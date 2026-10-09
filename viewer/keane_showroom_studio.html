@@ -319,14 +319,16 @@ const METALS = [
   { id: 'metal_nickel', name: 'Polished nickel', family: 'Polished', color: [0.80, 0.78, 0.74], roughness: 0.12, metalness: 1 },
 ];
 // Lighting scenes: an HDR light room (equirect, built below) + one key light whose shadow is visible in the live view.
+// Exposures sit a little under neutral so white quartz stays off the tone-map shoulder and its veining still reads.
 const SCENES = {
-  showroom: { label: 'Showroom', exposure: 1.0, bg: 0xd2cec7, key: [1.7, 2.9, -1.3], keyI: 1.6, keyC: 0xfffaf4 },
-  whiteroom: { label: 'Whiteroom', exposure: 0.8, bg: 0xeeeeec, key: [2.3, 3.3, -2.1], keyI: 1.2, keyC: 0xffffff },
-  evening: { label: 'Evening', exposure: 1.25, bg: 0x1a1714, key: [1.3, 2.6, -1.1], keyI: 1.1, keyC: 0xffcf96 },
+  showroom: { label: 'Showroom', exposure: 0.86, bg: 0xd2cec7, key: [1.7, 2.9, -1.3], keyI: 1.6, keyC: 0xfffaf4 },
+  whiteroom: { label: 'Whiteroom', exposure: 0.69, bg: 0xeeeeec, key: [2.3, 3.3, -2.1], keyI: 1.2, keyC: 0xffffff },
+  evening: { label: 'Evening', exposure: 1.08, bg: 0x1a1714, key: [1.3, 2.6, -1.1], keyI: 1.1, keyC: 0xffcf96 },
 };
 
 // ============================ renderer ============================
 const canvas = $('gl');
+const PHONE = matchMedia('(hover: none) and (pointer: coarse)').matches;   // touch-first device: lighter GPU budget
 const renderer = new THREE.WebGLRenderer({ canvas, antialias: false, alpha: false, preserveDrawingBuffer: false });
 renderer.setPixelRatio(Math.min(devicePixelRatio, 2));
 renderer.outputColorSpace = THREE.SRGBColorSpace;
@@ -343,7 +345,7 @@ controls.enableDamping = true; controls.dampingFactor = 0.08;
 
 const key = new THREE.DirectionalLight(0xffffff, 1.5);
 key.castShadow = true;
-key.shadow.mapSize.set(4096, 4096);
+key.shadow.mapSize.setScalar(PHONE ? 2048 : 4096);
 Object.assign(key.shadow.camera, { left: -2.4, right: 2.4, top: 2.4, bottom: -2.4, near: 0.2, far: 8 });
 key.shadow.bias = -0.0002; key.shadow.normalBias = 0.004; key.shadow.radius = 4;
 key.target.position.set(1.0, 0.9, -1.0);
@@ -537,7 +539,11 @@ function roomEnv(kind) {
       data.set([c[0], c[1], c[2], 1], (j * W + i) * 4);
     }
   }
-  const t = new THREE.DataTexture(data, W, H, THREE.RGBAFormat, THREE.FloatType);
+  // Half float, not float: iOS Safari cannot linearly filter 32-bit float textures, so a FloatType room samples as
+  // black there and the live view is lit by the key light alone. Half float filters everywhere (max radiance 70 fits).
+  const half = new Uint16Array(data.length);
+  for (let i = 0; i < data.length; i++) half[i] = THREE.DataUtils.toHalfFloat(data[i]);
+  const t = new THREE.DataTexture(half, W, H, THREE.RGBAFormat, THREE.HalfFloatType);
   t.mapping = THREE.EquirectangularReflectionMapping; t.magFilter = t.minFilter = THREE.LinearFilter; t.needsUpdate = true;
   return t;
 }
@@ -965,7 +971,8 @@ async function restoreBuild() {
   setSplash(p.get('s') === 'slab' ? 'slab' : 'tile');
   await Promise.all([pickCounter(get('c', CAT.counters[0])), pickFront(get('f', SHOWROOM_PAINT))]);
   restoring = false; writeHash(); queueThumbs();
-  setTimeout(prewarm, 2500);
+  // Phones build the path tracer only when Photo render is tapped: compiling it in the background stalls mobile GPUs.
+  if (!PHONE) setTimeout(prewarm, 2500);
 }
 let toastT = 0;
 function toast(msg) { const t = $('toast'); t.textContent = msg; t.hidden = false; clearTimeout(toastT); toastT = setTimeout(() => t.hidden = true, 2200); }
