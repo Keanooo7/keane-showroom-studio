@@ -81,7 +81,7 @@ python3 tools/build_studio.py   # repo-relative paths; embeds GLB + Countertops/
   - *Swatches*: rounded frames with a gloss sheen scaled to the finish, a ring on the selected one, and a tooltip with name, code, brand and family.
   - *Backsplash*: two picture option cards.
   - *Search*: covers every finish.
-  - *Camera*: follows the section being edited (Countertop → edge close-up, Backsplash → sink, Cabinets and Hardware → drawers).
+  - *Camera*: follows the section being edited (Countertop → high view into the L-corner, Backsplash → straight-on sink wall, Cabinets and Hardware → drawers).
   - *Summary dialog*: a Change link per row.
   - *Build link*: the whole build lives in the URL hash, so a copied link reopens it exactly.
 - Camera presets include the five solved photo cameras, so renders can be compared directly against `verify/` photos.

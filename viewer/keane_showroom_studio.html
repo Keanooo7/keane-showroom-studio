@@ -722,9 +722,11 @@ new GLTFLoader().parse(bin.buffer, '', gltf => {
 const in2gl = (x, y, z) => new THREE.Vector3(x * IN / 1000, z * IN / 1000, -y * IN / 1000);   // world Z-up in -> glTF Y-up m
 const VIEWS = [
   { label: 'Corner', pos: DATA.views[1].center, tgt: DATA.views[1].target, fov: 50 },
-  { label: 'Sink', pos: [74, 62, 54], tgt: [52, 20, 36], fov: 34 },
+  // Backsplash section: straight-on elevation of the sink wall, centred on the faucet (framed with the client)
+  { label: 'Backsplash', pos: [57, 100, 50], tgt: [57, 0, 50], fov: 34 },
   { label: 'Drawers', pos: [58, 56, 44], tgt: [25, 62, 26], fov: 34 },
-  { label: 'Counter edge', pos: [40, 52, 41], tgt: [30, 34, 36.5], fov: 28 },
+  // Countertop section: high close look down into the L, sink at left, both slabs and the seam in frame
+  { label: 'Countertop', pos: [39, 52, 71], tgt: [16, 11, 30], fov: 48 },
   { label: 'Overview', pos: [150, 140, 120], tgt: [30, 28, 45], fov: 42 },
   ...DATA.views.filter(v => v.id !== '02_corner_wide').map(v => ({ label: v.label, pos: v.center, tgt: v.target, fov: Math.min(60, v.fov) })),
 ];
