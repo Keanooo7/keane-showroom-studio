@@ -1,0 +1,1117 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Keane Showroom Studio</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+/* Configurator layout (after the Porsche Car Configurator): sticky app bar, sticky stage with a control pill and picture
+   thumbnails, and a scrolling column of accordion cards with framed swatches. The camera follows the section being edited. */
+:root{
+  --bg:#F2F1EE; --card:#FFFFFF; --ink:#1A1B1D; --muted:#6B6964; --line:#E3E1DC; --soft:#E7E5E0; --soft-hover:#DCD9D3;
+  --ring:#1A1B1D; --accent:#8A6631; --stage:#DAD7D1; --glass:rgba(24,25,27,.72); --glass-ink:#F4F3F0;
+  --shadow:0 1px 2px rgba(20,20,20,.04),0 6px 22px rgba(20,20,20,.06);
+  --f-body:"Barlow",system-ui,-apple-system,"Segoe UI",sans-serif;
+  --f-mono:"IBM Plex Mono",ui-monospace,"SFMono-Regular",Menlo,monospace;
+  --bar-h:64px; --r-card:16px; --r-ctl:10px;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#121314; --card:#1B1C1E; --ink:#ECEAE5; --muted:#A09D97; --line:#2C2D31; --soft:#2A2B2E; --soft-hover:#34363A;
+  --ring:#ECEAE5; --accent:#CFA868; --stage:#0E0F10; --shadow:0 1px 2px rgba(0,0,0,.3); color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#121314; --card:#1B1C1E; --ink:#ECEAE5; --muted:#A09D97; --line:#2C2D31; --soft:#2A2B2E; --soft-hover:#34363A;
+  --ring:#ECEAE5; --accent:#CFA868; --stage:#0E0F10; --shadow:0 1px 2px rgba(0,0,0,.3); color-scheme:dark}
+*{box-sizing:border-box}
+html{scroll-padding-top:calc(var(--bar-h) + 12px)}
+body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.45 var(--f-body)}
+button{font:inherit;color:inherit}
+:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.vh{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+
+/* ---------- app bar ---------- */
+.appbar{position:sticky;top:0;z-index:30;height:var(--bar-h);display:flex;align-items:center;gap:12px;padding:0 clamp(16px,2.4vw,28px);
+  background:color-mix(in srgb,var(--bg) 88%,transparent);backdrop-filter:saturate(1.4) blur(12px);border-bottom:1px solid var(--line)}
+.brand{display:flex;align-items:baseline;gap:10px;min-width:0;margin-right:auto}
+.brand b{font-weight:700;letter-spacing:.18em;font-size:15px}
+.brand span{color:var(--muted);font-size:14px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.b{display:inline-flex;align-items:center;justify-content:center;gap:8px;height:44px;padding:0 18px;border-radius:var(--r-ctl);border:0;
+  background:var(--soft);color:var(--ink);font-weight:500;cursor:pointer;white-space:nowrap}
+.b:hover{background:var(--soft-hover)}
+.b.primary{background:var(--ink);color:var(--bg)}
+.b.primary:hover{opacity:.88}
+.b.primary[aria-pressed="true"]{background:var(--accent);color:#fff}
+.b.ghost{background:transparent;padding:0 10px}
+.b.ghost:hover{background:var(--soft)}
+.b svg{width:18px;height:18px;flex:none}
+@media (max-width:640px){.brand span,.b .lbl-wide{display:none}.b{padding:0 12px}}
+
+/* ---------- layout ---------- */
+.app{display:grid;grid-template-columns:minmax(0,1fr) 410px;gap:24px;padding:16px clamp(16px,2.4vw,28px) 48px;max-width:1680px;margin:0 auto}
+.stagecol{position:sticky;top:calc(var(--bar-h) + 16px);align-self:start;display:flex;flex-direction:column;gap:12px;min-width:0}
+.stage{position:relative;border-radius:var(--r-card);overflow:hidden;background:var(--stage);height:calc(100vh - var(--bar-h) - 32px - 92px);min-height:380px}
+.stage:fullscreen{border-radius:0;height:100vh}
+canvas#gl{display:block;width:100%;height:100%;touch-action:none;cursor:grab}
+canvas#gl:active{cursor:grabbing}
+.status[hidden]{display:none}
+.status{position:absolute;inset:0;display:grid;place-items:center;color:var(--muted);font:500 13px var(--f-mono);pointer-events:none;text-align:center;padding:20px}
+.chip{position:absolute;top:14px;right:14px;display:flex;align-items:center;gap:8px;padding:7px 11px;border-radius:999px;background:var(--glass);color:var(--glass-ink);
+  font:500 12px/1 var(--f-mono);font-variant-numeric:tabular-nums;backdrop-filter:blur(10px);pointer-events:none}
+.chip i{width:7px;height:7px;border-radius:50%;background:#7FD39B}
+.chip[data-mode="photo"] i{background:#F2B35A}
+/* control pill + popovers (dark glass over the render) */
+.pill{position:absolute;left:14px;bottom:14px;display:flex;align-items:center;gap:2px;padding:4px;border-radius:12px;background:var(--glass);color:var(--glass-ink);backdrop-filter:blur(10px);max-width:calc(100% - 28px);overflow-x:auto}
+.pill button{display:inline-flex;align-items:center;gap:7px;height:38px;padding:0 12px;border:0;border-radius:9px;background:transparent;color:inherit;cursor:pointer;white-space:nowrap;font-size:14.5px}
+.pill button:hover,.pill button[aria-expanded="true"]{background:rgba(255,255,255,.14)}
+.pill .sep{width:1px;height:22px;background:rgba(255,255,255,.22);margin:0 4px;flex:none}
+.pill svg{width:17px;height:17px;flex:none}
+.pop{position:absolute;left:14px;bottom:70px;padding:16px;border-radius:14px;background:var(--glass);color:var(--glass-ink);backdrop-filter:blur(14px);min-width:280px}
+.pop[hidden]{display:none}
+.pop h3{margin:0 0 10px;font-size:14px;font-weight:600}
+.scenes{display:flex;gap:10px}
+.scene-opt{display:flex;flex-direction:column;align-items:center;gap:6px;border:0;background:none;color:inherit;cursor:pointer;padding:0;font-size:13px}
+.scene-opt span{width:64px;height:48px;border-radius:9px;display:block;box-shadow:0 0 0 1px rgba(255,255,255,.2)}
+.scene-opt[aria-pressed="true"] span{box-shadow:0 0 0 2px rgba(24,25,27,.9),0 0 0 4px #fff}
+.range{display:flex;align-items:center;gap:12px}
+.range input{flex:1;accent-color:#fff}
+.range output{font:500 12px var(--f-mono);width:4ch;text-align:right}
+/* picture thumbnails of each camera */
+.thumbs{position:relative}
+.strip{display:flex;gap:8px;overflow-x:auto;scroll-behavior:smooth;scrollbar-width:none;padding:3px}
+.strip::-webkit-scrollbar{display:none}
+.vt{flex:0 0 auto;width:112px;height:70px;border-radius:10px;border:0;padding:0;cursor:pointer;background:var(--stage) center/cover no-repeat;position:relative}
+.vt[aria-pressed="true"]{box-shadow:0 0 0 2px var(--bg),0 0 0 4px var(--ring)}
+.vt em{position:absolute;left:6px;bottom:5px;font:600 10.5px/1 var(--f-body);font-style:normal;color:#fff;text-shadow:0 1px 3px rgba(0,0,0,.7);letter-spacing:.02em}
+.arrow{position:absolute;top:50%;transform:translateY(-50%);width:32px;height:32px;border-radius:50%;border:0;background:var(--card);box-shadow:var(--shadow);cursor:pointer;display:grid;place-items:center;z-index:1}
+.arrow.l{left:-6px}.arrow.r{right:-6px}
+.arrow[hidden]{display:none}
+
+/* ---------- options column ---------- */
+.opts{display:flex;flex-direction:column;gap:14px;min-width:0}
+.title h1{margin:0;font-size:30px;line-height:1.1;font-weight:600;display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.tag{font-size:12.5px;font-weight:600;padding:3px 9px;border-radius:999px;background:var(--soft);color:var(--muted)}
+.linkbtn{border:0;background:none;padding:0;cursor:pointer;text-decoration:underline;text-underline-offset:3px;color:var(--ink);font-size:14px}
+.title p{margin:6px 0 0;color:var(--muted);font-size:14px}
+.search{position:relative}
+.search input{width:100%;height:48px;border-radius:var(--r-ctl);border:1px solid var(--line);background:var(--card);color:var(--ink);font:inherit;padding:0 40px 0 44px}
+.search svg{position:absolute;left:15px;top:50%;transform:translateY(-50%);width:18px;height:18px;color:var(--muted);pointer-events:none}
+.search button{position:absolute;right:8px;top:50%;transform:translateY(-50%);width:32px;height:32px;border:0;border-radius:8px;background:none;cursor:pointer;color:var(--muted)}
+.search button[hidden]{display:none}
+.search input::-webkit-search-cancel-button{-webkit-appearance:none;display:none}
+.searching .note{display:none}
+.card{background:var(--card);border-radius:var(--r-card);box-shadow:var(--shadow)}
+.card>summary{list-style:none;cursor:pointer;display:grid;grid-template-columns:1fr auto;align-items:center;gap:2px 12px;padding:18px 20px}
+.card>summary::-webkit-details-marker,.sub>summary::-webkit-details-marker{display:none}
+.card>summary h2{margin:0;font-size:20px;font-weight:600}
+.card>summary .sel{grid-column:1;color:var(--muted);font-size:14px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.chev{grid-column:2;grid-row:1/span 2;width:20px;height:20px;transition:transform .2s}
+details[open]>summary .chev{transform:rotate(180deg)}
+.body{padding:0 20px 20px;display:flex;flex-direction:column;gap:18px}
+.note{margin:0;color:var(--muted);font-size:13.5px;display:flex;gap:8px;align-items:flex-start}
+.note svg{width:16px;height:16px;flex:none;margin-top:2px}
+/* sub-dropdowns inside a card */
+.sub{border-top:1px solid var(--line)}
+.sub>summary{list-style:none;cursor:pointer;display:flex;align-items:center;gap:10px;padding:14px 0;font-weight:600;font-size:16px}
+.sub>summary .n{color:var(--muted);font-weight:500;font-size:14px}
+.sub>summary .chev{margin-left:auto}
+.sub .inner{display:flex;flex-direction:column;gap:16px;padding:2px 0 16px}
+/* groups ("tiers") and framed swatches */
+.grp h3{margin:0 0 2px;font-size:14.5px;font-weight:600;display:flex;gap:8px;align-items:baseline}
+.grp h3 .n{color:var(--muted);font-weight:500}
+.grp .pickname{font-size:14px;color:var(--ink);margin:0 0 8px;min-height:0}
+.grp .pickname:empty{display:none}
+.sws{display:grid;grid-template-columns:repeat(auto-fill,62px);gap:10px;margin-top:8px}
+.sw{position:relative;width:62px;height:62px;border-radius:12px;border:0;padding:0;cursor:pointer;background:var(--soft) center/cover no-repeat;overflow:visible}
+/* material sample look: a curved sheen whose strength follows the finish's gloss, plus soft falloff at the far edge */
+.sw::after{content:"";position:absolute;inset:0;border-radius:inherit;pointer-events:none;
+  background:linear-gradient(128deg,rgba(255,255,255,0) 34%,rgba(255,255,255,var(--g,.25)) 49%,rgba(255,255,255,0) 64%),
+             radial-gradient(120% 90% at 100% 100%,rgba(0,0,0,.16),rgba(0,0,0,0) 60%);
+  box-shadow:inset 0 0 0 1px rgba(0,0,0,.08)}
+.sw:hover{transform:translateY(-1px)}
+.sw[aria-pressed="true"]{box-shadow:0 0 0 2px var(--card),0 0 0 4px var(--ring)}
+.sw[aria-busy="true"]::before{content:"";position:absolute;inset:20px;border-radius:50%;border:2px solid rgba(255,255,255,.85);border-top-color:transparent;animation:spin .8s linear infinite;z-index:1}
+@keyframes spin{to{transform:rotate(360deg)}}
+.sw.hide,.grp.hide,.sub.hide{display:none}
+.empty{color:var(--muted);font-size:14px;margin:0}
+.empty[hidden]{display:none}
+/* option cards (backsplash), like the seat cards */
+.optcards{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.oc{position:relative;display:flex;flex-direction:column;gap:6px;text-align:left;border:1px solid var(--line);border-radius:12px;background:var(--card);padding:10px;cursor:pointer}
+.oc[aria-pressed="true"]{border-color:var(--ring);box-shadow:inset 0 0 0 1px var(--ring)}
+.oc .img{height:84px;border-radius:8px;background:var(--soft) center/cover}
+.oc b{font-weight:600;font-size:15px}
+.oc small{color:var(--muted);font-size:13px;line-height:1.35}
+.oc .dot{position:absolute;right:10px;bottom:10px;width:20px;height:20px;border-radius:50%;border:1.5px solid var(--line);background:var(--card)}
+.oc[aria-pressed="true"] .dot{border:6px solid var(--ring)}
+/* tooltip */
+.tip{position:fixed;z-index:50;pointer-events:none;padding:8px 11px;border-radius:9px;background:var(--card);color:var(--ink);box-shadow:0 6px 24px rgba(0,0,0,.18);font-size:14px;line-height:1.3;width:max-content;max-width:260px;transform:translate(-50%,-100%)}
+.tip small{display:block;color:var(--muted);font-size:12.5px;margin-top:2px}
+.tip::after{content:"";position:absolute;left:50%;bottom:-6px;width:12px;height:12px;background:var(--card);transform:translateX(-50%) rotate(45deg)}
+.tip[hidden]{display:none}
+/* dialogs */
+dialog{border:0;border-radius:18px;padding:0;background:var(--card);color:var(--ink);width:min(640px,calc(100vw - 32px));max-height:calc(100vh - 48px);box-shadow:0 24px 80px rgba(0,0,0,.3)}
+dialog::backdrop{background:rgba(10,10,12,.45);backdrop-filter:blur(2px)}
+.dh{display:flex;align-items:center;justify-content:space-between;padding:20px 24px 8px}
+.dh h2{margin:0;font-size:22px;font-weight:600}
+.db{padding:8px 24px 24px;display:flex;flex-direction:column;gap:14px}
+.row{display:grid;grid-template-columns:56px 1fr auto;gap:14px;align-items:center;padding:10px 0;border-top:1px solid var(--line)}
+.row .ph{width:56px;height:56px;border-radius:10px;background:var(--soft) center/cover}
+.row .k{font-size:12.5px;color:var(--muted);text-transform:uppercase;letter-spacing:.06em}
+.row .v{font-weight:600}
+.row .s{color:var(--muted);font-size:13.5px}
+.acts{display:flex;gap:10px;flex-wrap:wrap}
+.toast{position:fixed;left:50%;bottom:24px;transform:translateX(-50%);background:var(--ink);color:var(--bg);padding:10px 16px;border-radius:10px;font-size:14px;z-index:60}
+.toast[hidden]{display:none}
+.about ul{margin:0;padding-left:18px;color:var(--muted);font-size:14.5px}
+.about li{margin:5px 0}.about b{color:var(--ink)}
+
+@media (max-width:980px){
+  .app{grid-template-columns:minmax(0,1fr);gap:16px}
+  .stagecol{top:var(--bar-h);z-index:5;background:var(--bg);margin:0 calc(-1 * clamp(16px,2.4vw,28px));padding:8px clamp(16px,2.4vw,28px)}
+  .stage{height:44vh;min-height:260px}
+  .vt{width:84px;height:54px}
+  .pill .lbl{display:none}
+}
+@media (prefers-reduced-motion: reduce){*{transition:none!important;animation:none!important;scroll-behavior:auto!important}}
+</style>
+</head>
+<body>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <symbol id="i-chev" viewBox="0 0 24 24"><path d="M6 9l6 6 6-6" fill="none" stroke="currentColor" stroke-width="1.6"/></symbol>
+  <symbol id="i-search" viewBox="0 0 24 24"><circle cx="10.5" cy="10.5" r="6.5" fill="none" stroke="currentColor" stroke-width="1.6"/><path d="M15.5 15.5L21 21" stroke="currentColor" stroke-width="1.6"/></symbol>
+  <symbol id="i-x" viewBox="0 0 24 24"><path d="M6 6l12 12M18 6L6 18" stroke="currentColor" stroke-width="1.6"/></symbol>
+  <symbol id="i-share" viewBox="0 0 24 24"><path d="M12 15V3M7 8l5-5 5 5M5 12v8h14v-8" fill="none" stroke="currentColor" stroke-width="1.6"/></symbol>
+  <symbol id="i-dl" viewBox="0 0 24 24"><path d="M12 3v12M7 10l5 5 5-5M5 20h14" fill="none" stroke="currentColor" stroke-width="1.6"/></symbol>
+  <symbol id="i-full" viewBox="0 0 24 24"><path d="M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5" fill="none" stroke="currentColor" stroke-width="1.6"/></symbol>
+  <symbol id="i-sun" viewBox="0 0 24 24"><circle cx="12" cy="12" r="4" fill="none" stroke="currentColor" stroke-width="1.6"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3M5 5l2 2M17 17l2 2M5 19l2-2M17 7l2-2" stroke="currentColor" stroke-width="1.6"/></symbol>
+  <symbol id="i-door" viewBox="0 0 24 24"><path d="M5 3h10v18H5zM15 5l4 2v12l-4 2" fill="none" stroke="currentColor" stroke-width="1.6"/></symbol>
+  <symbol id="i-info" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9" fill="none" stroke="currentColor" stroke-width="1.5"/><path d="M12 11v6M12 7.5v.5" stroke="currentColor" stroke-width="1.8"/></symbol>
+  <symbol id="i-left" viewBox="0 0 24 24"><path d="M15 6l-6 6 6 6" fill="none" stroke="currentColor" stroke-width="1.8"/></symbol>
+  <symbol id="i-right" viewBox="0 0 24 24"><path d="M9 6l6 6-6 6" fill="none" stroke="currentColor" stroke-width="1.8"/></symbol>
+</svg>
+
+<header class="appbar">
+  <div class="brand"><b>KEANE</b><span>Showroom Studio · L-corner display</span></div>
+  <button class="b ghost" id="share" title="Copy a link that reopens this exact build"><svg><use href="#i-share"/></svg><span class="lbl-wide">Share build</span></button>
+  <button class="b" id="open-summary">Summary</button>
+  <button class="b primary" id="photo" aria-pressed="false" title="Path-traced render: soft shadows, bounce light, true reflections">Photo render</button>
+</header>
+
+<main class="app">
+  <section class="stagecol" aria-label="Render">
+    <div class="stage" id="stage">
+      <canvas id="gl" aria-label="Photoreal 3D render of the showroom kitchen corner"></canvas>
+      <div class="status" id="status">Loading model…</div>
+      <div class="chip" id="chip" data-mode="live"><i></i><span id="spp">Live view</span></div>
+      <div class="pop" id="pop-scene" hidden>
+        <h3>Lighting</h3>
+        <div class="scenes" id="scenes" role="group" aria-label="Lighting scene"></div>
+      </div>
+      <div class="pop" id="pop-open" hidden>
+        <h3>Open doors and drawers</h3>
+        <div class="range"><input id="open" type="range" min="0" max="100" value="0" aria-label="Open fronts"><output id="openv" for="open">0%</output></div>
+      </div>
+      <div class="pill" role="toolbar" aria-label="Stage controls">
+        <button id="btn-scene" aria-expanded="false" aria-controls="pop-scene"><svg><use href="#i-sun"/></svg><span class="lbl">Adjust scene</span></button>
+        <button id="btn-open" aria-expanded="false" aria-controls="pop-open"><svg><use href="#i-door"/></svg><span class="lbl">Open fronts</span></button>
+        <span class="sep"></span>
+        <button id="shot" title="Download this frame as PNG" aria-label="Download image"><svg><use href="#i-dl"/></svg></button>
+        <button id="full" title="Fullscreen" aria-label="Fullscreen"><svg><use href="#i-full"/></svg></button>
+      </div>
+    </div>
+    <div class="thumbs">
+      <button class="arrow l" id="strip-l" aria-label="Previous views" hidden><svg width="16" height="16"><use href="#i-left"/></svg></button>
+      <div class="strip" id="views" role="group" aria-label="Camera views"></div>
+      <button class="arrow r" id="strip-r" aria-label="More views"><svg width="16" height="16"><use href="#i-right"/></svg></button>
+    </div>
+  </section>
+
+  <section class="opts" aria-label="Finishes">
+    <div class="title">
+      <h1>L-Corner Display <span class="tag">Keane Showroom</span></h1>
+      <p><button class="linkbtn" id="open-about">How this model is built</button></p>
+    </div>
+    <div class="search">
+      <svg><use href="#i-search"/></svg>
+      <input id="q" type="search" placeholder="Search finishes, e.g. walnut, V816, black" aria-label="Search finishes" autocomplete="off">
+      <button id="q-clear" aria-label="Clear search" hidden><svg width="16" height="16"><use href="#i-x"/></svg></button>
+    </div>
+
+    <details class="card" id="card-counter" data-view="3" open>
+      <summary><h2>Countertop</h2><span class="sel" id="sel-counter"></span><svg class="chev"><use href="#i-chev"/></svg></summary>
+      <div class="body" id="body-counter"></div>
+    </details>
+    <details class="card" id="card-splash" data-view="1" open>
+      <summary><h2>Backsplash</h2><span class="sel" id="sel-splash"></span><svg class="chev"><use href="#i-chev"/></svg></summary>
+      <div class="body"><div class="optcards" id="splash" role="group" aria-label="Backsplash"></div></div>
+    </details>
+    <details class="card" id="card-front" data-view="2" open>
+      <summary><h2>Cabinets</h2><span class="sel" id="sel-front"></span><svg class="chev"><use href="#i-chev"/></svg></summary>
+      <div class="body" id="body-front"></div>
+    </details>
+    <details class="card" id="card-metal" data-view="2" open>
+      <summary><h2>Hardware</h2><span class="sel" id="sel-metal"></span><svg class="chev"><use href="#i-chev"/></svg></summary>
+      <div class="body" id="body-metal"></div>
+    </details>
+  </section>
+</main>
+
+<div class="tip" id="tip" role="tooltip" hidden></div>
+<div class="toast" id="toast" role="status" hidden></div>
+
+<dialog id="dlg-summary" aria-labelledby="sum-h">
+  <div class="dh"><h2 id="sum-h">Your build</h2><button class="b ghost" data-close aria-label="Close"><svg><use href="#i-x"/></svg></button></div>
+  <div class="db">
+    <div id="sum-rows"></div>
+    <div class="acts">
+      <button class="b primary" id="sum-share"><svg><use href="#i-share"/></svg>Copy build link</button>
+      <button class="b" id="sum-shot"><svg><use href="#i-dl"/></svg>Download image</button>
+    </div>
+  </div>
+</dialog>
+<dialog id="dlg-about" aria-labelledby="about-h">
+  <div class="dh"><h2 id="about-h">How this model is built</h2><button class="b ghost" data-close aria-label="Close"><svg><use href="#i-x"/></svg></button></div>
+  <div class="db about">
+    <ul>
+      <li><b>Geometry</b>: fitted from five showroom photos. Doors and drawers are rebuilt as Shaker fronts (2-1/4 in frame, 1/4 in recessed panel, 1.6 mm edge radius). Countertops are re-extruded from the CAD footprint with a 1.5 mm eased edge.</li>
+      <li><b>Finish library</b>: 38 Decore DRS131 finishes (decore.com), 34 Vadara quartz designs (vadara.uk) and 48 MSI granites (msisurfaces.com). Each texture loads only when picked.</li>
+      <li><b>Scale</b>: Vadara slabs map at 126 × 63 in. MSI close-ups are assumed to show 24 × 24 in, and Decore chips about 10 in.</li>
+      <li><b>Live view</b>: PBR materials, a studio HDR light room, soft shadows, ambient occlusion and Khronos PBR Neutral tone mapping for true product colour.</li>
+      <li><b>Photo render</b>: path tracing with an edge-preserving denoise. It converges in about a minute and stops at 400 samples.</li>
+    </ul>
+  </div>
+</dialog>
+
+<script type="application/json" id="asm">__ASM__</script>
+<script type="application/json" id="catalog">__CATALOG__</script>
+<script>window.__GLB_B64 = "__GLB__";</script>
+<script type="importmap">{"imports":{
+  "three":"https://cdn.jsdelivr.net/npm/three@0.165.0/build/three.module.js",
+  "three/addons/":"https://cdn.jsdelivr.net/npm/three@0.165.0/examples/jsm/",
+  "three/examples/jsm/":"https://cdn.jsdelivr.net/npm/three@0.165.0/examples/jsm/",
+  "three-mesh-bvh":"https://cdn.jsdelivr.net/npm/three-mesh-bvh@0.7.6/build/index.module.js",
+  "three-gpu-pathtracer":"https://cdn.jsdelivr.net/npm/three-gpu-pathtracer@0.0.23/src/index.js"}}</script>
+<script type="module">
+import * as THREE from 'three';
+import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
+import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
+import { RoundedBoxGeometry } from 'three/addons/geometries/RoundedBoxGeometry.js';
+import { mergeGeometries } from 'three/addons/utils/BufferGeometryUtils.js';
+import { EffectComposer } from 'three/addons/postprocessing/EffectComposer.js';
+import { RenderPass } from 'three/addons/postprocessing/RenderPass.js';
+import { GTAOPass } from 'three/addons/postprocessing/GTAOPass.js';
+import { OutputPass } from 'three/addons/postprocessing/OutputPass.js';
+import { RectAreaLightUniformsLib } from 'three/addons/lights/RectAreaLightUniformsLib.js';
+
+const DATA = JSON.parse(document.getElementById('asm').textContent);
+const CAT = JSON.parse(document.getElementById('catalog').textContent);
+const $ = id => document.getElementById(id);
+const IN = 25.4;
+let pt = null, photo = false, geomDirty = false, ready = false, warming = false;   // path tracer state (created on first use)
+
+// ============================ finishes ============================
+const SHOWROOM_PAINT = { id: 'paint_showroom', name: 'Showroom greige (from photos)', kind: 'paint', brand: 'Five-piece painted', family: 'Satin paint', color: DATA.photoPaint, rough: 0.5, cc: 0.45 };
+const METALS = [
+  { id: 'metal_bronze', name: 'Champagne bronze (from photos)', family: 'Brushed', color: DATA.photoMetal, roughness: 0.32, metalness: 1 },
+  { id: 'metal_black', name: 'Matte black', family: 'Powder coat', color: [0.025, 0.025, 0.025], roughness: 0.55, metalness: 0.4 },
+  { id: 'metal_nickel', name: 'Polished nickel', family: 'Polished', color: [0.80, 0.78, 0.74], roughness: 0.12, metalness: 1 },
+];
+// Lighting scenes: an HDR light room (equirect, built below) + one key light whose shadow is visible in the live view.
+const SCENES = {
+  showroom: { label: 'Showroom', exposure: 1.0, bg: 0xd2cec7, key: [1.7, 2.9, -1.3], keyI: 1.6, keyC: 0xfffaf4 },
+  whiteroom: { label: 'Whiteroom', exposure: 0.8, bg: 0xeeeeec, key: [2.3, 3.3, -2.1], keyI: 1.2, keyC: 0xffffff },
+  evening: { label: 'Evening', exposure: 1.25, bg: 0x1a1714, key: [1.3, 2.6, -1.1], keyI: 1.1, keyC: 0xffcf96 },
+};
+
+// ============================ renderer ============================
+const canvas = $('gl');
+const renderer = new THREE.WebGLRenderer({ canvas, antialias: false, alpha: false, preserveDrawingBuffer: false });
+renderer.setPixelRatio(Math.min(devicePixelRatio, 2));
+renderer.outputColorSpace = THREE.SRGBColorSpace;
+renderer.toneMapping = THREE.NeutralToneMapping;      // Khronos PBR Neutral: built for accurate product colour
+renderer.shadowMap.enabled = true;
+renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+RectAreaLightUniformsLib.init();
+const maxAniso = renderer.capabilities.getMaxAnisotropy();
+
+const scene = new THREE.Scene();
+const camera = new THREE.PerspectiveCamera(50, 1, 0.05, 60);
+const controls = new OrbitControls(camera, canvas);
+controls.enableDamping = true; controls.dampingFactor = 0.08;
+
+const key = new THREE.DirectionalLight(0xffffff, 1.5);
+key.castShadow = true;
+key.shadow.mapSize.set(4096, 4096);
+Object.assign(key.shadow.camera, { left: -2.4, right: 2.4, top: 2.4, bottom: -2.4, near: 0.2, far: 8 });
+key.shadow.bias = -0.0002; key.shadow.normalBias = 0.004; key.shadow.radius = 4;
+key.target.position.set(1.0, 0.9, -1.0);
+scene.add(key, key.target);
+// Path-traced twin of the key light: an area light gives soft shadows. Only one of the two is visible at a time.
+const keyArea = new THREE.RectAreaLight(0xffffff, 10, 1.4, 0.5);
+keyArea.visible = false; scene.add(keyArea);
+
+const composer = new EffectComposer(renderer, new THREE.WebGLRenderTarget(1, 1, { type: THREE.HalfFloatType, samples: 4 }));
+composer.addPass(new RenderPass(scene, camera));
+const gtao = new GTAOPass(scene, camera, 1, 1);
+gtao.updateGtaoMaterial({ radius: 0.32, distanceExponent: 1.6, thickness: 1.5, scale: 1.15, samples: 16 });
+gtao.updatePdMaterial({ lumaPhi: 10, depthPhi: 2, normalPhi: 3, radius: 6, rings: 2, samples: 16 });
+gtao.blendIntensity = 1.0;
+composer.addPass(gtao);
+composer.addPass(new OutputPass());
+
+// ============================ procedural textures ============================
+function rng(seed) { let s = seed >>> 0; return () => ((s = (s * 1664525 + 1013904223) >>> 0) / 4294967296); }
+// tileable value noise, sum of octaves, values ~[0,1]
+function noise2D(size, base, octaves, seed) {
+  const out = new Float32Array(size * size), r = rng(seed);
+  let amp = 1, norm = 0;
+  for (let o = 0; o < octaves; o++) {
+    const p = base << o, g = new Float32Array(p * p).map(() => r());
+    for (let y = 0; y < size; y++) for (let x = 0; x < size; x++) {
+      const fx = x / size * p, fy = y / size * p, x0 = fx | 0, y0 = fy | 0;
+      let tx = fx - x0, ty = fy - y0; tx = tx * tx * (3 - 2 * tx); ty = ty * ty * (3 - 2 * ty);
+      const a = g[y0 * p + x0], b = g[y0 * p + (x0 + 1) % p], c = g[((y0 + 1) % p) * p + x0], d = g[((y0 + 1) % p) * p + (x0 + 1) % p];
+      out[y * size + x] += amp * ((a * (1 - tx) + b * tx) * (1 - ty) + (c * (1 - tx) + d * tx) * ty);
+    }
+    norm += amp; amp *= 0.5;
+  }
+  for (let i = 0; i < out.length; i++) out[i] /= norm;
+  return out;
+}
+function texFromFn(w, h, fn, srgb) {
+  const cv = document.createElement('canvas'); cv.width = w; cv.height = h;
+  const ctx = cv.getContext('2d'), img = ctx.createImageData(w, h), d = img.data;
+  for (let y = 0; y < h; y++) for (let x = 0; x < w; x++) { const i = (y * w + x) * 4, c = fn(x, y, i / 4); d[i] = c[0]; d[i + 1] = c[1]; d[i + 2] = c[2]; d[i + 3] = 255; }
+  ctx.putImageData(img, 0, 0);
+  const t = new THREE.CanvasTexture(cv);
+  t.wrapS = t.wrapT = THREE.RepeatWrapping; t.anisotropy = maxAniso;
+  t.colorSpace = srgb ? THREE.SRGBColorSpace : THREE.NoColorSpace;
+  return t;
+}
+// Painted hardwood: the paint film is smooth; only fine, long grain telegraphs through it, visible in raking light.
+// Tileable anisotropic value noise: many cells across the grain (u), few along it (v), so features become long streaks.
+function streakNoise(W, H, cu, cv, seed) {
+  const out = new Float32Array(W * H), r = rng(seed), g = new Float32Array(cu * cv).map(() => r());
+  for (let y = 0; y < H; y++) {
+    const fy = y / H * cv, y0 = fy | 0; let ty = fy - y0; ty = ty * ty * (3 - 2 * ty);
+    for (let x = 0; x < W; x++) {
+      const fx = x / W * cu, x0 = fx | 0; let tx = fx - x0; tx = tx * tx * (3 - 2 * tx);
+      const x1 = (x0 + 1) % cu, y1 = (y0 + 1) % cv;
+      out[y * W + x] = (g[y0 * cu + x0] * (1 - tx) + g[y0 * cu + x1] * tx) * (1 - ty) + (g[y1 * cu + x0] * (1 - tx) + g[y1 * cu + x1] * tx) * ty;
+    }
+  }
+  return out;
+}
+// one tile = GRAIN_U mm across the grain x GRAIN_V mm along it
+const GRAIN_U = 240, GRAIN_V = 960;
+const grainTex = (() => {
+  const W = 1024, H = 1024, warp = noise2D(256, 2, 2, 5);
+  const a = streakNoise(W, H, 220, 6, 31), b = streakNoise(W, H, 520, 14, 37), c = streakNoise(W, H, 1024, 48, 41);
+  const hgt = new Float32Array(W * H);
+  for (let y = 0; y < H; y++) for (let x = 0; x < W; x++) {
+    // grain lines meander slightly instead of running ruler-straight
+    const wv = warp[(Math.floor(y / H * 256) * 256 + Math.floor(x / W * 256))], xs = (x + Math.round(wv * 40) + W) % W, i = y * W + xs;
+    hgt[y * W + x] = 0.68 * a[i] + 0.27 * b[i] + 0.05 * c[i];   // pore pattern, not hairline scratches
+  }
+  const nrm = texFromFn(W, H, (x, y, i) => {
+    const hx = hgt[y * W + (x + 1) % W] - hgt[y * W + (x - 1 + W) % W], hy = hgt[((y + 1) % H) * W + x] - hgt[((y - 1 + H) % H) * W + x];
+    const n = new THREE.Vector3(-hx * 1.6, hy * 1.6, 1).normalize();
+    return [127.5 + 127.5 * n.x, 127.5 + 127.5 * n.y, 127.5 + 127.5 * n.z];
+  });
+  // paint sits a touch glossier where it levels into the grain: tiny roughness variation, no blotches
+  const rgh = texFromFn(W, H, (x, y, i) => { const v = 249 + 6 * hgt[i]; return [v, v, v]; });
+  return { nrm, rgh };
+})();
+
+// Glazed handmade tile: colour, normal and roughness maps from one height field.
+function tileSet({ tw, th, cols, rows, bond, seed }) {
+  const ppm = 1.4, pw = tw * cols, ph = th * rows, W = Math.round(pw * ppm), H = Math.round(ph * ppm);
+  const pal = ['#5d5a55', '#6f6a63', '#46443f', '#827d75', '#3d3b38', '#8c877f', '#55524c', '#67625a', '#4c4945'].map(h => new THREE.Color(h));
+  const r = rng(seed), tone = new Map(), toneOf = (c, rw) => { const k = c + ',' + rw; if (!tone.has(k)) tone.set(k, [pal[Math.floor(r() * pal.length)], 0.92 + 0.16 * r(), r() * 6.28]); return tone.get(k); };
+  const wav = noise2D(256, 4, 3, seed + 1), grout = 1.6, hgt = new Float32Array(W * H), col = new Float32Array(W * H * 3), rough = new Uint8Array(W * H);
+  for (let y = 0; y < H; y++) for (let x = 0; x < W; x++) {
+    const mx = x / ppm, my = y / ppm, rw = Math.floor(my / th), off = bond && (rw & 1) ? tw / 2 : 0;
+    const sx = ((mx + off) % pw + pw) % pw, cl = Math.floor(sx / tw), lx = sx - cl * tw, ly = my - rw * th;
+    const dEdge = Math.min(lx, tw - lx, ly, th - ly) - grout / 2, i = y * W + x;
+    if (dEdge < 0) { hgt[i] = 0; col.set([0.30, 0.29, 0.27], i * 3); rough[i] = 225; continue; }
+    const [c, k, ph0] = toneOf(cl, rw), w = wav[(Math.floor(y / H * 256) * 256 + Math.floor(x / W * 256)) % 65536];
+    const pillow = Math.min(1, dEdge / 2.2), edgeDark = 0.80 + 0.20 * Math.min(1, dEdge / 5);
+    hgt[i] = 0.55 * Math.sin(pillow * Math.PI / 2) + 0.45 * (0.5 + 0.5 * Math.sin(ph0 + lx * 0.05 + ly * 0.03)) * w;
+    const v = k * edgeDark * (0.94 + 0.12 * w);
+    col.set([c.r * v, c.g * v, c.b * v], i * 3);
+    rough[i] = 26 + 20 * w;
+  }
+  const lin2s = v => 255 * (v <= 0.0031308 ? 12.92 * v : 1.055 * Math.pow(v, 1 / 2.4) - 0.055);
+  const map = texFromFn(W, H, (x, y, i) => [lin2s(col[i * 3]), lin2s(col[i * 3 + 1]), lin2s(col[i * 3 + 2])], true);
+  const nrm = texFromFn(W, H, (x, y, i) => {
+    const hx = hgt[y * W + (x + 1) % W] - hgt[y * W + (x - 1 + W) % W], hy = hgt[((y + 1) % H) * W + x] - hgt[((y - 1 + H) % H) * W + x];
+    const s = 2.2, n = new THREE.Vector3(-hx * s, hy * s, 1).normalize();   // canvas y runs down, uv v runs up
+    return [127.5 + 127.5 * n.x, 127.5 + 127.5 * n.y, 127.5 + 127.5 * n.z];
+  });
+  const rgh = texFromFn(W, H, (x, y, i) => [rough[i], rough[i], rough[i]]);
+  return { map, nrm, rgh, pw, ph };
+}
+const tileV = tileSet({ tw: 3 * IN, th: 12 * IN, cols: 8, rows: 4, bond: false, seed: 11 });   // W1: vertical stack
+const tileH = tileSet({ tw: 12 * IN, th: 3 * IN, cols: 2, rows: 16, bond: true, seed: 23 });   // W2: running bond
+
+// Polished showroom floor: soft mottling.
+const mott = noise2D(512, 6, 5, 3);
+const floorMap = texFromFn(512, 512, (x, y, i) => { const v = 190 + 40 * mott[i]; return [v, v * 0.995, v * 0.985]; }, true);
+
+// Finish textures live in textures/<id>.js (JSONP with a data: URL), fetched on first pick and cached.
+// A <script> tag works from file:// and data: URLs are not cross-origin, so WebGL accepts them without a server.
+const texWait = {}, texImg = {};
+window.__texData = (id, src) => texWait[id] && texWait[id](src);
+function loadImage(id) {
+  return texImg[id] || (texImg[id] = new Promise((res, rej) => {
+    texWait[id] = src => { const im = new Image(); im.onload = () => res(im); im.onerror = rej; im.src = src; };
+    const sc = document.createElement('script'); sc.src = 'textures/' + id + '.js'; sc.onerror = () => rej(new Error('missing textures/' + id + '.js'));
+    document.head.appendChild(sc);
+  }));
+}
+const colorTex = {};
+async function getColorTex(id) {
+  if (colorTex[id]) return colorTex[id];
+  const t = new THREE.Texture(await loadImage(id)); t.colorSpace = THREE.SRGBColorSpace; t.anisotropy = maxAniso;
+  t.wrapS = t.wrapT = THREE.RepeatWrapping; t.needsUpdate = true;
+  return (colorTex[id] = t);
+}
+// Embossed-in-register foils (Taction, Deep Grain, Groovz...): relief follows the printed grain, so derive a normal map
+// from the high-passed luminance of the chip (dark grain lines sit lower).
+const embossTex = {};
+async function getEmbossTex(id) {
+  if (embossTex[id]) return embossTex[id];
+  const im = await loadImage(id), W = im.width, H = im.height, cv = document.createElement('canvas'); cv.width = W; cv.height = H;
+  const ctx = cv.getContext('2d'); ctx.drawImage(im, 0, 0); const d = ctx.getImageData(0, 0, W, H).data, L = new Float32Array(W * H);
+  for (let i = 0; i < W * H; i++) L[i] = (0.2126 * d[i * 4] + 0.7152 * d[i * 4 + 1] + 0.0722 * d[i * 4 + 2]) / 255;
+  const blur = (src, r, horiz) => { const out = new Float32Array(W * H); for (let y = 0; y < H; y++) for (let x = 0; x < W; x++) { let s = 0;
+    for (let k = -r; k <= r; k++) s += horiz ? src[y * W + (x + k + W) % W] : src[((y + k + H) % H) * W + x]; out[y * W + x] = s / (2 * r + 1); } return out; };
+  const B = blur(blur(L, 6, true), 6, false), hp = L.map((v, i) => v - B[i]);
+  const t = texFromFn(W, H, (x, y) => {
+    const hx = hp[y * W + (x + 1) % W] - hp[y * W + (x - 1 + W) % W], hy = hp[((y + 1) % H) * W + x] - hp[((y - 1 + H) % H) * W + x];
+    const n = new THREE.Vector3(-hx * 6, hy * 6, 1).normalize(); return [127.5 + 127.5 * n.x, 127.5 + 127.5 * n.y, 127.5 + 127.5 * n.z];
+  });
+  return (embossTex[id] = t);
+}
+
+// ============================ HDR light room (equirect) ============================
+// Directional radiance from a box room around the kitchen. Same texture lights the live view (PMREM) and the path tracer
+// (importance-sampled), so both modes agree.
+function roomEnv(kind) {
+  const W = 1024, H = 512, data = new Float32Array(W * H * 4);
+  const R = { hx: 6, hz: 6, floor: -1.6, ceil: 2.1 };
+  const sm = (a, b, x) => { const t = Math.min(1, Math.max(0, (x - a) / (b - a))); return t * t * (3 - 2 * t); };
+  for (let j = 0; j < H; j++) {
+    const lat = ((j + 0.5) / H - 0.5) * Math.PI, y = Math.sin(lat), rr = Math.cos(lat);
+    for (let i = 0; i < W; i++) {
+      const phi = ((i + 0.5) / W - 0.5) * 2 * Math.PI, x = rr * Math.cos(phi), z = rr * Math.sin(phi);
+      let t = Infinity, s = '';
+      if (y > 1e-6) { const q = R.ceil / y; if (q < t) { t = q; s = 'c'; } } else if (y < -1e-6) { const q = R.floor / y; if (q < t) { t = q; s = 'f'; } }
+      if (Math.abs(x) > 1e-6) { const q = (x > 0 ? R.hx : -R.hx) / x; if (q < t) { t = q; s = x > 0 ? 'px' : 'nx'; } }
+      if (Math.abs(z) > 1e-6) { const q = (z > 0 ? R.hz : -R.hz) / z; if (q < t) { t = q; s = z > 0 ? 'pz' : 'nz'; } }
+      const px = x * t, py = y * t, pz = z * t, hgt = (py - R.floor) / (R.ceil - R.floor);
+      let c = [0, 0, 0];
+      if (kind === 'showroom') {
+        if (s === 'c') {
+          // rows of linear LED troffers, 4000 K
+          const zr = ((pz + 0.9) % 1.8 + 1.8) % 1.8 - 0.9, on = sm(0.16, 0.12, Math.abs(zr)) * sm(4.2, 4.0, Math.abs(px));
+          const e = 0.16 + 13 * on; c = [e, e * 0.99, e * 0.97];
+        } else if (s === 'f') c = [0.32, 0.31, 0.30];
+        else { const e = 0.42 + 0.22 * hgt; c = [e, e, e * 0.99]; }
+      } else if (kind === 'whiteroom') {
+        if (s === 'c') { const on = sm(2.6, 2.2, Math.abs(px)) * sm(2.6, 2.2, Math.abs(pz)); const e = 1.1 + 4.5 * on; c = [e, e, e]; }
+        else if (s === 'f') c = [0.95, 0.95, 0.95];
+        else { const e = 1.15 + 0.25 * hgt; c = [e, e, e]; }
+      } else {
+        // evening: warm 2700 K downlights + a dusk window behind the viewer
+        if (s === 'c') {
+          const gx = ((px + 0.75) % 1.5 + 1.5) % 1.5 - 0.75, gz = ((pz + 0.75) % 1.5 + 1.5) % 1.5 - 0.75;
+          const on = sm(0.13, 0.09, Math.hypot(gx, gz)) * sm(3.2, 3.0, Math.max(Math.abs(px), Math.abs(pz)));
+          const e = 0.02 + 70 * on; c = [e, e * 0.78, e * 0.52];
+        } else if (s === 'f') c = [0.03, 0.025, 0.02];
+        else if (s === 'px' && py > -0.7 && py < 1.4 && pz > -3 && pz < 1) c = [0.22, 0.30, 0.55];
+        else { const e = 0.05 + 0.04 * hgt; c = [e, e * 0.85, e * 0.7]; }
+      }
+      data.set([c[0], c[1], c[2], 1], (j * W + i) * 4);
+    }
+  }
+  const t = new THREE.DataTexture(data, W, H, THREE.RGBAFormat, THREE.FloatType);
+  t.mapping = THREE.EquirectangularReflectionMapping; t.magFilter = t.minFilter = THREE.LinearFilter; t.needsUpdate = true;
+  return t;
+}
+const envCache = {};
+
+// ============================ materials ============================
+// Two-layer satin: matte-ish pigment base under a thin, smoother top coat. The top coat gives the broad, soft sheen
+// that shows each panel's shape. Both layers follow the same faint grain.
+const paint = new THREE.MeshPhysicalMaterial({ name: 'paint', roughness: 0.5, roughnessMap: grainTex.rgh,
+  normalMap: grainTex.nrm, normalScale: new THREE.Vector2(0.035, 0.035),
+  clearcoat: 0.45, clearcoatRoughness: 0.24, clearcoatNormalMap: grainTex.nrm, clearcoatNormalScale: new THREE.Vector2(0.02, 0.02) });
+const quartz = new THREE.MeshPhysicalMaterial({ name: 'quartz', roughness: 0.14, ior: 1.55, clearcoat: 0.7, clearcoatRoughness: 0.03 });
+const metal = new THREE.MeshPhysicalMaterial({ name: 'metal', metalness: 1, roughness: 0.32 });
+const nickel = new THREE.MeshPhysicalMaterial({ name: 'nickel', color: new THREE.Color().setRGB(0.66, 0.64, 0.60), metalness: 1, roughness: 0.26 });
+const fireclay = new THREE.MeshPhysicalMaterial({ name: 'fireclay', color: new THREE.Color().setRGB(0.86, 0.86, 0.84), roughness: 0.18,
+  clearcoat: 1, clearcoatRoughness: 0.02, ior: 1.5 });
+const hose = new THREE.MeshPhysicalMaterial({ name: 'hose', color: new THREE.Color().setRGB(0.03, 0.03, 0.03), roughness: 0.55 });
+const tileMat = s => new THREE.MeshPhysicalMaterial({ name: 'tile', map: s.map, normalMap: s.nrm, roughnessMap: s.rgh, roughness: 1,
+  clearcoat: 0.6, clearcoatRoughness: 0.05 });
+const tileW1 = tileMat(tileV), tileW2 = tileMat(tileH);
+// full-height backsplash cut from the same slab as the countertop (shares its texture)
+const splashSlab = new THREE.MeshPhysicalMaterial({ name: 'splash_slab', roughness: 0.14, ior: 1.55, clearcoat: 0.7, clearcoatRoughness: 0.03 });
+const wall = new THREE.MeshPhysicalMaterial({ name: 'wall', color: new THREE.Color().setRGB(0.33, 0.33, 0.32), roughness: 0.92 });
+const floor = new THREE.MeshPhysicalMaterial({ name: 'floor', map: floorMap, roughness: 0.32, clearcoat: 0.3, clearcoatRoughness: 0.12 });
+
+// ============================ geometry upgrades ============================
+// Every replacement is built in the part's own local frame (mm, +Z = out of the front), inside the CAD envelope,
+// so hierarchy, pivots, door swings and drawer travel stay exactly as manufactured.
+function rbox(x0, x1, y0, y1, z0, z1, r, seg = 2) {
+  r = Math.min(r, (x1 - x0) / 2 - 0.01, (y1 - y0) / 2 - 0.01, (z1 - z0) / 2 - 0.01);
+  const g = new RoundedBoxGeometry(x1 - x0, y1 - y0, z1 - z0, seg, Math.max(r, 0.05));
+  g.translate((x0 + x1) / 2, (y0 + y1) / 2, (z0 + z1) / 2);
+  return g.index ? g.toNonIndexed() : g;
+}
+// per-face box projection, real-world mm scale: textures keep their size on every part
+function boxUV(g, su, sv = su, rot = false, ou = 0, ov = 0) {
+  const p = g.attributes.position, uv = new Float32Array(p.count * 2), a = new THREE.Vector3(), b = new THREE.Vector3(), c = new THREE.Vector3(), n = new THREE.Vector3();
+  for (let i = 0; i < p.count; i += 3) {
+    a.fromBufferAttribute(p, i); b.fromBufferAttribute(p, i + 1); c.fromBufferAttribute(p, i + 2);
+    n.subVectors(c, b).cross(a.clone().sub(b)); const ax = Math.abs(n.x), ay = Math.abs(n.y), az = Math.abs(n.z);
+    for (let k = 0; k < 3; k++) {
+      const v = [a, b, c][k];
+      const [u, w] = ax >= ay && ax >= az ? [v.z, v.y] : ay >= az ? [v.x, v.z] : [v.x, v.y];
+      const [uu, ww] = rot ? [w, u] : [u, w];
+      uv[(i + k) * 2] = ou + uu / su; uv[(i + k) * 2 + 1] = ov + ww / sv;
+    }
+  }
+  g.setAttribute('uv', new THREE.BufferAttribute(uv, 2));
+  return g;
+}
+const RECESS = 6.35;
+const hash01 = (s, k) => { let h = 2166136261 ^ k; for (const c of s) h = Math.imul(h ^ c.charCodeAt(0), 16777619); return ((h >>> 0) % 10007) / 10007; };
+// Two UV layouts per front: 'piece' (five-piece painted door: grain follows each stile/rail) and 'whole' (one-piece RTF:
+// one grain direction over the whole front, vertical on doors, horizontal on drawers, offset per part so neighbours differ).
+function withGrainLayouts(g, isDrawer, id) {
+  const piece = g.attributes.uv.clone(), whole = boxUV(g.clone(), GRAIN_U, GRAIN_V, isDrawer, hash01(id, 1), hash01(id, 2)).attributes.uv;
+  g.setAttribute('uv', piece); g.userData.uv = { piece, whole }; return g;
+}
+function shakerFront(bb, isDrawer, id) { return withGrainLayouts(shakerFront0(bb), isDrawer, id); }
+function shakerFront0(bb) {
+  const { min: m, max: M } = bb, w = M.x - m.x, h = M.y - m.y;
+  const S = Math.min(2.25 * IN, 0.2 * Math.min(w, h));            // stile / rail width
+  const G = (g, rot) => boxUV(g, GRAIN_U, GRAIN_V, rot);
+  if (Math.min(w, h) < 100) return G(rbox(m.x, M.x, m.y, M.y, m.z, M.z, 1.6), w > h);
+  const R = 1.6, z0 = m.z, z1 = M.z;
+  // grain runs along each piece: vertical stiles, horizontal rails, panel along its long side
+  const parts = [
+    G(rbox(m.x, m.x + S, m.y, M.y, z0, z1, R), false), G(rbox(M.x - S, M.x, m.y, M.y, z0, z1, R), false),             // stiles
+    G(rbox(m.x + S, M.x - S, M.y - S, M.y, z0, z1, R), true), G(rbox(m.x + S, M.x - S, m.y, m.y + S, z0, z1, R), true), // rails
+    G(rbox(m.x + S - 4, M.x - S + 4, m.y + S - 4, M.y - S + 4, z0, z1 - RECESS, 0.8, 1), w > h * 1.5),               // floating panel
+  ];
+  return mergeGeometries(parts);
+}
+function barPull(bb) {
+  const { min: m, max: M } = bb, alongX = (M.x - m.x) > (M.y - m.y);
+  const L = alongX ? M.x - m.x : M.y - m.y, Wd = alongX ? M.y - m.y : M.x - m.x, T = 0.375 * IN, P = 0.375 * IN;
+  const zb = M.z - T, c = alongX ? (m.x + M.x) / 2 : (m.y + M.y) / 2, o = alongX ? (m.y + M.y) / 2 : (m.x + M.x) / 2;
+  const box = (a0, a1, b0, b1, z0, z1, r) => alongX ? rbox(a0, a1, b0, b1, z0, z1, r, 3) : rbox(b0, b1, a0, a1, z0, z1, r, 3);
+  const g = mergeGeometries([
+    box(c - L / 2, c + L / 2, o - Wd / 2, o + Wd / 2, zb, M.z, 3.2),
+    box(c - L / 2, c - L / 2 + P, o - P / 2, o + P / 2, m.z, zb + 1, 1.6),
+    box(c + L / 2 - P, c + L / 2, o - P / 2, o + P / 2, m.z, zb + 1, 1.6),
+  ]);
+  return boxUV(g, 50);
+}
+// Quartz slab: outline of the CAD top face -> extrusion with an eased (bevelled) edge, same footprint and thickness.
+function quartzSlab(geo, uvOff) {
+  const p = geo.attributes.position, idx = geo.index ? geo.index.array : [...Array(p.count).keys()];
+  let top = -Infinity, bot = Infinity; for (let i = 0; i < p.count; i++) { top = Math.max(top, p.getY(i)); bot = Math.min(bot, p.getY(i)); }
+  const key = i => Math.round(p.getX(i) * 100) + ',' + Math.round(p.getZ(i) * 100), pt = new Map(), ec = new Map();
+  for (let t = 0; t < idx.length; t += 3) {
+    const tri = [idx[t], idx[t + 1], idx[t + 2]]; if (!tri.every(i => Math.abs(p.getY(i) - top) < 0.01)) continue;
+    for (let e = 0; e < 3; e++) {
+      const a = key(tri[e]), b = key(tri[(e + 1) % 3]); pt.set(a, [p.getX(tri[e]), p.getZ(tri[e])]); pt.set(b, [p.getX(tri[(e + 1) % 3]), p.getZ(tri[(e + 1) % 3])]);
+      const k = a < b ? a + '|' + b : b + '|' + a; ec.set(k, (ec.get(k) || 0) + 1);
+    }
+  }
+  const adj = new Map(); for (const [k, n] of ec) if (n === 1) { const [a, b] = k.split('|'); (adj.get(a) || adj.set(a, []).get(a)).push(b); (adj.get(b) || adj.set(b, []).get(b)).push(a); }
+  const loops = [], seen = new Set();
+  for (const s of adj.keys()) {
+    if (seen.has(s)) continue; const loop = []; let prev = null, cur = s;
+    while (cur && !seen.has(cur)) { seen.add(cur); loop.push(pt.get(cur)); const nx = adj.get(cur).find(v => v !== prev && !seen.has(v)); prev = cur; cur = nx; }
+    if (loop.length > 2) loops.push(loop);
+  }
+  const area = l => l.reduce((s, q, i) => { const r = l[(i + 1) % l.length]; return s + q[0] * r[1] - r[0] * q[1]; }, 0) / 2;
+  loops.sort((a, b) => Math.abs(area(b)) - Math.abs(area(a)));
+  const shape = new THREE.Shape(loops[0].map(([x, z]) => new THREE.Vector2(x, z)));
+  loops.slice(1).forEach(l => shape.holes.push(new THREE.Path(l.map(([x, z]) => new THREE.Vector2(x, z)))));
+  const T = top - bot, bev = 1.5;
+  const g = new THREE.ExtrudeGeometry(shape, { depth: T - 2 * bev, bevelEnabled: true, bevelThickness: bev, bevelSize: bev, bevelOffset: -bev, bevelSegments: 3, curveSegments: 1 });
+  g.rotateX(Math.PI / 2); g.translate(0, bot + T - bev, 0);
+  // Top face maps straight from the slab. Edge faces are 'unfolded' off the top (as a fabricator mitres an edge), so a
+  // vein that reaches the front edge carries on down it instead of smearing into vertical stripes.
+  g.computeVertexNormals();
+  const q = g.attributes.position, nn = g.attributes.normal, uv = new Float32Array(q.count * 2), SW = 126 * IN, SH = 63 * IN, yT = bot + T;
+  for (let i = 0; i < q.count; i += 3) {
+    let nx = 0, ny = 0, nz = 0; for (let k = 0; k < 3; k++) { nx += nn.getX(i + k); ny += nn.getY(i + k); nz += nn.getZ(i + k); }
+    for (let k = 0; k < 3; k++) {
+      const x = q.getX(i + k), y = q.getY(i + k), z = q.getZ(i + k), drop = yT - y;
+      let u = x, v = z;
+      if (Math.abs(ny) < 0.7 * Math.hypot(nx, ny, nz)) { if (Math.abs(nz) >= Math.abs(nx)) v = z + Math.sign(nz) * drop; else u = x + Math.sign(nx) * drop; }
+      uv[(i + k) * 2] = uvOff[0] + u / SW; uv[(i + k) * 2 + 1] = uvOff[1] + v / SH;
+    }
+  }
+  g.setAttribute('uv', new THREE.BufferAttribute(uv, 2));
+  return { g, loops: loops.length, verts: loops[0].length };
+}
+const isBox = g => (g.index ? g.index.count : g.attributes.position.count) === 36;
+
+// ============================ load + upgrade the CAD assembly ============================
+const nodes = {}, doors = [], drawers = [], frontMeshes = [], splashMeshes = [], report = { fronts: 0, pulls: 0, boxes: 0, slabs: [] };
+const bin = Uint8Array.from(atob(window.__GLB_B64), c => c.charCodeAt(0));
+new GLTFLoader().parse(bin.buffer, '', gltf => {
+  const root = gltf.scene; scene.add(root);
+  root.traverse(o => { if (o.name) nodes[o.name] = o; });
+  root.traverse(o => {
+    if (!o.isMesh) return;
+    const id = o.name, mname = o.material.name, cat = (gltf.parser.json.nodes.find(n => n.name === id) || {}).extras?.category || '';
+    o.geometry.computeBoundingBox(); const bb = o.geometry.boundingBox.clone();
+    o.castShadow = o.receiveShadow = true;
+    if (cat === 'door' || cat === 'drawer_front') { o.geometry = shakerFront(bb, cat === 'drawer_front', id); frontMeshes.push(o); report.fronts++; }
+    else if (cat === 'hardware_handle') {
+      o.geometry = barPull(bb); report.pulls++;
+      // pulls centred on a drawer land on the recessed panel, not in mid-air
+      const par = o.parent; if (par && par.isMesh && /drawer_front/.test(par.name)) {
+        par.geometry.computeBoundingBox(); const pb = par.geometry.boundingBox, S = Math.min(2.25 * IN, 0.2 * Math.min(pb.max.x - pb.min.x, pb.max.y - pb.min.y));
+        if (Math.abs(o.position.y - (pb.min.y + pb.max.y) / 2) < (pb.max.y - pb.min.y) / 2 - S && Math.min(pb.max.x - pb.min.x, pb.max.y - pb.min.y) >= 100) o.position.z -= RECESS;
+      }
+    }
+    else if (cat === 'countertop_slab') {
+      const off = id.endsWith('01') ? [0.03, 0.52] : [0.40, 0.06];
+      const r = quartzSlab(o.geometry, off); o.geometry = r.g; report.slabs.push(id + ':' + r.loops + 'loop/' + r.verts + 'v');
+    }
+    else if (isBox(o.geometry) && mname === 'mat_cabinet_primary') { o.geometry = boxUV(rbox(bb.min.x, bb.max.x, bb.min.y, bb.max.y, bb.min.z, bb.max.z, 1.5), GRAIN_U, GRAIN_V, (bb.max.x - bb.min.x) > (bb.max.y - bb.min.y)); report.boxes++; }
+    else if (mname === 'mat_backsplash_tile') {
+      const g = o.geometry = o.geometry.index ? o.geometry.toNonIndexed() : o.geometry, w1 = id.endsWith('01');
+      const slabUV = boxUV(g.clone(), 126 * IN, 63 * IN, false, w1 ? 0.05 : 0.2, w1 ? 0.1 : 0.45).attributes.uv;   // its own area of the slab
+      boxUV(g, w1 ? tileV.pw : tileH.pw, w1 ? tileV.ph : tileH.ph);
+      g.userData.uv = { tile: g.attributes.uv, slab: slabUV }; g.userData.tileMat = w1 ? tileW1 : tileW2; splashMeshes.push(o);
+    }
+    else if (mname === 'mat_cabinet_primary') boxUV(o.geometry = o.geometry.index ? o.geometry.toNonIndexed() : o.geometry, GRAIN_U, GRAIN_V);
+    else if (id.startsWith('reference_floor')) boxUV(o.geometry = o.geometry.toNonIndexed(), 3000);
+
+    o.material = { mat_cabinet_primary: paint, mat_countertop_surface: quartz, mat_hardware_finish: metal, mat_faucet_finish: nickel,
+      mat_fixture_fireclay: fireclay, mat_faucet_hose: hose,
+      mat_backsplash_tile: id.endsWith('01') ? tileW1 : tileW2,
+      mat_reference: id.startsWith('reference_floor') ? floor : wall }[mname] || o.material;
+  });
+  for (const [id, d] of Object.entries(DATA.parts)) {
+    const n = nodes[id]; if (!n) continue;
+    if (d.swing) doors.push({ n, q0: n.quaternion.clone(), sign: d.swing.sign, max: d.swing.max * Math.PI / 180 });
+    if (d.travel_mm) drawers.push({ n, p0: n.position.clone(), dir: new THREE.Vector3(0, 0, 1).applyQuaternion(n.quaternion), travel: d.travel_mm });
+  }
+  console.log('[studio] upgraded', JSON.stringify(report));
+  window.__studio = { THREE, scene, camera, renderer, composer, gtao, controls, nodes, get pt() { return pt; } };
+  $('status').hidden = true;
+  ready = true; resize();
+  restoreBuild();
+}, err => { $('status').textContent = 'The 3D model could not load in this browser (' + (err && err.message || 'WebGL error') + ').'; });
+
+// ============================ cameras ============================
+const in2gl = (x, y, z) => new THREE.Vector3(x * IN / 1000, z * IN / 1000, -y * IN / 1000);   // world Z-up in -> glTF Y-up m
+const VIEWS = [
+  { label: 'Corner', pos: DATA.views[1].center, tgt: DATA.views[1].target, fov: 50 },
+  { label: 'Sink', pos: [74, 62, 54], tgt: [52, 20, 36], fov: 34 },
+  { label: 'Drawers', pos: [58, 56, 44], tgt: [25, 62, 26], fov: 34 },
+  { label: 'Counter edge', pos: [40, 52, 41], tgt: [30, 34, 36.5], fov: 28 },
+  { label: 'Overview', pos: [150, 140, 120], tgt: [30, 28, 45], fov: 42 },
+  ...DATA.views.filter(v => v.id !== '02_corner_wide').map(v => ({ label: v.label, pos: v.center, tgt: v.target, fov: Math.min(60, v.fov) })),
+];
+const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+let tween = null, curView = 0;
+$('views').innerHTML = VIEWS.map((v, i) => `<button class="vt" data-v="${i}" aria-pressed="false" aria-label="${v.label} view" title="${v.label}"><em>${v.label}</em></button>`).join('');
+$('views').addEventListener('click', e => { const b = e.target.closest('[data-v]'); if (b) goView(+b.dataset.v); });
+const markViews = () => document.querySelectorAll('#views .vt').forEach(b => b.setAttribute('aria-pressed', +b.dataset.v === curView));
+function goView(i, instant) {
+  curView = i; markViews(); writeHash();
+  const v = VIEWS[i], pos = in2gl(...v.pos), tgt = in2gl(...v.tgt);
+  if (instant || reduce) { camera.position.copy(pos); controls.target.copy(tgt); camera.fov = v.fov; camera.updateProjectionMatrix(); camMoved(); return; }
+  tween = { t0: performance.now(), p0: camera.position.clone(), q0: controls.target.clone(), f0: camera.fov, pos, tgt, fov: v.fov };
+}
+controls.addEventListener('start', () => { tween = null; if (curView !== -1) { curView = -1; markViews(); } });   // user took the camera
+// thumbnail strip arrows
+const strip = $('views'), syncArrows = () => { $('strip-l').hidden = strip.scrollLeft < 4; $('strip-r').hidden = strip.scrollLeft + strip.clientWidth >= strip.scrollWidth - 4; };
+$('strip-l').addEventListener('click', () => strip.scrollBy({ left: -strip.clientWidth * 0.8 }));
+$('strip-r').addEventListener('click', () => strip.scrollBy({ left: strip.clientWidth * 0.8 }));
+strip.addEventListener('scroll', syncArrows, { passive: true }); new ResizeObserver(syncArrows).observe(strip);
+// Picture thumbnails, re-rendered after every finish change so the strip always shows the current build.
+// Each view is drawn into a corner of the main canvas and copied out within the same task, before the next frame.
+const thumbCam = new THREE.PerspectiveCamera(50, 1.6, 0.05, 60);
+let thumbTimer = 0;
+const queueThumbs = () => { clearTimeout(thumbTimer); thumbTimer = setTimeout(renderThumbs, 450); };
+function renderThumbs() {
+  if (!ready || tween) return queueThumbs();
+  const TW = 224, TH = 140, dpr = renderer.getPixelRatio(), size = renderer.getSize(new THREE.Vector2());
+  const cv = document.createElement('canvas'); cv.width = TW; cv.height = TH; const ctx = cv.getContext('2d');
+  thumbCam.aspect = TW / TH;
+  VIEWS.forEach((v, i) => {
+    thumbCam.position.copy(in2gl(...v.pos)); thumbCam.fov = v.fov; thumbCam.updateProjectionMatrix(); thumbCam.lookAt(in2gl(...v.tgt));
+    renderer.setViewport(0, 0, TW / dpr, TH / dpr); renderer.render(scene, thumbCam);
+    ctx.drawImage(canvas, 0, canvas.height - TH, TW, TH, 0, 0, TW, TH);
+    const b = strip.querySelector(`[data-v="${i}"]`); if (b) b.style.backgroundImage = `url(${cv.toDataURL('image/jpeg', 0.82)})`;
+  });
+  renderer.setViewport(0, 0, size.x, size.y);
+  if (pt && photo) pt.reset();
+}
+
+// ============================ stage controls ============================
+const SCENE_SW = {
+  showroom: 'linear-gradient(180deg,#fbf8f2 0 16%,#c9c5be 16% 68%,#9a9790 68%)',
+  whiteroom: 'linear-gradient(180deg,#ffffff 0 60%,#ecebe8 60%)',
+  evening: 'radial-gradient(circle at 30% 18%,#ffd28a 0 7%,transparent 8%),radial-gradient(circle at 70% 18%,#ffd28a 0 7%,transparent 8%),linear-gradient(180deg,#1d1814 0 66%,#3a2d22 66%)',
+};
+$('scenes').innerHTML = Object.entries(SCENES).map(([k, s]) => `<button class="scene-opt" data-s="${k}" aria-pressed="false"><span style="background:${SCENE_SW[k]}"></span>${s.label}</button>`).join('');
+$('scenes').addEventListener('click', e => { const b = e.target.closest('[data-s]'); if (b) setScene(b.dataset.s); });
+let curScene = 'showroom';
+function setScene(k) {
+  const s = SCENES[k]; curScene = k;
+  document.querySelectorAll('#scenes .scene-opt').forEach(b => b.setAttribute('aria-pressed', b.dataset.s === k));
+  scene.environment = envCache[k] || (envCache[k] = roomEnv(k));
+  scene.background = new THREE.Color(s.bg);
+  renderer.toneMappingExposure = s.exposure;
+  key.position.set(...s.key); key.color.set(s.keyC); key.intensity = s.keyI * RASTER_KEY;
+  // area twin: same position/colour, luminance chosen so irradiance at the counter matches the directional light
+  const d = key.position.distanceTo(key.target.position);
+  keyArea.position.copy(key.position); keyArea.lookAt(key.target.position); keyArea.color.copy(key.color);
+  keyArea.intensity = PHOTO_KEY * s.keyI * d * d / (keyArea.width * keyArea.height);
+  scene.environmentIntensity = photo ? PHOTO_ENV : RASTER_ENV;
+  if (pt) { pt.updateEnvironment(); pt.updateLights(); }
+  writeHash(); queueThumbs();
+}
+const POPS = { 'btn-scene': 'pop-scene', 'btn-open': 'pop-open' };
+function closePops(except) { for (const [b, p] of Object.entries(POPS)) if (b !== except) { $(p).hidden = true; $(b).setAttribute('aria-expanded', false); } }
+for (const [b, p] of Object.entries(POPS)) $(b).addEventListener('click', e => { e.stopPropagation(); const open = $(p).hidden; closePops(b); $(p).hidden = !open; $(b).setAttribute('aria-expanded', open); });
+document.addEventListener('click', e => { if (!e.target.closest('.pop')) closePops(); });
+document.addEventListener('keydown', e => { if (e.key === 'Escape') closePops(); });
+$('full').addEventListener('click', () => document.fullscreenElement ? document.exitFullscreen() : $('stage').requestFullscreen?.());
+
+// ============================ finish pickers ============================
+const lin2hex = c => '#' + c.map(v => Math.round(255 * Math.min(1, v <= 0.0031308 ? 12.92 * v : 1.055 * Math.pow(v, 1 / 2.4) - 0.055)).toString(16).padStart(2, '0')).join('');
+const esc = t => String(t ?? '').replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' })[c]);
+// geometry attributes or mesh materials changed: the path tracer must rebuild its scene
+function sceneChanged() { if (!pt) return; if (photo) { pt.setScene(scene, camera); geomDirty = false; } else geomDirty = true; }
+function setUVs(meshes, key) { let changed = false; meshes.forEach(o => { const a = o.geometry.userData.uv[key]; if (o.geometry.attributes.uv !== a) { o.geometry.setAttribute('uv', a); changed = true; } }); return changed; }
+const subline = o => [o.code, o.brand, o.family || o.group].filter(Boolean).join(' · ');
+const gloss = o => o.kind === 'slab' || o.kind === 'tile' ? 0.42 : o.metalness ? Math.max(0.12, 0.55 - o.roughness * 0.7)
+  : Math.max(0.06, Math.min(0.42, 0.5 - (o.rough ?? 0.5) * 0.5 + (o.cc ?? 0) * 0.2));
+const ITEMS = {};   // id -> { o, sec }
+// chip background: photo thumb, flat colour, or for metals a brushed-metal ramp built from the finish colour
+const shade = (c, k) => lin2hex(c.map(v => Math.min(1, v * k)));
+const chipBg = o => o.thumb ? `background-image:url(${o.thumb})`
+  : o.metalness > 0.5 ? `background-image:linear-gradient(135deg,${shade(o.color, 0.35)} 0%,${shade(o.color, 1.15)} 42%,${shade(o.color, 0.7)} 58%,${shade(o.color, 1.0)} 78%,${shade(o.color, 0.45)} 100%)`
+  : `background-color:${lin2hex(o.color)}`;
+function swatch(o, sec) {
+  ITEMS[o.id] = { o, sec };
+  // searchable text: name, code, brand, family, and Vadara collection (tone bands are left out: "black" should not find Coffee Brown)
+  const q = [o.name, o.code, o.brand, o.family, o.kind === 'slab' ? o.group : ''].filter(Boolean).join(' ').toLowerCase();
+  return `<button class="sw" data-id="${o.id}" aria-pressed="false" aria-label="${esc(o.name)}" data-q="${esc(q)}" style="${chipBg(o)};--g:${gloss(o).toFixed(2)}"></button>`;
+}
+const chev = '<svg class="chev"><use href="#i-chev"/></svg>';
+const grp = (title, items, sec) => `<div class="grp"><h3>${esc(title)} <span class="n">${items.length}</span></h3><p class="pickname"></p><div class="sws">${items.map(o => swatch(o, sec)).join('')}</div></div>`;
+const groupBy = (items, key, order) => { const m = new Map(); (order || []).forEach(k => m.set(k, [])); items.forEach(o => { const k = o[key]; if (!m.has(k)) m.set(k, []); m.get(k).push(o); }); return [...m].filter(([, v]) => v.length); };
+const sub = (title, groups, sec, open) => { const n = groups.reduce((s, [, v]) => s + v.length, 0);
+  return `<details class="sub"${open ? ' open' : ''}><summary>${esc(title)} <span class="n">${n}</span>${chev}</summary><div class="inner">${groups.map(([t, v]) => grp(t, v, sec)).join('')}</div></details>`; };
+const empty = '<p class="empty" hidden>No finishes match your search.</p>';
+
+const quartzAll = CAT.counters.filter(c => c.kind === 'slab'), graniteAll = CAT.counters.filter(c => c.kind === 'tile');
+$('body-counter').innerHTML =
+  `<p class="note"><svg><use href="#i-info"/></svg>Quartz is cut from the full slab photo at 126 × 63 in. Granite repeats the maker's close-up at true scale.</p>` +
+  sub('Vadara quartz', groupBy(quartzAll, 'group'), 'counter', true) +
+  sub('MSI granite', groupBy(graniteAll, 'group', ['Light & white', 'Mid tones', 'Dark & black']), 'counter', false) + empty;
+const solids = CAT.fronts.filter(f => f.group === 'solid'), woods = CAT.fronts.filter(f => f.group === 'woodgrain');
+$('body-front').innerHTML =
+  grp('Showroom paint', [SHOWROOM_PAINT], 'front') +
+  `<p class="note"><svg><use href="#i-info"/></svg>Decore DRS131 is a one-piece RTF door. Woodgrain runs vertically on doors and horizontally on drawer fronts, with no rail joints.</p>` +
+  sub('Decore solid colours', groupBy(solids, 'family', ['Smooth', 'Satin', 'Soft-touch', 'Supermatte']), 'front', true) +
+  sub('Decore woodgrain', groupBy(woods, 'family', ['Smooth woodgrain', 'Textured']), 'front', false) + empty;
+$('body-metal').innerHTML = grp('Bar pulls', METALS, 'metal') + empty;
+
+const SEL = { counter: null, front: null, metal: null, splash: 'tile' };
+let lastSection = null, restoring = false;
+function markSelected(sec, id) {
+  const card = $('card-' + sec), it = ITEMS[id];
+  card.querySelectorAll('.sw').forEach(b => b.setAttribute('aria-pressed', b.dataset.id === id));
+  card.querySelectorAll('.pickname').forEach(p => p.textContent = '');
+  const btn = card.querySelector(`.sw[data-id="${id}"]`);
+  if (btn) { btn.closest('.grp').querySelector('.pickname').textContent = it.o.name + (it.o.code ? '  ' + it.o.code : ''); const d = btn.closest('.sub'); if (d) d.open = true; }
+  $('sel-' + sec).textContent = it.o.name + (it.o.code ? ' ' + it.o.code : '') + (it.o.brand ? ' · ' + it.o.brand : '');
+}
+// the camera follows the section being edited (Porsche jumps to the wheel or seat view the same way)
+function follow(sec) { if (restoring) return; const v = +$('card-' + sec).dataset.view; if (lastSection !== sec) { lastSection = sec; if (curView !== v) goView(v); } }
+document.querySelectorAll('.card>summary').forEach(sm => sm.addEventListener('click', () => { const card = sm.parentElement; setTimeout(() => { if (card.open) follow(card.id.slice(5)); }, 0); }));
+document.querySelector('.opts').addEventListener('click', e => {
+  const b = e.target.closest('.sw'); if (!b) return; const it = ITEMS[b.dataset.id]; if (!it) return;
+  follow(it.sec); ({ counter: pickCounter, front: pickFront, metal: pickMetal })[it.sec](it.o);
+});
+const busy = (id, on) => document.querySelectorAll(`.sw[data-id="${id}"]`).forEach(b => b.toggleAttribute('aria-busy', on));
+
+let counterTok = 0;
+async function pickCounter(o) {
+  const tok = ++counterTok; SEL.counter = o; markSelected('counter', o.id); busy(o.id, true);
+  let t; try { t = await getColorTex(o.id); } catch (e) { busy(o.id, false); toast(`Texture for ${o.name} is missing`); return; }
+  busy(o.id, false); if (tok !== counterTok) return;
+  // geometry UVs are in slab units (126 x 63 in); tiled granite repeats its close-up at true size
+  t.repeat.set(126 * IN / o.size_mm[0], 63 * IN / o.size_mm[1]);
+  quartz.map = splashSlab.map = t; quartz.needsUpdate = splashSlab.needsUpdate = true;
+  if (pt) pt.updateMaterials();
+  drawSplashCards(); writeHash(); queueThumbs();
+}
+let frontTok = 0;
+async function pickFront(o) {
+  const tok = ++frontTok; SEL.front = o; markSelected('front', o.id);
+  const P = paint;
+  if (o.kind === 'paint') {
+    Object.assign(P, { map: null, roughness: 0.5, roughnessMap: grainTex.rgh, normalMap: grainTex.nrm, clearcoat: 0.45, clearcoatRoughness: 0.24, clearcoatNormalMap: grainTex.nrm });
+    P.normalScale.set(0.035, 0.035); P.clearcoatNormalScale.set(0.02, 0.02); P.color.setRGB(...o.color, THREE.LinearSRGBColorSpace);
+  } else if (o.kind === 'solid') {
+    // thermofoil over MDF: a smooth film, no grain
+    Object.assign(P, { map: null, roughnessMap: null, normalMap: null, clearcoatNormalMap: null, roughness: o.rough, clearcoat: o.cc, clearcoatRoughness: 0.3 });
+    P.color.setRGB(...o.color, THREE.LinearSRGBColorSpace);
+  } else {
+    busy(o.id, true);
+    let t, n; try { [t, n] = await Promise.all([getColorTex(o.id), getEmbossTex(o.id)]); } catch (e) { busy(o.id, false); toast(`Texture for ${o.name} is missing`); return; }
+    busy(o.id, false); if (tok !== frontTok) return;
+    n.wrapS = n.wrapT = THREE.RepeatWrapping;
+    [t, n].forEach(x => x.repeat.set(GRAIN_U / o.size_mm[0], GRAIN_V / o.size_mm[1]));
+    Object.assign(P, { map: t, roughnessMap: null, normalMap: n, clearcoatNormalMap: n, roughness: o.rough, clearcoat: o.cc, clearcoatRoughness: 0.32 });
+    P.normalScale.set(o.emboss, o.emboss); P.clearcoatNormalScale.set(o.emboss * 0.6, o.emboss * 0.6); P.color.setRGB(0.93, 0.93, 0.93);
+  }
+  P.needsUpdate = true;
+  const uvChanged = frontMeshes.length && setUVs(frontMeshes, o.kind === 'paint' ? 'piece' : 'whole');
+  if (uvChanged) sceneChanged(); else if (pt) pt.updateMaterials();
+  writeHash(); queueThumbs();
+}
+function pickMetal(o) {
+  SEL.metal = o; markSelected('metal', o.id);
+  metal.color.setRGB(...o.color, THREE.LinearSRGBColorSpace); metal.roughness = o.roughness; metal.metalness = o.metalness;
+  if (pt) pt.updateMaterials(); writeHash(); queueThumbs();
+}
+
+// backsplash: option cards with a picture, like the seat cards
+const tileThumb = (() => { const c = document.createElement('canvas'); c.width = 240; c.height = 140; const src = tileV.map.image;
+  c.getContext('2d').drawImage(src, 0, 0, src.width, src.width * 140 / 240, 0, 0, 240, 140); return c.toDataURL('image/jpeg', 0.85); })();
+const SPLASH = [
+  { k: 'tile', t: 'Glazed tile', d: '3 × 12 in handmade-look tile, as in the showroom.' },
+  { k: 'slab', t: 'Full-height slab', d: 'Cut from the same stone as the countertop.' },
+];
+function drawSplashCards() {
+  $('splash').innerHTML = SPLASH.map(o => `<button class="oc" data-k="${o.k}" aria-pressed="${SEL.splash === o.k}"><span class="img" style="background-image:url(${o.k === 'tile' ? tileThumb : SEL.counter?.thumb || ''})"></span><b>${o.t}</b><small>${o.d}</small><span class="dot"></span></button>`).join('');
+  $('sel-splash').textContent = SPLASH.find(o => o.k === SEL.splash).t + (SEL.splash === 'slab' && SEL.counter ? ' · ' + SEL.counter.name : '');
+}
+$('splash').addEventListener('click', e => { const b = e.target.closest('[data-k]'); if (b) { follow('splash'); setSplash(b.dataset.k); } });
+function setSplash(k) {
+  SEL.splash = k; drawSplashCards();
+  splashMeshes.forEach(o => { o.material = k === 'slab' ? splashSlab : o.geometry.userData.tileMat; });
+  setUVs(splashMeshes, k); sceneChanged(); writeHash(); queueThumbs();
+}
+
+// ---------- search across every finish
+let preSearch = null;   // open state of cards and sub-dropdowns before a search, restored when it is cleared
+function applySearch() {
+  const q = $('q').value.trim().toLowerCase(), opts = document.querySelector('.opts'); $('q-clear').hidden = !q;
+  const folds = [...opts.querySelectorAll('details')];
+  if (q && !preSearch) preSearch = folds.map(d => d.open);
+  opts.classList.toggle('searching', !!q);
+  opts.querySelectorAll('.sw').forEach(b => b.classList.toggle('hide', !!q && !b.dataset.q.includes(q)));
+  const count = el => el.querySelectorAll('.sw:not(.hide)').length;
+  opts.querySelectorAll('.grp').forEach(g => { const n = count(g); g.classList.toggle('hide', !n); g.querySelector('h3 .n').textContent = n; });
+  opts.querySelectorAll('.sub').forEach(d => { const n = count(d); d.classList.toggle('hide', !n); d.querySelector('summary .n').textContent = n; if (q && n) d.open = true; });
+  ['counter', 'front', 'metal'].forEach(sec => { const card = $('card-' + sec), n = count(card); card.querySelector('.empty').hidden = true; if (q) card.open = n > 0; });
+  if (!q && preSearch) { folds.forEach((d, i) => d.open = preSearch[i]); preSearch = null; }
+}
+$('q').addEventListener('input', applySearch);
+$('q-clear').addEventListener('click', () => { $('q').value = ''; applySearch(); $('q').focus(); });
+
+// ---------- tooltip: name on top, code / brand / family below
+const tip = $('tip');
+function showTip(b) {
+  const it = ITEMS[b.dataset.id]; if (!it) return;
+  tip.innerHTML = `${esc(it.o.name)}<small>${esc(subline(it.o))}</small>`; tip.hidden = false;
+  const r = b.getBoundingClientRect(), w = tip.offsetWidth;
+  tip.style.left = Math.min(innerWidth - w / 2 - 8, Math.max(w / 2 + 8, r.left + r.width / 2)) + 'px'; tip.style.top = r.top - 10 + 'px';
+}
+const hideTip = () => { tip.hidden = true; };
+document.querySelector('.opts').addEventListener('pointerover', e => { const b = e.target.closest('.sw'); b ? showTip(b) : hideTip(); });
+document.querySelector('.opts').addEventListener('pointerleave', hideTip);
+document.querySelector('.opts').addEventListener('focusin', e => { const b = e.target.closest('.sw'); if (b) showTip(b); });
+document.querySelector('.opts').addEventListener('focusout', hideTip);
+addEventListener('scroll', hideTip, { passive: true });
+
+// ---------- build state in the URL: Share copies a link that reopens this exact build
+function writeHash() {
+  if (restoring || !SEL.counter || !SEL.front || !SEL.metal) return;
+  const p = new URLSearchParams({ c: SEL.counter.id, s: SEL.splash, f: SEL.front.id, h: SEL.metal.id, sc: curScene, v: curView });
+  history.replaceState(null, '', '#' + p);
+}
+async function restoreBuild() {
+  restoring = true;
+  const p = new URLSearchParams(location.hash.slice(1)), get = (k, d) => ITEMS[p.get(k)]?.o || d;
+  setScene(SCENES[p.get('sc')] ? p.get('sc') : 'showroom');
+  const v = +p.get('v'); goView(Number.isInteger(v) && v >= 0 && v < VIEWS.length && p.has('v') ? v : 0, true);
+  pickMetal(get('h', METALS[0]));
+  setSplash(p.get('s') === 'slab' ? 'slab' : 'tile');
+  await Promise.all([pickCounter(get('c', CAT.counters[0])), pickFront(get('f', SHOWROOM_PAINT))]);
+  restoring = false; writeHash(); queueThumbs();
+  setTimeout(prewarm, 2500);
+}
+let toastT = 0;
+function toast(msg) { const t = $('toast'); t.textContent = msg; t.hidden = false; clearTimeout(toastT); toastT = setTimeout(() => t.hidden = true, 2200); }
+async function copyLink() {
+  writeHash();
+  try { await navigator.clipboard.writeText(location.href); toast('Build link copied'); }
+  catch { const i = document.createElement('input'); i.value = location.href; document.body.appendChild(i); i.select(); document.execCommand('copy'); i.remove(); toast('Build link copied'); }
+}
+$('share').addEventListener('click', copyLink); $('sum-share').addEventListener('click', copyLink);
+
+// ---------- summary + about dialogs
+function drawSummary() {
+  const sw = chipBg;
+  const sp = SPLASH.find(o => o.k === SEL.splash);
+  const rows = [
+    ['counter', 'Countertop', sw(SEL.counter), SEL.counter.name, subline(SEL.counter)],
+    ['splash', 'Backsplash', `background-image:url(${SEL.splash === 'tile' ? tileThumb : SEL.counter.thumb})`, sp.t, SEL.splash === 'slab' ? 'Matches ' + SEL.counter.name : 'Vertical stack + running bond'],
+    ['front', 'Cabinets', sw(SEL.front), SEL.front.name, subline(SEL.front)],
+    ['metal', 'Hardware', sw(SEL.metal), SEL.metal.name, '6-3/4 in bar pulls'],
+  ];
+  $('sum-rows').innerHTML = rows.map(([k, t, bg, v, s]) => `<div class="row"><span class="ph" style="${bg}"></span><div><div class="k">${t}</div><div class="v">${esc(v)}</div><div class="s">${esc(s)}</div></div><button class="b ghost" data-change="${k}">Change</button></div>`).join('')
+    + `<div class="row"><span class="ph" style="background:${SCENE_SW[curScene]}"></span><div><div class="k">Lighting</div><div class="v">${SCENES[curScene].label}</div></div><span></span></div>`;
+}
+$('open-summary').addEventListener('click', () => { drawSummary(); $('dlg-summary').showModal(); });
+$('open-about').addEventListener('click', () => $('dlg-about').showModal());
+document.querySelectorAll('dialog').forEach(d => d.addEventListener('click', e => { if (e.target === d || e.target.closest('[data-close]')) d.close(); }));
+$('sum-rows').addEventListener('click', e => {
+  const b = e.target.closest('[data-change]'); if (!b) return; const sec = b.dataset.change, card = $('card-' + sec);
+  $('dlg-summary').close(); card.open = true; follow(sec); card.scrollIntoView({ behavior: reduce ? 'auto' : 'smooth', block: 'start' });
+  (card.querySelector('.sw[aria-pressed="true"], .oc[aria-pressed="true"]') || card.querySelector('summary')).focus({ preventScroll: true });
+});
+$('sum-shot').addEventListener('click', () => $('shot').click());
+
+// ============================ fronts ============================
+const Y = new THREE.Vector3(0, 1, 0);
+function applyOpen() {
+  const t = $('open').value / 100; $('openv').value = Math.round(t * 100) + '%';
+  doors.forEach(d => d.n.quaternion.copy(d.q0).multiply(new THREE.Quaternion().setFromAxisAngle(Y, d.sign * t * d.max)));
+  drawers.forEach(d => d.n.position.copy(d.p0).addScaledVector(d.dir, d.travel * t));
+}
+$('open').addEventListener('input', () => { applyOpen(); if (pt) geomDirty = true; });
+$('open').addEventListener('change', () => { if (pt && photo) { pt.setScene(scene, camera); geomDirty = false; } });
+
+// ============================ path-traced photo mode ============================
+const MAX_SPP = 400;
+const RASTER_ENV = 0.72, RASTER_KEY = 1.35;   // live view only: compensates for the unshadowed environment
+const PHOTO_ENV = 0.75, PHOTO_KEY = 0.75;     // path tracer: matched by eye to the live view so the greige stays greige
+let ptLoading = null;
+function loadPT() {
+  return ptLoading || (ptLoading = (async () => {
+      const { WebGLPathTracer } = await import('three-gpu-pathtracer');
+      pt = new WebGLPathTracer(renderer);
+      // CSS-pixel resolution and 4 bounces: ~5 samples/s on an M1 Pro, converged still in about a minute
+      pt.tiles.set(2, 2); pt.bounces = 4; pt.filterGlossyFactor = 0.4; pt.minSamples = 3; pt.renderDelay = 120; pt.fadeDuration = 0;
+      pt.textureSize.set(2048, 2048); pt.renderScale = 1 / renderer.getPixelRatio();
+      pt.rasterizeSceneCallback = () => composer.render();
+      // Edge-preserving (bilateral) denoise that compares neighbours in log space, so the test is relative. Noise on a
+      // bright white sink is ignored as readily as on dark paint, while stone speckle and grain still count as edges.
+      // Painted panels are large and matte, where leftover noise reads as grit, so the blur keeps a firm floor.
+      const den = new THREE.ShaderMaterial({
+        blending: THREE.NoBlending, depthWrite: false, depthTest: false,
+        uniforms: { map: { value: null }, sigma: { value: 4 }, kSigma: { value: 1.5 }, threshold: { value: 0.2 } },
+        vertexShader: 'varying vec2 vUv; void main() { vUv = uv; gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0); }',
+        fragmentShader: `uniform sampler2D map; uniform float sigma, kSigma, threshold; varying vec2 vUv;
+          vec3 lg(vec3 c) { return log(1.0 + 8.0 * max(c, 0.0)); }
+          void main() {
+            float radius = round(kSigma * sigma), radQ = radius * radius, iS = 0.5 / (sigma * sigma), iT = 0.5 / (threshold * threshold);
+            vec2 size = vec2(textureSize(map, 0)); vec3 cl = lg(texture2D(map, vUv).rgb);
+            vec4 acc = vec4(0.0); float z = 0.0; vec2 d;
+            for (d.x = -radius; d.x <= radius; d.x++) { float h = sqrt(radQ - d.x * d.x);
+              for (d.y = -h; d.y <= h; d.y++) { vec4 w = texture2D(map, vUv + d / size); vec3 dC = lg(w.rgb) - cl;
+                float f = exp(-dot(d, d) * iS) * exp(-dot(dC, dC) * iT); z += f; acc += f * w; } }
+            gl_FragColor = acc / z;
+            #include <tonemapping_fragment>
+            #include <colorspace_fragment>
+          }`,
+      });
+      pt.renderToCanvasCallback = (target, r, quad) => {
+        const m = quad.material, spp = Math.max(1, pt.samples);
+        den.uniforms.map.value = target.texture;
+        den.uniforms.sigma.value = Math.max(2.4, Math.min(4, 4 * Math.pow(8 / spp, 0.4)));
+        quad.material = den; const ac = r.autoClear; r.autoClear = false; quad.render(r); r.autoClear = ac; quad.material = m;
+      };
+  })());
+}
+// Build the BVH and compile the (large) path-tracing shader in the background shortly after load, so the first
+// click on Photo render does not wait ~30 s for the driver. Lights are snapshotted in their photo-mode state.
+async function prewarm() {
+  try { await loadPT(); } catch (e) { console.warn('[studio] path tracer unavailable', e); return; }
+  if (photo) return;
+  key.visible = false; keyArea.visible = true; pt.setScene(scene, camera); key.visible = true; keyArea.visible = false;
+  pt.renderToCanvas = false; warming = true; geomDirty = false;
+}
+async function enablePhoto(on) {
+  photo = on; $('photo').setAttribute('aria-pressed', on); $('photo').textContent = on ? 'Exit photo' : 'Photo render';
+  $('chip').dataset.mode = on ? 'photo' : 'live'; $('spp').textContent = on ? 'Preparing photo render…' : 'Live view';
+  key.visible = !on; keyArea.visible = on;
+  scene.environmentIntensity = on ? PHOTO_ENV : RASTER_ENV;
+  if (!on) return;
+  if (!pt) {
+    $('spp').textContent = 'loading path tracer…';
+    try { await loadPT(); }
+    catch (e) { console.error(e); toast('Photo render is not available in this browser'); enablePhoto(false); return; }
+  }
+  if (!photo) return;
+  warming = false; pt.renderToCanvas = true; pt.pausePathTracing = false;
+  if (!pt.scene || pt.scene !== scene || geomDirty) {
+    $('spp').textContent = 'building scene…';
+    await new Promise(r => setTimeout(r, 30));
+    pt.setScene(scene, camera); geomDirty = false;
+  } else { pt.updateLights(); pt.updateMaterials(); pt.updateEnvironment(); pt.updateCamera(); }
+}
+$('photo').addEventListener('click', () => enablePhoto(!photo));
+function camMoved() { if (pt && photo) pt.updateCamera(); }
+controls.addEventListener('change', camMoved);
+
+$('shot').addEventListener('click', () => {
+  frame(); const a = document.createElement('a');
+  a.download = 'keane_showroom_' + (photo && pt ? pt.samples + 'spp' : 'live') + '.png'; a.href = canvas.toDataURL('image/png'); a.click();
+});
+
+// ============================ loop ============================
+function resize() {
+  const w = canvas.clientWidth, h = canvas.clientHeight; if (!w || !h) return;
+  renderer.setSize(w, h, false); composer.setSize(w, h);
+  camera.aspect = w / h; camera.updateProjectionMatrix(); camMoved();
+}
+new ResizeObserver(resize).observe(canvas);
+const ease = t => t < .5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2;
+function frame() {
+  if (photo && pt && !geomDirty) {
+    pt.renderSample();
+    $('spp').textContent = pt.isCompiling ? 'Preparing photo render…' : pt.samples >= MAX_SPP ? `Photo · done (${MAX_SPP} samples)` : `Photo · ${Math.floor(pt.samples)} / ${MAX_SPP}`;
+  } else composer.render();
+}
+renderer.setAnimationLoop(now => {
+  if (!ready) return;
+  if (tween) {
+    const k = Math.min(1, (now - tween.t0) / 800), e = ease(k);
+    camera.position.lerpVectors(tween.p0, tween.pos, e); controls.target.lerpVectors(tween.q0, tween.tgt, e);
+    camera.fov = tween.f0 + (tween.fov - tween.f0) * e; camera.updateProjectionMatrix(); if (k === 1) tween = null;
+    camMoved();
+  }
+  controls.update();
+  if (warming) { pt.renderSample(); if (!pt.isCompiling && pt.samples >= 1) warming = false; }
+  else if (pt) pt.pausePathTracing = pt.samples >= MAX_SPP;
+  frame();
+});
+</script>
+</body>
+</html>

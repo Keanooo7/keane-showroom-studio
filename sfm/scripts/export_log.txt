@@ -1,0 +1,74 @@
+{
+ "model": "work_s075 (SIFT on 0.75-scale images, 10k max features, DSP+affine SIFT, exhaustive matching, guided matching, incremental mapper)",
+ "registered_images": [
+  "01_sink_closeup.jpg",
+  "02_corner_wide.jpg",
+  "03_corner_high.jpg",
+  "04_right_run.jpg",
+  "05_left_run.jpg"
+ ],
+ "num_images_input": 5,
+ "num_points3D": 6490,
+ "num_observations": 14666,
+ "mean_reprojection_error_px_at_0p75": 0.9064778386153062,
+ "mean_reprojection_error_px_fullres": 1.2086371181537416,
+ "median_point_error_px_at_0p75": 0.7583393348122207,
+ "mean_track_length": 2.2597842835130972,
+ "track_length_histogram": {
+  "2": 5147,
+  "3": 1043,
+  "4": 258,
+  "5": 41,
+  "6": 1
+ },
+ "points_per_image": {
+  "01_sink_closeup.jpg": 1228,
+  "04_right_run.jpg": 2940,
+  "03_corner_high.jpg": 3786,
+  "05_left_run.jpg": 2774,
+  "02_corner_wide.jpg": 3938
+ },
+ "cameras": {
+  "2": {
+   "model": "SIMPLE_RADIAL",
+   "params_at_0p75": [
+    2251.8139242324974,
+    1134.0,
+    1512.0,
+    0.019695482569389862
+   ],
+   "f_fullres": 3002.4185656433297
+  },
+  "1": {
+   "model": "SIMPLE_RADIAL",
+   "params_at_0p75": [
+    2268.330059544501,
+    1134.0,
+    1512.0,
+    0.00731381517872816
+   ],
+   "f_fullres": 3024.4400793926684
+  }
+ }
+}
+   939  W1 backsplash (counter to upper bottoms, x 0..pantry)
+   321  W2 backsplash (counter to upper bottoms)
+  1641  countertop top surface (+-0.6in)
+   119  countertop front edge faces (left+right, 1.6in band)
+    17  countertop right end face
+   341  left-run base door/drawer faces
+   276  right-run base door/drawer faces
+   175  left-run upper door faces
+   178  right-run upper door faces
+    60  crown molding faces (z crown underside..+4in)
+     4  tops of upper cabinets / crown tops (z>crown top, inside footprint)
+    20  undersides of uppers (+-0.75in of bottom, inside footprint)
+    14  sink apron face
+    22  sink bowl interior
+    25  toe kicks (z<toe-kick top, 1..4in behind door faces)
+    88  floor (|z|<0.75)
+    16  pantry front face
+     1  pantry right side panel (x~pantry right, y 0..24)
+     7  upper side panel visible under short upper (x~42.3, z 55..67)
+   106  wall above crown (z>crown top)
+   177  outliers / far points (outside 0..130in box)

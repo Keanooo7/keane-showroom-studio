@@ -1,0 +1,686 @@
+{
+ "frame": {
+  "description": "z up; W1 (sink wall, backsplash tile face) is y=0, room y>0; W2 (right wall, backsplash tile face) is x=0, room x>0; origin = inside corner at floor level. Units inches (mm also given). Drywall is ~0.4in behind the tile face.",
+  "aligned_to_frame": {
+   "R_vp_model_to_aligned": [
+    [
+     -0.6430488868113208,
+     0.08804510100767983,
+     -0.7607471257647109
+    ],
+    [
+     0.7657551404965435,
+     0.08735274975186609,
+     -0.6371723172846621
+    ],
+    [
+     0.010353452266751113,
+     -0.9922789715091896,
+     -0.12359307718001336
+    ]
+   ],
+   "origin_aligned_units": [
+    -9.925,
+    -6.295,
+    -6.362
+   ],
+   "inches_per_unit": 10.325923658867474,
+   "formula": "X_in = s * (R_vp @ X_model - o)"
+  }
+ },
+ "scale": {
+  "in_per_unit": 10.325923658867474,
+  "rel_sigma": 0.012359293089659515,
+  "apron_width_units": 2.905309102710366,
+  "apron_height_units": 0.9606469068904735,
+  "s_from_apron_height": 10.279531354516589,
+  "apron_height_in_at_s": 9.9195666236782,
+  "apron_width_alternatives_in": {
+   "to_50pct_left_edge": 29.64695032470925,
+   "to_gap_line": 30.35304967529075
+  }
+ },
+ "values": {
+  "countertop_top_height_above_floor": {
+   "in_": 36.75,
+   "mm": 933.4,
+   "sigma_in": 0.48,
+   "sigma_mm": 12.1,
+   "sigma_geom_in": 0.15,
+   "sigma_scale_in": 0.45,
+   "method": "z of RANSAC/median countertop plane (1650 sparse pts) minus floor z (17 sparse floor pts)"
+  },
+  "left_run_countertop_front_edge_y": {
+   "in_": 26.54,
+   "mm": 674.2,
+   "sigma_in": 0.72,
+   "sigma_mm": 18.3,
+   "sigma_geom_in": 0.64,
+   "sigma_scale_in": 0.33,
+   "method": "05 top-arris pixels (4 pts, both sides of sink) ray-intersected with countertop top plane"
+  },
+  "left_run_countertop_thickness": {
+   "in_": 1.25,
+   "mm": 31.9,
+   "sigma_in": 0.13,
+   "sigma_mm": 3.3,
+   "sigma_geom_in": 0.13,
+   "sigma_scale_in": 0.02,
+   "method": "05 front-edge bottom pixels ray-intersected with the counter front plane; top plane minus bottom"
+  },
+  "right_run_countertop_front_edge_x": {
+   "in_": 25.29,
+   "mm": 642.5,
+   "sigma_in": 0.49,
+   "sigma_mm": 12.4,
+   "sigma_geom_in": 0.37,
+   "sigma_scale_in": 0.31,
+   "method": "04 top-arris pixels ray-intersected with countertop top plane"
+  },
+  "right_run_countertop_thickness": {
+   "in_": 1.59,
+   "mm": 40.5,
+   "sigma_in": 0.11,
+   "sigma_mm": 2.7,
+   "sigma_geom_in": 0.11,
+   "sigma_scale_in": 0.02,
+   "method": "04 front-edge bottom pixels ray-intersected with the counter front plane"
+  },
+  "right_run_countertop_end_y (run length from W2... along W1 normal)": {
+   "in_": 73.14,
+   "mm": 1857.7,
+   "sigma_in": 0.97,
+   "sigma_mm": 24.5,
+   "sigma_geom_in": 0.34,
+   "sigma_scale_in": 0.9,
+   "method": "front-top-right counter corner: 2-view triangulation (04,03; reproj [5.  6.5] px) + 2 ray/top-plane estimates",
+   "triangulated_corner_in": [
+    24.89,
+    73.22,
+    36.51
+   ]
+  },
+  "left_run_upper_door_face_y (depth from W1 backsplash)": {
+   "in_": 12.4,
+   "mm": 314.9,
+   "sigma_in": 0.4,
+   "sigma_mm": 10.2,
+   "sigma_geom_in": 0.37,
+   "sigma_scale_in": 0.15,
+   "method": "mean y of 3 multi-view Manhattan line fits on the 30in upper over sink"
+  },
+  "right_run_upper_door_face_x (depth from W2 backsplash)": {
+   "in_": 12.65,
+   "mm": 321.4,
+   "sigma_in": 0.46,
+   "sigma_mm": 11.6,
+   "sigma_geom_in": 0.43,
+   "sigma_scale_in": 0.16,
+   "method": "x of 3-view Manhattan line fit of right-run upper bottom front edge"
+  },
+  "right_run_upper_bottom_height": {
+   "in_": 55.12,
+   "mm": 1400.0,
+   "sigma_in": 0.69,
+   "sigma_mm": 17.6,
+   "sigma_geom_in": 0.13,
+   "sigma_scale_in": 0.68,
+   "method": "3-view (04,03,02) Manhattan y-line fit, rms 1.3px; loo z spread 0.006 units"
+  },
+  "left_run_short_upper_over_sink_bottom_height": {
+   "in_": 67.38,
+   "mm": 1711.4,
+   "sigma_in": 0.84,
+   "sigma_mm": 21.4,
+   "sigma_geom_in": 0.13,
+   "sigma_scale_in": 0.83,
+   "method": "3-view (05,02,03) Manhattan x-line fit, rms 1.2px"
+  },
+  "left_run_tall_upper_right_of_sink_bottom_height": {
+   "in_": 55.18,
+   "mm": 1401.6,
+   "sigma_in": 0.7,
+   "sigma_mm": 17.7,
+   "sigma_geom_in": 0.13,
+   "sigma_scale_in": 0.68,
+   "method": "rays from 05 (2 px) and 02 (2 px) intersected with left upper face plane",
+   "per_view_in": [
+    55.2,
+    55.25,
+    55.15,
+    55.14
+   ]
+  },
+  "left_run_tall_upper_left_of_sink_bottom_height": {
+   "in_": 55.13,
+   "mm": 1400.4,
+   "sigma_in": 0.69,
+   "sigma_mm": 17.6,
+   "sigma_geom_in": 0.13,
+   "sigma_scale_in": 0.68,
+   "method": "05 rays intersected with left upper face plane (single view)"
+  },
+  "left_run_corner_upper_bottom_height": {
+   "in_": 55.19,
+   "mm": 1401.9,
+   "sigma_in": 0.7,
+   "sigma_mm": 17.7,
+   "sigma_geom_in": 0.14,
+   "sigma_scale_in": 0.68,
+   "method": "05 rays intersected with left upper face plane (single view)"
+  },
+  "short_upper_bottom_minus_tall_upper_bottom": {
+   "in_": 12.2,
+   "mm": 309.8,
+   "sigma_in": 0.16,
+   "sigma_mm": 4.1,
+   "sigma_geom_in": 0.06,
+   "sigma_scale_in": 0.15,
+   "method": "difference of the two above (scale-dependent only)"
+  },
+  "left_run_crown_underside_height (top of upper boxes)": {
+   "in_": 97.14,
+   "mm": 2467.3,
+   "sigma_in": 1.21,
+   "sigma_mm": 30.8,
+   "sigma_geom_in": 0.17,
+   "sigma_scale_in": 1.2,
+   "method": "mean of 2-view (05,03) and 3-view (05,03,02) Manhattan x-line fits (97.0 / 97.3 in)"
+  },
+  "left_run_crown_top_height": {
+   "in_": 100.6,
+   "mm": 2555.3,
+   "sigma_in": 1.27,
+   "sigma_mm": 32.1,
+   "sigma_geom_in": 0.24,
+   "sigma_scale_in": 1.24,
+   "method": "mean of 2-view (05,03) and 3-view (05,03,02) Manhattan x-line fits (100.4 / 100.8 in)"
+  },
+  "pantry_cap_top_height": {
+   "in_": 99.13,
+   "mm": 2517.9,
+   "sigma_in": 1.24,
+   "sigma_mm": 31.5,
+   "sigma_geom_in": 0.2,
+   "sigma_scale_in": 1.23,
+   "method": "2-view (05,03) Manhattan x-line fit, rms 1.4px; edge y=29.0in from W1 (cap projects past pantry face)"
+  },
+  "pantry_cap_underside_height": {
+   "in_": 96.58,
+   "mm": 2453.0,
+   "sigma_in": 1.21,
+   "sigma_mm": 30.7,
+   "sigma_geom_in": 0.2,
+   "sigma_scale_in": 1.19,
+   "method": "2-view (05,03) Manhattan x-line fit, rms 1.3px; edge y=26.8in from W1 (cap projects past pantry face)"
+  },
+  "right_run_crown_top_height": {
+   "in_": 98.77,
+   "mm": 2508.7,
+   "sigma_in": 1.24,
+   "sigma_mm": 31.4,
+   "sigma_geom_in": 0.2,
+   "sigma_scale_in": 1.22,
+   "method": "Manhattan y-line fit views ['04', '03'], rms 1.1px"
+  },
+  "right_run_crown_underside_height (top of upper boxes)": {
+   "in_": 97.05,
+   "mm": 2465.1,
+   "sigma_in": 1.22,
+   "sigma_mm": 30.9,
+   "sigma_geom_in": 0.2,
+   "sigma_scale_in": 1.2,
+   "method": "Manhattan y-line fit views ['04', '03', '02'], rms 5.1px"
+  },
+  "right_run_base_door_face_x (depth from W2 backsplash)": {
+   "in_": 24.7,
+   "mm": 627.3,
+   "sigma_in": 0.48,
+   "sigma_mm": 12.2,
+   "sigma_geom_in": 0.37,
+   "sigma_scale_in": 0.31,
+   "method": "3-view Manhattan vertical-line fit of right-run door-base left edge"
+  },
+  "right_run_door_base_left_edge_y": {
+   "in_": 28.34,
+   "mm": 719.7,
+   "sigma_in": 0.48,
+   "sigma_mm": 12.2,
+   "sigma_geom_in": 0.33,
+   "sigma_scale_in": 0.35,
+   "method": "3-view vertical line fit"
+  },
+  "right_run_door_base_to_drawer_stack_seam_y": {
+   "in_": 50.88,
+   "mm": 1292.5,
+   "sigma_in": 0.7,
+   "sigma_mm": 17.8,
+   "sigma_geom_in": 0.31,
+   "sigma_scale_in": 0.63,
+   "method": "04 rays at seam gap centre on base face plane"
+  },
+  "right_run_drawer_stack_right_end_y": {
+   "in_": 72.04,
+   "mm": 1829.8,
+   "sigma_in": 0.95,
+   "sigma_mm": 24.1,
+   "sigma_geom_in": 0.33,
+   "sigma_scale_in": 0.89,
+   "method": "04 rays at stack right edge on base face plane"
+  },
+  "right_run_door_base_width": {
+   "in_": 22.55,
+   "mm": 572.7,
+   "sigma_in": 0.3,
+   "sigma_mm": 7.6,
+   "sigma_geom_in": 0.11,
+   "sigma_scale_in": 0.28,
+   "method": "difference of edge positions"
+  },
+  "right_run_4drawer_stack_width": {
+   "in_": 21.15,
+   "mm": 537.3,
+   "sigma_in": 0.29,
+   "sigma_mm": 7.4,
+   "sigma_geom_in": 0.13,
+   "sigma_scale_in": 0.26,
+   "method": "difference of edge positions"
+  },
+  "right_run_upper_cab1_left_y": {
+   "in_": 12.19,
+   "mm": 309.6,
+   "sigma_in": 0.37,
+   "sigma_mm": 9.3,
+   "sigma_geom_in": 0.34,
+   "sigma_scale_in": 0.15,
+   "method": "04 ray (row 1300) on right upper face plane"
+  },
+  "right_run_upper_cab1_right_y": {
+   "in_": 23.12,
+   "mm": 587.3,
+   "sigma_in": 0.43,
+   "sigma_mm": 11.0,
+   "sigma_geom_in": 0.32,
+   "sigma_scale_in": 0.29,
+   "method": "04 ray (row 1300) on right upper face plane"
+  },
+  "right_run_upper_cab2_left_y": {
+   "in_": 23.83,
+   "mm": 605.2,
+   "sigma_in": 0.44,
+   "sigma_mm": 11.1,
+   "sigma_geom_in": 0.32,
+   "sigma_scale_in": 0.29,
+   "method": "04 ray (row 1300) on right upper face plane"
+  },
+  "right_run_upper_cab2_door_meet_y": {
+   "in_": 35.7,
+   "mm": 906.8,
+   "sigma_in": 0.54,
+   "sigma_mm": 13.8,
+   "sigma_geom_in": 0.32,
+   "sigma_scale_in": 0.44,
+   "method": "04 ray (row 1300) on right upper face plane"
+  },
+  "right_run_upper_cab2_right_y": {
+   "in_": 47.48,
+   "mm": 1205.9,
+   "sigma_in": 0.67,
+   "sigma_mm": 16.9,
+   "sigma_geom_in": 0.32,
+   "sigma_scale_in": 0.59,
+   "method": "04 ray (row 1300) on right upper face plane"
+  },
+  "right_run_upper_cab3_left_y": {
+   "in_": 47.97,
+   "mm": 1218.6,
+   "sigma_in": 0.67,
+   "sigma_mm": 17.1,
+   "sigma_geom_in": 0.32,
+   "sigma_scale_in": 0.59,
+   "method": "04 ray (row 1300) on right upper face plane"
+  },
+  "right_run_upper_cab3_door_meet_y": {
+   "in_": 59.79,
+   "mm": 1518.6,
+   "sigma_in": 0.8,
+   "sigma_mm": 20.4,
+   "sigma_geom_in": 0.32,
+   "sigma_scale_in": 0.74,
+   "method": "04 ray (row 1300) on right upper face plane"
+  },
+  "right_run_upper_cab3_right_end_y": {
+   "in_": 71.55,
+   "mm": 1817.4,
+   "sigma_in": 0.94,
+   "sigma_mm": 23.9,
+   "sigma_geom_in": 0.33,
+   "sigma_scale_in": 0.88,
+   "method": "04 ray (row 1300) on right upper face plane"
+  },
+  "right_run_upper_cab1_single_door_width": {
+   "in_": 10.93,
+   "mm": 277.7,
+   "sigma_in": 0.21,
+   "sigma_mm": 5.4,
+   "sigma_geom_in": 0.16,
+   "sigma_scale_in": 0.14,
+   "method": "difference of 04 edge rays on face plane"
+  },
+  "right_run_upper_cab2_double_door_width": {
+   "in_": 23.65,
+   "mm": 600.7,
+   "sigma_in": 0.31,
+   "sigma_mm": 8.0,
+   "sigma_geom_in": 0.11,
+   "sigma_scale_in": 0.29,
+   "method": "difference of 04 edge rays on face plane"
+  },
+  "right_run_upper_cab3_double_door_width": {
+   "in_": 23.58,
+   "mm": 598.8,
+   "sigma_in": 0.31,
+   "sigma_mm": 8.0,
+   "sigma_geom_in": 0.12,
+   "sigma_scale_in": 0.29,
+   "method": "difference of 04 edge rays on face plane"
+  },
+  "left_run_base_door_face_y (depth from W1 backsplash)": {
+   "in_": 24.81,
+   "mm": 630.0,
+   "sigma_in": 0.46,
+   "sigma_mm": 11.7,
+   "sigma_geom_in": 0.35,
+   "sigma_scale_in": 0.31,
+   "method": "mean y of 2 multi-view vertical-line fits (sink-base left gap, 3-drawer left gap)"
+  },
+  "left_run_pantry_left_edge_x": {
+   "in_": 111.43,
+   "mm": 2830.3,
+   "sigma_in": 1.41,
+   "sigma_mm": 35.9,
+   "sigma_geom_in": 0.32,
+   "sigma_scale_in": 1.38,
+   "method": "05 rays on face plane / multi-view line fits"
+  },
+  "left_run_pantry_right_edge_x": {
+   "in_": 90.45,
+   "mm": 2297.4,
+   "sigma_in": 1.16,
+   "sigma_mm": 29.5,
+   "sigma_geom_in": 0.32,
+   "sigma_scale_in": 1.12,
+   "method": "05 rays on face plane / multi-view line fits"
+  },
+  "left_run_drawer_over_door_base_left_edge_x": {
+   "in_": 90.18,
+   "mm": 2290.5,
+   "sigma_in": 1.16,
+   "sigma_mm": 29.4,
+   "sigma_geom_in": 0.31,
+   "sigma_scale_in": 1.11,
+   "method": "05 rays on face plane / multi-view line fits"
+  },
+  "left_run_drawer_over_door_base_right_edge = sink_base_left_x": {
+   "in_": 72.46,
+   "mm": 1840.4,
+   "sigma_in": 0.95,
+   "sigma_mm": 24.2,
+   "sigma_geom_in": 0.33,
+   "sigma_scale_in": 0.9,
+   "method": "05 rays on face plane / multi-view line fits"
+  },
+  "left_run_sink_base_doors_meet_x": {
+   "in_": 56.71,
+   "mm": 1440.5,
+   "sigma_in": 0.78,
+   "sigma_mm": 19.8,
+   "sigma_geom_in": 0.34,
+   "sigma_scale_in": 0.7,
+   "method": "05 rays on face plane / multi-view line fits"
+  },
+  "left_run_sink_base_right = 3drawer_left_x": {
+   "in_": 41.77,
+   "mm": 1060.9,
+   "sigma_in": 0.62,
+   "sigma_mm": 15.8,
+   "sigma_geom_in": 0.35,
+   "sigma_scale_in": 0.52,
+   "method": "05 rays on face plane / multi-view line fits"
+  },
+  "left_run_3drawer_base_right_edge_x": {
+   "in_": 26.87,
+   "mm": 682.4,
+   "sigma_in": 0.47,
+   "sigma_mm": 11.8,
+   "sigma_geom_in": 0.33,
+   "sigma_scale_in": 0.33,
+   "method": "05 rays on face plane / multi-view line fits"
+  },
+  "left_run_sink_apron_left_outer_x": {
+   "in_": 72.1,
+   "mm": 1831.4,
+   "sigma_in": 1.01,
+   "sigma_mm": 25.6,
+   "sigma_geom_in": 0.47,
+   "sigma_scale_in": 0.89,
+   "method": "05 rays on face plane / multi-view line fits"
+  },
+  "left_run_sink_apron_right_outer_x": {
+   "in_": 42.1,
+   "mm": 1069.4,
+   "sigma_in": 0.61,
+   "sigma_mm": 15.6,
+   "sigma_geom_in": 0.33,
+   "sigma_scale_in": 0.52,
+   "method": "05 rays on face plane / multi-view line fits"
+  },
+  "left_run_upper_tall_left_right_edge = short_upper_left_x": {
+   "in_": 72.5,
+   "mm": 1841.4,
+   "sigma_in": 0.95,
+   "sigma_mm": 24.2,
+   "sigma_geom_in": 0.33,
+   "sigma_scale_in": 0.9,
+   "method": "05 rays on face plane / multi-view line fits"
+  },
+  "left_run_upper_short_right = tall_right_left_x": {
+   "in_": 42.26,
+   "mm": 1073.4,
+   "sigma_in": 0.62,
+   "sigma_mm": 15.6,
+   "sigma_geom_in": 0.33,
+   "sigma_scale_in": 0.52,
+   "method": "05 rays on face plane / multi-view line fits"
+  },
+  "left_run_upper_tall_right_right_edge_x": {
+   "in_": 23.87,
+   "mm": 606.4,
+   "sigma_in": 0.44,
+   "sigma_mm": 11.3,
+   "sigma_geom_in": 0.33,
+   "sigma_scale_in": 0.3,
+   "method": "05 rays on face plane / multi-view line fits"
+  },
+  "left_run_upper_corner_visible_end (meets right-run upper face)_x": {
+   "in_": 12.91,
+   "mm": 327.8,
+   "sigma_in": 0.37,
+   "sigma_mm": 9.5,
+   "sigma_geom_in": 0.34,
+   "sigma_scale_in": 0.16,
+   "method": "05 rays on face plane / multi-view line fits"
+  },
+  "left_run_pantry_width": {
+   "in_": 20.98,
+   "mm": 532.9,
+   "sigma_in": 0.48,
+   "sigma_mm": 12.1,
+   "sigma_geom_in": 0.4,
+   "sigma_scale_in": 0.26,
+   "method": "difference of pantry edge x"
+  },
+  "left_run_drawer_over_door_base_width": {
+   "in_": 17.72,
+   "mm": 450.1,
+   "sigma_in": 0.37,
+   "sigma_mm": 9.4,
+   "sigma_geom_in": 0.3,
+   "sigma_scale_in": 0.22,
+   "method": "difference"
+  },
+  "left_run_sink_base_width": {
+   "in_": 30.69,
+   "mm": 779.5,
+   "sigma_in": 0.48,
+   "sigma_mm": 12.3,
+   "sigma_geom_in": 0.3,
+   "sigma_scale_in": 0.38,
+   "method": "difference (multi-view fits both sides)"
+  },
+  "left_run_3drawer_base_width": {
+   "in_": 14.9,
+   "mm": 378.5,
+   "sigma_in": 0.44,
+   "sigma_mm": 11.2,
+   "sigma_geom_in": 0.4,
+   "sigma_scale_in": 0.18,
+   "method": "difference"
+  },
+  "left_run_upper_short_width": {
+   "in_": 30.24,
+   "mm": 768.0,
+   "sigma_in": 0.48,
+   "sigma_mm": 12.2,
+   "sigma_geom_in": 0.3,
+   "sigma_scale_in": 0.37,
+   "method": "difference (multi-view fits both sides)"
+  },
+  "left_run_upper_tall_right_width": {
+   "in_": 18.39,
+   "mm": 467.1,
+   "sigma_in": 0.46,
+   "sigma_mm": 11.7,
+   "sigma_geom_in": 0.4,
+   "sigma_scale_in": 0.23,
+   "method": "difference"
+  },
+  "left_run_upper_tall_left_width (pantry edge to short upper)": {
+   "in_": 17.95,
+   "mm": 456.0,
+   "sigma_in": 0.46,
+   "sigma_mm": 11.6,
+   "sigma_geom_in": 0.4,
+   "sigma_scale_in": 0.22,
+   "method": "difference (left edge hidden behind pantry face; uses pantry edge)"
+  },
+  "pantry_height_floor_to_cap_top": {
+   "in_": 99.13,
+   "mm": 2517.9,
+   "sigma_in": 1.24,
+   "sigma_mm": 31.5,
+   "sigma_geom_in": 0.2,
+   "sigma_scale_in": 1.23,
+   "method": "cap-top line fit z minus floor"
+  },
+  "pantry_face_y (depth from W1 backsplash)": {
+   "in_": 24.53,
+   "mm": 623.0,
+   "sigma_in": 0.48,
+   "sigma_mm": 12.2,
+   "sigma_geom_in": 0.37,
+   "sigma_scale_in": 0.3,
+   "method": "2-view vertical line fit of pantry right edge (rms 7.7px: weak)"
+  },
+  "left_run_base_door_bottom_height (toe-kick top)": {
+   "in_": 4.7,
+   "mm": 119.4,
+   "sigma_in": 0.16,
+   "sigma_mm": 4.2,
+   "sigma_geom_in": 0.15,
+   "sigma_scale_in": 0.06,
+   "method": "05 rays at door/drawer bottom edge on base face plane (single view)"
+  },
+  "sink_apron_front_plane_y": {
+   "in_": 26.86,
+   "mm": 682.3,
+   "sigma_in": 0.47,
+   "sigma_mm": 11.9,
+   "sigma_geom_in": 0.33,
+   "sigma_scale_in": 0.33,
+   "method": "mean of 4 multi-view apron edge line fits"
+  },
+  "sink_apron_proud_of_base_door_face": {
+   "in_": 2.06,
+   "mm": 52.3,
+   "sigma_in": 0.19,
+   "sigma_mm": 4.9,
+   "sigma_geom_in": 0.19,
+   "sigma_scale_in": 0.03,
+   "method": "apron plane minus base door-face plane"
+  },
+  "sink_apron_top_height": {
+   "in_": 35.74,
+   "mm": 907.9,
+   "sigma_in": 0.45,
+   "sigma_mm": 11.3,
+   "sigma_geom_in": 0.06,
+   "sigma_scale_in": 0.44,
+   "method": "3-view x-line fit of apron front-top lip highlight"
+  },
+  "sink_apron_bottom_height": {
+   "in_": 25.82,
+   "mm": 655.9,
+   "sigma_in": 0.33,
+   "sigma_mm": 8.4,
+   "sigma_geom_in": 0.08,
+   "sigma_scale_in": 0.32,
+   "method": "3-view x-line fit of apron bottom edge"
+  },
+  "sink_apron_height_measured": {
+   "in_": 9.92,
+   "mm": 252.0,
+   "sigma_in": 0.17,
+   "sigma_mm": 4.4,
+   "sigma_geom_in": 0.12,
+   "sigma_scale_in": 0.12,
+   "method": "top lip minus bottom (spec 9.875in)"
+  },
+  "countertop_front_overhang_past_left_base_face": {
+   "in_": 1.74,
+   "mm": 44.2,
+   "sigma_in": 0.58,
+   "sigma_mm": 14.8,
+   "sigma_geom_in": 0.58,
+   "sigma_scale_in": 0.02,
+   "method": "difference"
+  },
+  "countertop_front_overhang_past_right_base_face": {
+   "in_": 0.6,
+   "mm": 15.2,
+   "sigma_in": 0.29,
+   "sigma_mm": 7.5,
+   "sigma_geom_in": 0.29,
+   "sigma_scale_in": 0.01,
+   "method": "difference"
+  },
+  "right_run_door_base_left_edge_minus_left_base_face (corner filler)": {
+   "in_": 3.53,
+   "mm": 89.7,
+   "sigma_in": 0.19,
+   "sigma_mm": 4.9,
+   "sigma_geom_in": 0.19,
+   "sigma_scale_in": 0.04,
+   "method": "difference"
+  },
+  "left_run_3drawer_right_edge_minus_right_base_face (corner filler)": {
+   "in_": 2.17,
+   "mm": 55.1,
+   "sigma_in": 0.31,
+   "sigma_mm": 7.9,
+   "sigma_geom_in": 0.31,
+   "sigma_scale_in": 0.03,
+   "method": "difference"
+  }
+ }
+}

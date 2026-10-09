@@ -1,0 +1,26 @@
+{
+ "total_points": 6490,
+ "regions": {
+  "W1 backsplash (counter to upper bottoms, x 0..pantry)": 939,
+  "W2 backsplash (counter to upper bottoms)": 321,
+  "countertop top surface (+-0.6in)": 1641,
+  "countertop front edge faces (left+right, 1.6in band)": 119,
+  "countertop right end face": 17,
+  "left-run base door/drawer faces": 341,
+  "right-run base door/drawer faces": 276,
+  "left-run upper door faces": 175,
+  "right-run upper door faces": 178,
+  "crown molding faces (z crown underside..+4in)": 60,
+  "tops of upper cabinets / crown tops (z>crown top, inside footprint)": 4,
+  "undersides of uppers (+-0.75in of bottom, inside footprint)": 20,
+  "sink apron face": 14,
+  "sink bowl interior": 22,
+  "toe kicks (z<toe-kick top, 1..4in behind door faces)": 25,
+  "floor (|z|<0.75)": 88,
+  "pantry front face": 16,
+  "pantry right side panel (x~pantry right, y 0..24)": 1,
+  "upper side panel visible under short upper (x~42.3, z 55..67)": 7,
+  "wall above crown (z>crown top)": 106,
+  "outliers / far points (outside 0..130in box)": 177
+ }
+}

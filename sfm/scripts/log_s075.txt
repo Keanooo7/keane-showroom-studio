@@ -1,0 +1,104 @@
+I20261007 09:32:36.680810 140085190194880 feature_extraction.cc:498] === Feature extraction ===
+I20261007 09:32:36.681349 140085165016768 sift.cc:754] Creating Covariant SIFT CPU feature extractor
+I20261007 09:32:36.681349 140085156624064 sift.cc:754] Creating Covariant SIFT CPU feature extractor
+I20261007 09:32:46.858736 140085148231360 feature_extraction.cc:270] Processed file [1/5]
+I20261007 09:32:46.858810 140085148231360 feature_extraction.cc:273]   Name:            cam1/01_sink_closeup.jpg
+I20261007 09:32:46.858813 140085148231360 feature_extraction.cc:282]   Dimensions:      2268 x 3024
+I20261007 09:32:46.858814 140085148231360 feature_extraction.cc:285]   Camera:          #1 - SIMPLE_RADIAL
+I20261007 09:32:46.858818 140085148231360 feature_extraction.cc:289]   Focal Length:    2271.00px (Prior)
+I20261007 09:32:46.860542 140085148231360 feature_extraction.cc:294]   Features:        8287 (SIFT)
+I20261007 09:32:52.336628 140085148231360 feature_extraction.cc:270] Processed file [2/5]
+I20261007 09:32:52.336747 140085148231360 feature_extraction.cc:273]   Name:            cam2/02_corner_wide.jpg
+I20261007 09:32:52.336751 140085148231360 feature_extraction.cc:282]   Dimensions:      2268 x 3024
+I20261007 09:32:52.336752 140085148231360 feature_extraction.cc:285]   Camera:          #2 - SIMPLE_RADIAL
+I20261007 09:32:52.336755 140085148231360 feature_extraction.cc:289]   Focal Length:    2271.00px (Prior)
+I20261007 09:32:52.336765 140085148231360 feature_extraction.cc:294]   Features:        11597 (SIFT)
+I20261007 09:33:01.435643 140085148231360 feature_extraction.cc:270] Processed file [3/5]
+I20261007 09:33:01.435701 140085148231360 feature_extraction.cc:273]   Name:            cam2/03_corner_high.jpg
+I20261007 09:33:01.435705 140085148231360 feature_extraction.cc:282]   Dimensions:      2268 x 3024
+I20261007 09:33:01.435707 140085148231360 feature_extraction.cc:285]   Camera:          #2 - SIMPLE_RADIAL
+I20261007 09:33:01.435711 140085148231360 feature_extraction.cc:289]   Focal Length:    2271.00px (Prior)
+I20261007 09:33:01.435721 140085148231360 feature_extraction.cc:294]   Features:        12443 (SIFT)
+I20261007 09:33:07.653316 140085148231360 feature_extraction.cc:270] Processed file [4/5]
+I20261007 09:33:07.653581 140085148231360 feature_extraction.cc:273]   Name:            cam2/04_right_run.jpg
+I20261007 09:33:07.653595 140085148231360 feature_extraction.cc:282]   Dimensions:      2268 x 3024
+I20261007 09:33:07.653599 140085148231360 feature_extraction.cc:285]   Camera:          #2 - SIMPLE_RADIAL
+I20261007 09:33:07.653610 140085148231360 feature_extraction.cc:289]   Focal Length:    2271.00px (Prior)
+I20261007 09:33:07.653624 140085148231360 feature_extraction.cc:294]   Features:        13878 (SIFT)
+I20261007 09:33:14.891865 140085148231360 feature_extraction.cc:270] Processed file [5/5]
+I20261007 09:33:14.892102 140085148231360 feature_extraction.cc:273]   Name:            cam2/05_left_run.jpg
+I20261007 09:33:14.892111 140085148231360 feature_extraction.cc:282]   Dimensions:      2268 x 3024
+I20261007 09:33:14.892114 140085148231360 feature_extraction.cc:285]   Camera:          #2 - SIMPLE_RADIAL
+I20261007 09:33:14.892119 140085148231360 feature_extraction.cc:289]   Focal Length:    2271.00px (Prior)
+I20261007 09:33:14.892133 140085148231360 feature_extraction.cc:294]   Features:        15013 (SIFT)
+I20261007 09:33:14.900845 140085190194880 timer.cc:90] Elapsed time: 0.637 [minutes]
+extract: 38.3s
+1 cam1/01_sink_closeup.jpg 1 8287
+2 cam2/02_corner_wide.jpg 2 11597
+3 cam2/03_corner_high.jpg 2 12443
+4 cam2/04_right_run.jpg 2 13878
+5 cam2/05_left_run.jpg 2 15013
+I20261007 09:33:14.933895 140085190194880 feature_matching.cc:196] === Feature matching & geometric verification ===
+I20261007 09:33:14.934107 140085165016768 sift.cc:1685] Creating SIFT CPU feature matcher
+I20261007 09:33:14.934127 140085148231360 sift.cc:1685] Creating SIFT CPU feature matcher
+I20261007 09:33:14.934493 140085190194880 pairing.cc:181] Generating exhaustive image pairs...
+I20261007 09:33:14.934614 140085190194880 pairing.cc:214] Processing block [1/1, 1/1]
+I20261007 09:34:11.275315 140085190194880 feature_matching.cc:218] in 56.341s
+I20261007 09:34:11.275413 140085190194880 timer.cc:90] Elapsed time: 0.939 [minutes]
+match: 56.4s
+  cam1/01_sink_closeup.jpg|cam2/02_corner_wide.jpg: raw=249 verified=(511, '2')
+  cam1/01_sink_closeup.jpg|cam2/03_corner_high.jpg: raw=351 verified=(619, '2')
+  cam1/01_sink_closeup.jpg|cam2/04_right_run.jpg: raw=315 verified=(573, '2')
+  cam1/01_sink_closeup.jpg|cam2/05_left_run.jpg: raw=126 verified=(271, '2')
+  cam2/02_corner_wide.jpg|cam2/03_corner_high.jpg: raw=1024 verified=(1929, '2')
+  cam2/02_corner_wide.jpg|cam2/04_right_run.jpg: raw=785 verified=(1259, '2')
+  cam2/02_corner_wide.jpg|cam2/05_left_run.jpg: raw=1548 verified=(2155, '2')
+  cam2/03_corner_high.jpg|cam2/04_right_run.jpg: raw=1378 verified=(2090, '2')
+  cam2/03_corner_high.jpg|cam2/05_left_run.jpg: raw=630 verified=(1114, '2')
+  cam2/04_right_run.jpg|cam2/05_left_run.jpg: raw=310 verified=(594, '2')
+I20261007 09:34:11.324926 140085932638336 incremental_pipeline.cc:353] Loading database
+I20261007 09:34:11.325066 140085932638336 database_cache.cc:82] Loading rigs...
+I20261007 09:34:11.325093 140085932638336 database_cache.cc:92]  2 in 0.000s
+I20261007 09:34:11.325104 140085932638336 database_cache.cc:100] Loading cameras...
+I20261007 09:34:11.325113 140085932638336 database_cache.cc:118]  2 in 0.000s
+I20261007 09:34:11.325116 140085932638336 database_cache.cc:126] Loading frames...
+I20261007 09:34:11.325136 140085932638336 database_cache.cc:136]  5 in 0.000s
+I20261007 09:34:11.325138 140085932638336 database_cache.cc:144] Loading matches...
+I20261007 09:34:11.325214 140085932638336 database_cache.cc:163]  10 in 0.000s
+I20261007 09:34:11.325218 140085932638336 database_cache.cc:171] Loading images...
+I20261007 09:34:11.326735 140085932638336 database_cache.cc:268]  5 in 0.002s (connected 5, loaded 5)
+I20261007 09:34:11.326761 140085932638336 database_cache.cc:282] Loading pose priors...
+I20261007 09:34:11.326772 140085932638336 database_cache.cc:290]  0 in 0.000s
+I20261007 09:34:11.326774 140085932638336 database_cache.cc:298] Building correspondence graph...
+I20261007 09:34:11.328849 140085932638336 database_cache.cc:327]  in 0.002s (ignored 0)
+I20261007 09:34:11.328884 140085932638336 timer.cc:90] Elapsed time: 0.000 [minutes]
+I20261007 09:34:11.329583 140085932638336 incremental_pipeline.cc:465] Finding good initial image pair
+I20261007 09:34:11.368005 140085932638336 incremental_pipeline.cc:492] Registering initial image pair #2 and #5
+I20261007 09:34:11.376706 140085932638336 incremental_pipeline.cc:510] Global bundle adjustment
+I20261007 09:34:11.512444 140085932638336 incremental_pipeline.cc:620] Registering image #3 (num_reg_frames=2)
+I20261007 09:34:11.512559 140085932638336 incremental_pipeline.cc:623] => Image sees 617 / 4273 points
+I20261007 09:34:11.769412 140085932638336 incremental_pipeline.cc:88] Retriangulation and Global bundle adjustment
+I20261007 09:34:11.954379 140085932638336 incremental_pipeline.cc:620] Registering image #4 (num_reg_frames=3)
+I20261007 09:34:11.954415 140085932638336 incremental_pipeline.cc:623] => Image sees 1024 / 3461 points
+I20261007 09:34:12.367754 140085932638336 incremental_pipeline.cc:88] Retriangulation and Global bundle adjustment
+I20261007 09:34:12.749364 140085932638336 incremental_pipeline.cc:620] Registering image #1 (num_reg_frames=4)
+I20261007 09:34:12.749426 140085932638336 incremental_pipeline.cc:623] => Image sees 666 / 1472 points
+I20261007 09:34:13.345684 140085932638336 incremental_pipeline.cc:88] Retriangulation and Global bundle adjustment
+I20261007 09:34:13.525423 140085932638336 incremental_pipeline.cc:88] Retriangulation and Global bundle adjustment
+I20261007 09:34:13.636076 140085932638336 incremental_pipeline.cc:826] Keeping successful reconstruction
+I20261007 09:34:13.642616 140085932638336 timer.cc:90] Elapsed time: 0.039 [minutes]
+map: 2.3s
+model 0 Reconstruction:
+	num_rigs = 2
+	num_cameras = 2
+	num_frames = 5
+	num_reg_frames = 5
+	num_images = 5
+	num_points3D = 6490
+	num_observations = 14666
+	mean_track_length = 2.25978
+	mean_observations_per_image = 2933.2
+	mean_reprojection_error = 0.906478
+  registered: ['cam1/01_sink_closeup.jpg', 'cam2/02_corner_wide.jpg', 'cam2/03_corner_high.jpg', 'cam2/04_right_run.jpg', 'cam2/05_left_run.jpg']
+  cam 1 CameraModelId.SIMPLE_RADIAL [2.26833006e+03 1.13400000e+03 1.51200000e+03 7.31381518e-03]
+  cam 2 CameraModelId.SIMPLE_RADIAL [2.25181392e+03 1.13400000e+03 1.51200000e+03 1.96954826e-02]

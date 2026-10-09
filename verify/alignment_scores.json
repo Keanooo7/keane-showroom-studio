@@ -1,0 +1,32 @@
+{
+ "01_sink_closeup.jpg": {
+  "boundary_px": 11807,
+  "median_px_fullres": 15.279999732971191,
+  "within_8px": 0.35182518844753113,
+  "within_16px": 0.5337511645633946
+ },
+ "02_corner_wide.jpg": {
+  "boundary_px": 15787,
+  "median_px_fullres": 5.477200031280518,
+  "within_8px": 0.6447710141255464,
+  "within_16px": 0.8452524228795845
+ },
+ "03_corner_high.jpg": {
+  "boundary_px": 16728,
+  "median_px_fullres": 3.819999933242798,
+  "within_8px": 0.7401960784313726,
+  "within_16px": 0.8547345767575323
+ },
+ "04_right_run.jpg": {
+  "boundary_px": 14636,
+  "median_px_fullres": 7.639999866485596,
+  "within_8px": 0.6219595517901065,
+  "within_16px": 0.8470893686799672
+ },
+ "05_left_run.jpg": {
+  "boundary_px": 13802,
+  "median_px_fullres": 3.819999933242798,
+  "within_8px": 0.7359802927112012,
+  "within_16px": 0.8770468048108969
+ }
+}

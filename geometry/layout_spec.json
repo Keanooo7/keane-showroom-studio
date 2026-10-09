@@ -1,0 +1,2018 @@
+{
+ "schema": "keane-kitchens/layout-spec/v1",
+ "units": "in",
+ "export_units": "mm",
+ "inch_to_mm": 25.4,
+ "frame": {
+  "up": "+z",
+  "origin": "inside corner at floor, at backsplash tile faces",
+  "W1": "sink wall, tile face y=0, room y>0; left run along +x; fronts +y",
+  "W2": "right wall, tile face x=0, room x>0; right run along +y; fronts +x",
+  "drywall_offset": 0.375,
+  "viewer_left": {
+   "L": "+x",
+   "R": "-y"
+  }
+ },
+ "globals": {
+  "front_thickness": 0.75,
+  "reveal": 0.125,
+  "toe_kick": [
+   4.625,
+   3.0
+  ],
+  "countertop_top": 36.75,
+  "countertop_thickness": 1.25,
+  "upper_bottom": 55.125,
+  "short_upper_bottom": 67.125,
+  "upper_top": 97.125,
+  "pull": {
+   "len": 6.75,
+   "bar_w": 0.5,
+   "bar_t": 0.375,
+   "standoff": 1.25,
+   "post": 0.375
+  }
+ },
+ "provenance": "Agent A metric SfM (pycolmap, 5/5 images, 0.91px reproj, scale from 30in sink apron +/-1.24%) + Agent C snapping to 1/8in / standard sizes. Excluded as merchandise: tile samples, brochures, binder, disposal display.",
+ "materials": {
+  "mat_cabinet_primary": {
+   "baseColor": [
+    0.59,
+    0.481,
+    0.392
+   ],
+   "metallic": 0.0,
+   "roughness": 0.55,
+   "photo_albedo": [
+    0.59,
+    0.481,
+    0.392
+   ],
+   "note": "greige satin lacquer; photo-derived albedo"
+  },
+  "mat_countertop_surface": {
+   "baseColor": [
+    0.818,
+    0.772,
+    0.746
+   ],
+   "metallic": 0.0,
+   "roughness": 0.2,
+   "photo_albedo": [
+    0.503,
+    0.475,
+    0.459
+   ],
+   "note": "white quartz w/ gray veining (Vadara); photo chroma, luminance prior 0.78; vein texture slot"
+  },
+  "mat_hardware_finish": {
+   "baseColor": [
+    0.743,
+    0.6,
+    0.453
+   ],
+   "metallic": 1.0,
+   "roughness": 0.35,
+   "photo_albedo": [
+    0.302,
+    0.244,
+    0.184
+   ],
+   "note": "champagne bronze bar pulls; photo chroma, metal F0 luminance prior"
+  },
+  "mat_faucet_finish": {
+   "baseColor": [
+    0.66,
+    0.64,
+    0.6
+   ],
+   "metallic": 1.0,
+   "roughness": 0.4,
+   "note": "brushed nickel faucet body"
+  },
+  "mat_fixture_fireclay": {
+   "baseColor": [
+    0.85,
+    0.85,
+    0.85
+   ],
+   "metallic": 0.0,
+   "roughness": 0.12,
+   "note": "glossy white fireclay; white-balance reference"
+  },
+  "mat_backsplash_tile": {
+   "baseColor": [
+    0.264,
+    0.214,
+    0.151
+   ],
+   "metallic": 0.0,
+   "roughness": 0.15,
+   "photo_albedo": [
+    0.1,
+    0.081,
+    0.057
+   ],
+   "note": "glazed taupe/gray subway; photo chroma, luminance prior 0.22"
+  },
+  "mat_faucet_hose": {
+   "baseColor": [
+    0.04,
+    0.04,
+    0.04
+   ],
+   "metallic": 0.0,
+   "roughness": 0.6,
+   "note": "black silicone hose"
+  },
+  "mat_reference": {
+   "baseColor": [
+    0.55,
+    0.55,
+    0.55
+   ],
+   "metallic": 0.0,
+   "roughness": 0.9,
+   "note": "reference walls/floor, not for fabrication"
+  }
+ },
+ "parts": [
+  {
+   "id": "base_cabinet_01",
+   "type": "carcass",
+   "layer": "cabinets",
+   "material": "mat_cabinet_primary",
+   "run": "R",
+   "aabb": [
+    [
+     -0.375,
+     28.25,
+     0
+    ],
+    [
+     24.0,
+     50.875,
+     35.5
+    ]
+   ],
+   "toe_kick": [
+    4.625,
+    3.0
+   ],
+   "front_normal": "+x",
+   "label": "R-run drawer-over-door base 22-5/8in (measured 22.55)"
+  },
+  {
+   "id": "drawer_front_01",
+   "type": "shaker_front",
+   "role": "drawer",
+   "layer": "drawers",
+   "material": "mat_cabinet_primary",
+   "parent": "base_cabinet_01",
+   "run": "R",
+   "aabb": [
+    [
+     24.0,
+     28.3125,
+     29.125
+    ],
+    [
+     24.75,
+     50.8125,
+     35.375
+    ]
+   ],
+   "frame_width": 1.75,
+   "panel_recess": 0.25,
+   "slide_axis": "+x",
+   "label": "top drawer"
+  },
+  {
+   "id": "hardware_handle_01",
+   "type": "bar_pull",
+   "layer": "hardware",
+   "material": "mat_hardware_finish",
+   "parent": "drawer_front_01",
+   "run": "R",
+   "orientation": "horizontal",
+   "mount_center": [
+    39.5625,
+    32.25
+   ],
+   "mount_face": 24.75,
+   "length": 6.75,
+   "bar_w": 0.5,
+   "bar_t": 0.375,
+   "standoff": 1.25,
+   "post": 0.375,
+   "label": "6.75in bar pull"
+  },
+  {
+   "id": "door_01",
+   "type": "shaker_front",
+   "role": "door",
+   "layer": "cabinets",
+   "material": "mat_cabinet_primary",
+   "parent": "base_cabinet_01",
+   "run": "R",
+   "aabb": [
+    [
+     24.0,
+     28.3125,
+     4.625
+    ],
+    [
+     24.75,
+     50.8125,
+     29.0
+    ]
+   ],
+   "frame_width": 2.25,
+   "panel_recess": 0.25,
+   "hinge_side": "left",
+   "hinge_lateral": 28.3125,
+   "label": "door, hinge at corner side"
+  },
+  {
+   "id": "hardware_handle_02",
+   "type": "bar_pull",
+   "layer": "hardware",
+   "material": "mat_hardware_finish",
+   "parent": "door_01",
+   "run": "R",
+   "orientation": "vertical",
+   "mount_center": [
+    49.0625,
+    23.125
+   ],
+   "mount_face": 24.75,
+   "length": 6.75,
+   "bar_w": 0.5,
+   "bar_t": 0.375,
+   "standoff": 1.25,
+   "post": 0.375,
+   "label": "6.75in bar pull"
+  },
+  {
+   "id": "base_cabinet_02",
+   "type": "carcass",
+   "layer": "cabinets",
+   "material": "mat_cabinet_primary",
+   "run": "R",
+   "aabb": [
+    [
+     -0.375,
+     50.875,
+     0
+    ],
+    [
+     24.0,
+     72.0,
+     35.5
+    ]
+   ],
+   "toe_kick": [
+    4.625,
+    3.0
+   ],
+   "front_normal": "+x",
+   "label": "R-run 4-drawer base 21in (measured 21.15)"
+  },
+  {
+   "id": "drawer_front_02",
+   "type": "shaker_front",
+   "role": "drawer",
+   "layer": "drawers",
+   "material": "mat_cabinet_primary",
+   "parent": "base_cabinet_02",
+   "run": "R",
+   "aabb": [
+    [
+     24.0,
+     50.9375,
+     29.125
+    ],
+    [
+     24.75,
+     71.9375,
+     35.375
+    ]
+   ],
+   "frame_width": 1.75,
+   "panel_recess": 0.25,
+   "slide_axis": "+x",
+   "label": "drawer 1 of 4"
+  },
+  {
+   "id": "hardware_handle_03",
+   "type": "bar_pull",
+   "layer": "hardware",
+   "material": "mat_hardware_finish",
+   "parent": "drawer_front_02",
+   "run": "R",
+   "orientation": "horizontal",
+   "mount_center": [
+    61.4375,
+    32.25
+   ],
+   "mount_face": 24.75,
+   "length": 6.75,
+   "bar_w": 0.5,
+   "bar_t": 0.375,
+   "standoff": 1.25,
+   "post": 0.375,
+   "label": "6.75in bar pull"
+  },
+  {
+   "id": "drawer_front_03",
+   "type": "shaker_front",
+   "role": "drawer",
+   "layer": "drawers",
+   "material": "mat_cabinet_primary",
+   "parent": "base_cabinet_02",
+   "run": "R",
+   "aabb": [
+    [
+     24.0,
+     50.9375,
+     22.75
+    ],
+    [
+     24.75,
+     71.9375,
+     29.0
+    ]
+   ],
+   "frame_width": 1.75,
+   "panel_recess": 0.25,
+   "slide_axis": "+x",
+   "label": "drawer 2 of 4"
+  },
+  {
+   "id": "hardware_handle_04",
+   "type": "bar_pull",
+   "layer": "hardware",
+   "material": "mat_hardware_finish",
+   "parent": "drawer_front_03",
+   "run": "R",
+   "orientation": "horizontal",
+   "mount_center": [
+    61.4375,
+    25.875
+   ],
+   "mount_face": 24.75,
+   "length": 6.75,
+   "bar_w": 0.5,
+   "bar_t": 0.375,
+   "standoff": 1.25,
+   "post": 0.375,
+   "label": "6.75in bar pull"
+  },
+  {
+   "id": "drawer_front_04",
+   "type": "shaker_front",
+   "role": "drawer",
+   "layer": "drawers",
+   "material": "mat_cabinet_primary",
+   "parent": "base_cabinet_02",
+   "run": "R",
+   "aabb": [
+    [
+     24.0,
+     50.9375,
+     16.375
+    ],
+    [
+     24.75,
+     71.9375,
+     22.625
+    ]
+   ],
+   "frame_width": 1.75,
+   "panel_recess": 0.25,
+   "slide_axis": "+x",
+   "label": "drawer 3 of 4"
+  },
+  {
+   "id": "hardware_handle_05",
+   "type": "bar_pull",
+   "layer": "hardware",
+   "material": "mat_hardware_finish",
+   "parent": "drawer_front_04",
+   "run": "R",
+   "orientation": "horizontal",
+   "mount_center": [
+    61.4375,
+    19.5
+   ],
+   "mount_face": 24.75,
+   "length": 6.75,
+   "bar_w": 0.5,
+   "bar_t": 0.375,
+   "standoff": 1.25,
+   "post": 0.375,
+   "label": "6.75in bar pull"
+  },
+  {
+   "id": "drawer_front_05",
+   "type": "shaker_front",
+   "role": "drawer",
+   "layer": "drawers",
+   "material": "mat_cabinet_primary",
+   "parent": "base_cabinet_02",
+   "run": "R",
+   "aabb": [
+    [
+     24.0,
+     50.9375,
+     4.625
+    ],
+    [
+     24.75,
+     71.9375,
+     16.25
+    ]
+   ],
+   "frame_width": 2.25,
+   "panel_recess": 0.25,
+   "slide_axis": "+x",
+   "label": "drawer 4 of 4"
+  },
+  {
+   "id": "hardware_handle_06",
+   "type": "bar_pull",
+   "layer": "hardware",
+   "material": "mat_hardware_finish",
+   "parent": "drawer_front_05",
+   "run": "R",
+   "orientation": "horizontal",
+   "mount_center": [
+    61.4375,
+    10.4375
+   ],
+   "mount_face": 24.75,
+   "length": 6.75,
+   "bar_w": 0.5,
+   "bar_t": 0.375,
+   "standoff": 1.25,
+   "post": 0.375,
+   "label": "6.75in bar pull"
+  },
+  {
+   "id": "upper_cabinet_01",
+   "type": "carcass",
+   "layer": "cabinets",
+   "material": "mat_cabinet_primary",
+   "run": "R",
+   "aabb": [
+    [
+     -0.375,
+     12.5,
+     55.125
+    ],
+    [
+     11.9,
+     24.0,
+     97.125
+    ]
+   ],
+   "toe_kick": null,
+   "front_normal": "+x",
+   "label": "R-run narrow upper 11-1/2in x 42in (no visible pull)"
+  },
+  {
+   "id": "door_02",
+   "type": "shaker_front",
+   "role": "door",
+   "layer": "cabinets",
+   "material": "mat_cabinet_primary",
+   "parent": "upper_cabinet_01",
+   "run": "R",
+   "aabb": [
+    [
+     11.9,
+     12.5625,
+     55.1875
+    ],
+    [
+     12.65,
+     23.9375,
+     97.0625
+    ]
+   ],
+   "frame_width": 2.25,
+   "panel_recess": 0.25,
+   "hinge_side": "right",
+   "hinge_lateral": 23.9375,
+   "label": "narrow door, no pull visible (push-latch?); hinged away from corner so it clears door at inside corner"
+  },
+  {
+   "id": "upper_cabinet_02",
+   "type": "carcass",
+   "layer": "cabinets",
+   "material": "mat_cabinet_primary",
+   "run": "R",
+   "aabb": [
+    [
+     -0.375,
+     24.0,
+     55.125
+    ],
+    [
+     11.9,
+     48.0,
+     97.125
+    ]
+   ],
+   "toe_kick": null,
+   "front_normal": "+x",
+   "label": "R-run 24in x 42in double-door upper"
+  },
+  {
+   "id": "door_03",
+   "type": "shaker_front",
+   "role": "door",
+   "layer": "cabinets",
+   "material": "mat_cabinet_primary",
+   "parent": "upper_cabinet_02",
+   "run": "R",
+   "aabb": [
+    [
+     11.9,
+     24.0625,
+     55.1875
+    ],
+    [
+     12.65,
+     35.9375,
+     97.0625
+    ]
+   ],
+   "frame_width": 2.25,
+   "panel_recess": 0.25,
+   "hinge_side": "left",
+   "hinge_lateral": 24.0625,
+   "label": "left leaf"
+  },
+  {
+   "id": "hardware_handle_07",
+   "type": "bar_pull",
+   "layer": "hardware",
+   "material": "mat_hardware_finish",
+   "parent": "door_03",
+   "run": "R",
+   "orientation": "vertical",
+   "mount_center": [
+    34.1875,
+    61.0625
+   ],
+   "mount_face": 12.65,
+   "length": 6.75,
+   "bar_w": 0.5,
+   "bar_t": 0.375,
+   "standoff": 1.25,
+   "post": 0.375,
+   "label": "6.75in bar pull"
+  },
+  {
+   "id": "door_04",
+   "type": "shaker_front",
+   "role": "door",
+   "layer": "cabinets",
+   "material": "mat_cabinet_primary",
+   "parent": "upper_cabinet_02",
+   "run": "R",
+   "aabb": [
+    [
+     11.9,
+     36.0625,
+     55.1875
+    ],
+    [
+     12.65,
+     47.9375,
+     97.0625
+    ]
+   ],
+   "frame_width": 2.25,
+   "panel_recess": 0.25,
+   "hinge_side": "right",
+   "hinge_lateral": 47.9375,
+   "label": "right leaf"
+  },
+  {
+   "id": "hardware_handle_08",
+   "type": "bar_pull",
+   "layer": "hardware",
+   "material": "mat_hardware_finish",
+   "parent": "door_04",
+   "run": "R",
+   "orientation": "vertical",
+   "mount_center": [
+    37.8125,
+    61.0625
+   ],
+   "mount_face": 12.65,
+   "length": 6.75,
+   "bar_w": 0.5,
+   "bar_t": 0.375,
+   "standoff": 1.25,
+   "post": 0.375,
+   "label": "6.75in bar pull"
+  },
+  {
+   "id": "upper_cabinet_03",
+   "type": "carcass",
+   "layer": "cabinets",
+   "material": "mat_cabinet_primary",
+   "run": "R",
+   "aabb": [
+    [
+     -0.375,
+     48.0,
+     55.125
+    ],
+    [
+     11.9,
+     72.0,
+     97.125
+    ]
+   ],
+   "toe_kick": null,
+   "front_normal": "+x",
+   "label": "R-run 24in x 42in double-door upper"
+  },
+  {
+   "id": "door_05",
+   "type": "shaker_front",
+   "role": "door",
+   "layer": "cabinets",
+   "material": "mat_cabinet_primary",
+   "parent": "upper_cabinet_03",
+   "run": "R",
+   "aabb": [
+    [
+     11.9,
+     48.0625,
+     55.1875
+    ],
+    [
+     12.65,
+     59.9375,
+     97.0625
+    ]
+   ],
+   "frame_width": 2.25,
+   "panel_recess": 0.25,
+   "hinge_side": "left",
+   "hinge_lateral": 48.0625,
+   "label": "left leaf"
+  },
+  {
+   "id": "hardware_handle_09",
+   "type": "bar_pull",
+   "layer": "hardware",
+   "material": "mat_hardware_finish",
+   "parent": "door_05",
+   "run": "R",
+   "orientation": "vertical",
+   "mount_center": [
+    58.1875,
+    61.0625
+   ],
+   "mount_face": 12.65,
+   "length": 6.75,
+   "bar_w": 0.5,
+   "bar_t": 0.375,
+   "standoff": 1.25,
+   "post": 0.375,
+   "label": "6.75in bar pull"
+  },
+  {
+   "id": "door_06",
+   "type": "shaker_front",
+   "role": "door",
+   "layer": "cabinets",
+   "material": "mat_cabinet_primary",
+   "parent": "upper_cabinet_03",
+   "run": "R",
+   "aabb": [
+    [
+     11.9,
+     60.0625,
+     55.1875
+    ],
+    [
+     12.65,
+     71.9375,
+     97.0625
+    ]
+   ],
+   "frame_width": 2.25,
+   "panel_recess": 0.25,
+   "hinge_side": "right",
+   "hinge_lateral": 71.9375,
+   "label": "right leaf"
+  },
+  {
+   "id": "hardware_handle_10",
+   "type": "bar_pull",
+   "layer": "hardware",
+   "material": "mat_hardware_finish",
+   "parent": "door_06",
+   "run": "R",
+   "orientation": "vertical",
+   "mount_center": [
+    61.8125,
+    61.0625
+   ],
+   "mount_face": 12.65,
+   "length": 6.75,
+   "bar_w": 0.5,
+   "bar_t": 0.375,
+   "standoff": 1.25,
+   "post": 0.375,
+   "label": "6.75in bar pull"
+  },
+  {
+   "id": "base_cabinet_03",
+   "type": "carcass",
+   "layer": "cabinets",
+   "material": "mat_cabinet_primary",
+   "run": "L",
+   "aabb": [
+    [
+     -0.375,
+     -0.375,
+     0
+    ],
+    [
+     26.875,
+     24.0,
+     35.5
+    ]
+   ],
+   "toe_kick": [
+    4.625,
+    3.0
+   ],
+   "front_normal": "+y",
+   "label": "blind/dead corner base box (not visible in photos; assumed)"
+  },
+  {
+   "id": "base_cabinet_04",
+   "type": "carcass",
+   "layer": "cabinets",
+   "material": "mat_cabinet_primary",
+   "run": "L",
+   "aabb": [
+    [
+     26.875,
+     -0.375,
+     0
+    ],
+    [
+     41.875,
+     24.0,
+     35.5
+    ]
+   ],
+   "toe_kick": [
+    4.625,
+    3.0
+   ],
+   "front_normal": "+y",
+   "label": "L-run 3-drawer base 15in (measured 14.90)"
+  },
+  {
+   "id": "drawer_front_06",
+   "type": "shaker_front",
+   "role": "drawer",
+   "layer": "drawers",
+   "material": "mat_cabinet_primary",
+   "parent": "base_cabinet_04",
+   "run": "L",
+   "aabb": [
+    [
+     26.9375,
+     24.0,
+     28.125
+    ],
+    [
+     41.8125,
+     24.75,
+     35.375
+    ]
+   ],
+   "frame_width": 1.75,
+   "panel_recess": 0.25,
+   "slide_axis": "+y",
+   "label": "drawer 1 of 3"
+  },
+  {
+   "id": "hardware_handle_11",
+   "type": "bar_pull",
+   "layer": "hardware",
+   "material": "mat_hardware_finish",
+   "parent": "drawer_front_06",
+   "run": "L",
+   "orientation": "horizontal",
+   "mount_center": [
+    34.375,
+    31.75
+   ],
+   "mount_face": 24.75,
+   "length": 6.75,
+   "bar_w": 0.5,
+   "bar_t": 0.375,
+   "standoff": 1.25,
+   "post": 0.375,
+   "label": "6.75in bar pull"
+  },
+  {
+   "id": "drawer_front_07",
+   "type": "shaker_front",
+   "role": "drawer",
+   "layer": "drawers",
+   "material": "mat_cabinet_primary",
+   "parent": "base_cabinet_04",
+   "run": "L",
+   "aabb": [
+    [
+     26.9375,
+     24.0,
+     18.75
+    ],
+    [
+     41.8125,
+     24.75,
+     28.0
+    ]
+   ],
+   "frame_width": 2.25,
+   "panel_recess": 0.25,
+   "slide_axis": "+y",
+   "label": "drawer 2 of 3"
+  },
+  {
+   "id": "hardware_handle_12",
+   "type": "bar_pull",
+   "layer": "hardware",
+   "material": "mat_hardware_finish",
+   "parent": "drawer_front_07",
+   "run": "L",
+   "orientation": "horizontal",
+   "mount_center": [
+    34.375,
+    23.375
+   ],
+   "mount_face": 24.75,
+   "length": 6.75,
+   "bar_w": 0.5,
+   "bar_t": 0.375,
+   "standoff": 1.25,
+   "post": 0.375,
+   "label": "6.75in bar pull"
+  },
+  {
+   "id": "drawer_front_08",
+   "type": "shaker_front",
+   "role": "drawer",
+   "layer": "drawers",
+   "material": "mat_cabinet_primary",
+   "parent": "base_cabinet_04",
+   "run": "L",
+   "aabb": [
+    [
+     26.9375,
+     24.0,
+     4.625
+    ],
+    [
+     41.8125,
+     24.75,
+     18.625
+    ]
+   ],
+   "frame_width": 2.25,
+   "panel_recess": 0.25,
+   "slide_axis": "+y",
+   "label": "drawer 3 of 3"
+  },
+  {
+   "id": "hardware_handle_13",
+   "type": "bar_pull",
+   "layer": "hardware",
+   "material": "mat_hardware_finish",
+   "parent": "drawer_front_08",
+   "run": "L",
+   "orientation": "horizontal",
+   "mount_center": [
+    34.375,
+    11.625
+   ],
+   "mount_face": 24.75,
+   "length": 6.75,
+   "bar_w": 0.5,
+   "bar_t": 0.375,
+   "standoff": 1.25,
+   "post": 0.375,
+   "label": "6.75in bar pull"
+  },
+  {
+   "id": "base_cabinet_05",
+   "type": "carcass",
+   "layer": "cabinets",
+   "material": "mat_cabinet_primary",
+   "run": "L",
+   "aabb": [
+    [
+     41.875,
+     -0.375,
+     0
+    ],
+    [
+     72.375,
+     24.0,
+     35.5
+    ]
+   ],
+   "toe_kick": [
+    4.625,
+    3.0
+   ],
+   "front_normal": "+y",
+   "label": "L-run farmhouse sink base 30-1/2in (measured 30.69)",
+   "subtract_box": [
+    [
+     42.125,
+     8.875,
+     25.625
+    ],
+    [
+     72.125,
+     25.75,
+     36.5
+    ]
+   ]
+  },
+  {
+   "id": "door_07",
+   "type": "shaker_front",
+   "role": "door",
+   "layer": "cabinets",
+   "material": "mat_cabinet_primary",
+   "parent": "base_cabinet_05",
+   "run": "L",
+   "aabb": [
+    [
+     41.9375,
+     24.0,
+     4.625
+    ],
+    [
+     57.0625,
+     24.75,
+     25.5
+    ]
+   ],
+   "frame_width": 2.25,
+   "panel_recess": 0.25,
+   "hinge_side": "right",
+   "hinge_lateral": 41.9375,
+   "label": "sink door (viewer's right leaf)"
+  },
+  {
+   "id": "hardware_handle_14",
+   "type": "bar_pull",
+   "layer": "hardware",
+   "material": "mat_hardware_finish",
+   "parent": "door_07",
+   "run": "L",
+   "orientation": "vertical",
+   "mount_center": [
+    55.3125,
+    19.625
+   ],
+   "mount_face": 24.75,
+   "length": 6.75,
+   "bar_w": 0.5,
+   "bar_t": 0.375,
+   "standoff": 1.25,
+   "post": 0.375,
+   "label": "6.75in bar pull"
+  },
+  {
+   "id": "door_08",
+   "type": "shaker_front",
+   "role": "door",
+   "layer": "cabinets",
+   "material": "mat_cabinet_primary",
+   "parent": "base_cabinet_05",
+   "run": "L",
+   "aabb": [
+    [
+     57.1875,
+     24.0,
+     4.625
+    ],
+    [
+     72.3125,
+     24.75,
+     25.5
+    ]
+   ],
+   "frame_width": 2.25,
+   "panel_recess": 0.25,
+   "hinge_side": "left",
+   "hinge_lateral": 72.3125,
+   "label": "sink door (viewer's left leaf)"
+  },
+  {
+   "id": "hardware_handle_15",
+   "type": "bar_pull",
+   "layer": "hardware",
+   "material": "mat_hardware_finish",
+   "parent": "door_08",
+   "run": "L",
+   "orientation": "vertical",
+   "mount_center": [
+    58.9375,
+    19.625
+   ],
+   "mount_face": 24.75,
+   "length": 6.75,
+   "bar_w": 0.5,
+   "bar_t": 0.375,
+   "standoff": 1.25,
+   "post": 0.375,
+   "label": "6.75in bar pull"
+  },
+  {
+   "id": "base_cabinet_06",
+   "type": "carcass",
+   "layer": "cabinets",
+   "material": "mat_cabinet_primary",
+   "run": "L",
+   "aabb": [
+    [
+     72.375,
+     -0.375,
+     0
+    ],
+    [
+     90.375,
+     24.0,
+     35.5
+    ]
+   ],
+   "toe_kick": [
+    4.625,
+    3.0
+   ],
+   "front_normal": "+y",
+   "label": "L-run drawer + pull-out base 18in (measured 17.72)"
+  },
+  {
+   "id": "drawer_front_09",
+   "type": "shaker_front",
+   "role": "drawer",
+   "layer": "drawers",
+   "material": "mat_cabinet_primary",
+   "parent": "base_cabinet_06",
+   "run": "L",
+   "aabb": [
+    [
+     72.4375,
+     24.0,
+     29.125
+    ],
+    [
+     90.3125,
+     24.75,
+     35.375
+    ]
+   ],
+   "frame_width": 1.75,
+   "panel_recess": 0.25,
+   "slide_axis": "+y",
+   "label": "top drawer"
+  },
+  {
+   "id": "hardware_handle_16",
+   "type": "bar_pull",
+   "layer": "hardware",
+   "material": "mat_hardware_finish",
+   "parent": "drawer_front_09",
+   "run": "L",
+   "orientation": "horizontal",
+   "mount_center": [
+    81.375,
+    32.25
+   ],
+   "mount_face": 24.75,
+   "length": 6.75,
+   "bar_w": 0.5,
+   "bar_t": 0.375,
+   "standoff": 1.25,
+   "post": 0.375,
+   "label": "6.75in bar pull"
+  },
+  {
+   "id": "drawer_front_10",
+   "type": "shaker_front",
+   "role": "pullout",
+   "layer": "drawers",
+   "material": "mat_cabinet_primary",
+   "parent": "base_cabinet_06",
+   "run": "L",
+   "aabb": [
+    [
+     72.4375,
+     24.0,
+     4.625
+    ],
+    [
+     90.3125,
+     24.75,
+     29.0
+    ]
+   ],
+   "frame_width": 2.25,
+   "panel_recess": 0.25,
+   "slide_axis": "+y",
+   "label": "pull-out front (horizontal pull => pull-out, likely waste bin)"
+  },
+  {
+   "id": "hardware_handle_17",
+   "type": "bar_pull",
+   "layer": "hardware",
+   "material": "mat_hardware_finish",
+   "parent": "drawer_front_10",
+   "run": "L",
+   "orientation": "horizontal",
+   "mount_center": [
+    81.375,
+    26.25
+   ],
+   "mount_face": 24.75,
+   "length": 6.75,
+   "bar_w": 0.5,
+   "bar_t": 0.375,
+   "standoff": 1.25,
+   "post": 0.375,
+   "label": "6.75in bar pull"
+  },
+  {
+   "id": "tall_cabinet_01",
+   "type": "carcass",
+   "layer": "cabinets",
+   "material": "mat_cabinet_primary",
+   "run": "L",
+   "aabb": [
+    [
+     90.375,
+     -0.375,
+     0
+    ],
+    [
+     111.375,
+     23.75,
+     96.5
+    ]
+   ],
+   "toe_kick": [
+    4.625,
+    3.0
+   ],
+   "front_normal": "+y",
+   "label": "L-run pantry 21in x 96-1/2in (measured 20.98 wide, 99.13 incl. cap)"
+  },
+  {
+   "id": "door_09",
+   "type": "shaker_front",
+   "role": "door",
+   "layer": "cabinets",
+   "material": "mat_cabinet_primary",
+   "parent": "tall_cabinet_01",
+   "run": "L",
+   "aabb": [
+    [
+     90.4375,
+     23.75,
+     4.625
+    ],
+    [
+     111.3125,
+     24.5,
+     64.625
+    ]
+   ],
+   "frame_width": 2.25,
+   "panel_recess": 0.25,
+   "hinge_side": "left",
+   "hinge_lateral": 111.3125,
+   "label": "pantry lower door"
+  },
+  {
+   "id": "hardware_handle_18",
+   "type": "bar_pull",
+   "layer": "hardware",
+   "material": "mat_hardware_finish",
+   "parent": "door_09",
+   "run": "L",
+   "orientation": "vertical",
+   "mount_center": [
+    92.1875,
+    48.25
+   ],
+   "mount_face": 24.5,
+   "length": 10.0,
+   "bar_w": 0.5,
+   "bar_t": 0.375,
+   "standoff": 1.25,
+   "post": 0.375,
+   "label": "10.00in bar pull"
+  },
+  {
+   "id": "door_10",
+   "type": "shaker_front",
+   "role": "door",
+   "layer": "cabinets",
+   "material": "mat_cabinet_primary",
+   "parent": "tall_cabinet_01",
+   "run": "L",
+   "aabb": [
+    [
+     90.4375,
+     23.75,
+     64.75
+    ],
+    [
+     111.3125,
+     24.5,
+     96.4375
+    ]
+   ],
+   "frame_width": 2.25,
+   "panel_recess": 0.25,
+   "hinge_side": "left",
+   "hinge_lateral": 111.3125,
+   "label": "pantry upper door"
+  },
+  {
+   "id": "hardware_handle_19",
+   "type": "bar_pull",
+   "layer": "hardware",
+   "material": "mat_hardware_finish",
+   "parent": "door_10",
+   "run": "L",
+   "orientation": "vertical",
+   "mount_center": [
+    92.1875,
+    70.625
+   ],
+   "mount_face": 24.5,
+   "length": 6.75,
+   "bar_w": 0.5,
+   "bar_t": 0.375,
+   "standoff": 1.25,
+   "post": 0.375,
+   "label": "6.75in bar pull"
+  },
+  {
+   "id": "upper_cabinet_04",
+   "type": "carcass",
+   "layer": "cabinets",
+   "material": "mat_cabinet_primary",
+   "run": "L",
+   "aabb": [
+    [
+     -0.375,
+     -0.375,
+     55.125
+    ],
+    [
+     24.0,
+     11.65,
+     97.125
+    ]
+   ],
+   "toe_kick": null,
+   "front_normal": "+y",
+   "label": "L-run 24in blind-corner upper x 42in (+3/8in scribe to W2 drywall)"
+  },
+  {
+   "id": "door_11",
+   "type": "shaker_front",
+   "role": "door",
+   "layer": "cabinets",
+   "material": "mat_cabinet_primary",
+   "parent": "upper_cabinet_04",
+   "run": "L",
+   "aabb": [
+    [
+     12.875,
+     11.65,
+     55.1875
+    ],
+    [
+     23.9375,
+     12.4,
+     97.0625
+    ]
+   ],
+   "frame_width": 2.25,
+   "panel_recess": 0.25,
+   "hinge_side": "right",
+   "hinge_lateral": 12.875,
+   "label": "blind-corner door (visible portion)"
+  },
+  {
+   "id": "hardware_handle_20",
+   "type": "bar_pull",
+   "layer": "hardware",
+   "material": "mat_hardware_finish",
+   "parent": "door_11",
+   "run": "L",
+   "orientation": "vertical",
+   "mount_center": [
+    22.1875,
+    61.0625
+   ],
+   "mount_face": 12.4,
+   "length": 6.75,
+   "bar_w": 0.5,
+   "bar_t": 0.375,
+   "standoff": 1.25,
+   "post": 0.375,
+   "label": "6.75in bar pull"
+  },
+  {
+   "id": "upper_cabinet_05",
+   "type": "carcass",
+   "layer": "cabinets",
+   "material": "mat_cabinet_primary",
+   "run": "L",
+   "aabb": [
+    [
+     24.0,
+     -0.375,
+     55.125
+    ],
+    [
+     42.0,
+     11.65,
+     97.125
+    ]
+   ],
+   "toe_kick": null,
+   "front_normal": "+y",
+   "label": "L-run 18in x 42in upper"
+  },
+  {
+   "id": "door_12",
+   "type": "shaker_front",
+   "role": "door",
+   "layer": "cabinets",
+   "material": "mat_cabinet_primary",
+   "parent": "upper_cabinet_05",
+   "run": "L",
+   "aabb": [
+    [
+     24.0625,
+     11.65,
+     55.1875
+    ],
+    [
+     41.9375,
+     12.4,
+     97.0625
+    ]
+   ],
+   "frame_width": 2.25,
+   "panel_recess": 0.25,
+   "hinge_side": "right",
+   "hinge_lateral": 24.0625,
+   "label": "single door"
+  },
+  {
+   "id": "hardware_handle_21",
+   "type": "bar_pull",
+   "layer": "hardware",
+   "material": "mat_hardware_finish",
+   "parent": "door_12",
+   "run": "L",
+   "orientation": "vertical",
+   "mount_center": [
+    40.1875,
+    61.0625
+   ],
+   "mount_face": 12.4,
+   "length": 6.75,
+   "bar_w": 0.5,
+   "bar_t": 0.375,
+   "standoff": 1.25,
+   "post": 0.375,
+   "label": "6.75in bar pull"
+  },
+  {
+   "id": "upper_cabinet_06",
+   "type": "carcass",
+   "layer": "cabinets",
+   "material": "mat_cabinet_primary",
+   "run": "L",
+   "aabb": [
+    [
+     42.0,
+     -0.375,
+     67.125
+    ],
+    [
+     72.0,
+     11.65,
+     97.125
+    ]
+   ],
+   "toe_kick": null,
+   "front_normal": "+y",
+   "label": "L-run 30in x 30in double-door upper over sink"
+  },
+  {
+   "id": "door_13",
+   "type": "shaker_front",
+   "role": "door",
+   "layer": "cabinets",
+   "material": "mat_cabinet_primary",
+   "parent": "upper_cabinet_06",
+   "run": "L",
+   "aabb": [
+    [
+     42.0625,
+     11.65,
+     67.1875
+    ],
+    [
+     56.9375,
+     12.4,
+     97.0625
+    ]
+   ],
+   "frame_width": 2.25,
+   "panel_recess": 0.25,
+   "hinge_side": "right",
+   "hinge_lateral": 42.0625,
+   "label": "leaf (viewer's right)"
+  },
+  {
+   "id": "hardware_handle_22",
+   "type": "bar_pull",
+   "layer": "hardware",
+   "material": "mat_hardware_finish",
+   "parent": "door_13",
+   "run": "L",
+   "orientation": "vertical",
+   "mount_center": [
+    55.1875,
+    73.0625
+   ],
+   "mount_face": 12.4,
+   "length": 6.75,
+   "bar_w": 0.5,
+   "bar_t": 0.375,
+   "standoff": 1.25,
+   "post": 0.375,
+   "label": "6.75in bar pull"
+  },
+  {
+   "id": "door_14",
+   "type": "shaker_front",
+   "role": "door",
+   "layer": "cabinets",
+   "material": "mat_cabinet_primary",
+   "parent": "upper_cabinet_06",
+   "run": "L",
+   "aabb": [
+    [
+     57.0625,
+     11.65,
+     67.1875
+    ],
+    [
+     71.9375,
+     12.4,
+     97.0625
+    ]
+   ],
+   "frame_width": 2.25,
+   "panel_recess": 0.25,
+   "hinge_side": "left",
+   "hinge_lateral": 71.9375,
+   "label": "leaf (viewer's left)"
+  },
+  {
+   "id": "hardware_handle_23",
+   "type": "bar_pull",
+   "layer": "hardware",
+   "material": "mat_hardware_finish",
+   "parent": "door_14",
+   "run": "L",
+   "orientation": "vertical",
+   "mount_center": [
+    58.8125,
+    73.0625
+   ],
+   "mount_face": 12.4,
+   "length": 6.75,
+   "bar_w": 0.5,
+   "bar_t": 0.375,
+   "standoff": 1.25,
+   "post": 0.375,
+   "label": "6.75in bar pull"
+  },
+  {
+   "id": "upper_cabinet_07",
+   "type": "carcass",
+   "layer": "cabinets",
+   "material": "mat_cabinet_primary",
+   "run": "L",
+   "aabb": [
+    [
+     72.0,
+     -0.375,
+     55.125
+    ],
+    [
+     90.0,
+     11.65,
+     97.125
+    ]
+   ],
+   "toe_kick": null,
+   "front_normal": "+y",
+   "label": "L-run 18in x 42in upper beside pantry"
+  },
+  {
+   "id": "door_15",
+   "type": "shaker_front",
+   "role": "door",
+   "layer": "cabinets",
+   "material": "mat_cabinet_primary",
+   "parent": "upper_cabinet_07",
+   "run": "L",
+   "aabb": [
+    [
+     72.0625,
+     11.65,
+     55.1875
+    ],
+    [
+     89.9375,
+     12.4,
+     97.0625
+    ]
+   ],
+   "frame_width": 2.25,
+   "panel_recess": 0.25,
+   "hinge_side": "left",
+   "hinge_lateral": 89.9375,
+   "label": "single door"
+  },
+  {
+   "id": "hardware_handle_24",
+   "type": "bar_pull",
+   "layer": "hardware",
+   "material": "mat_hardware_finish",
+   "parent": "door_15",
+   "run": "L",
+   "orientation": "vertical",
+   "mount_center": [
+    73.8125,
+    61.0625
+   ],
+   "mount_face": 12.4,
+   "length": 6.75,
+   "bar_w": 0.5,
+   "bar_t": 0.375,
+   "standoff": 1.25,
+   "post": 0.375,
+   "label": "6.75in bar pull"
+  },
+  {
+   "id": "trim_filler_01",
+   "type": "box",
+   "layer": "cabinets",
+   "material": "mat_cabinet_primary",
+   "run": "L",
+   "aabb": [
+    [
+     24.0,
+     24.0,
+     4.625
+    ],
+    [
+     26.875,
+     24.75,
+     35.5
+    ]
+   ],
+   "label": "L-run corner filler 2-1/8in (measured 2.17)"
+  },
+  {
+   "id": "trim_filler_02",
+   "type": "box",
+   "layer": "cabinets",
+   "material": "mat_cabinet_primary",
+   "run": "R",
+   "aabb": [
+    [
+     24.0,
+     24.75,
+     4.625
+    ],
+    [
+     24.75,
+     28.25,
+     35.5
+    ]
+   ],
+   "label": "R-run corner filler 3-1/2in (measured 3.53)"
+  },
+  {
+   "id": "trim_filler_03",
+   "type": "box",
+   "layer": "cabinets",
+   "material": "mat_cabinet_primary",
+   "run": "R",
+   "aabb": [
+    [
+     21.0,
+     24.75,
+     4.625
+    ],
+    [
+     24.0,
+     28.25,
+     35.5
+    ]
+   ],
+   "label": "hidden filler backer block (attaches filler_02 to base_cabinet_01 side)"
+  },
+  {
+   "id": "trim_toekick_01",
+   "type": "box",
+   "layer": "cabinets",
+   "material": "mat_cabinet_primary",
+   "run": "L",
+   "aabb": [
+    [
+     21.0,
+     21.0,
+     0
+    ],
+    [
+     90.375,
+     21.5,
+     4.625
+    ]
+   ],
+   "label": "L-run toe kick board"
+  },
+  {
+   "id": "trim_toekick_02",
+   "type": "box",
+   "layer": "cabinets",
+   "material": "mat_cabinet_primary",
+   "run": "L",
+   "aabb": [
+    [
+     90.375,
+     20.75,
+     0
+    ],
+    [
+     111.375,
+     21.25,
+     4.625
+    ]
+   ],
+   "label": "pantry toe kick board"
+  },
+  {
+   "id": "trim_toekick_03",
+   "type": "box",
+   "layer": "cabinets",
+   "material": "mat_cabinet_primary",
+   "run": "R",
+   "aabb": [
+    [
+     21.0,
+     21.5,
+     0
+    ],
+    [
+     21.5,
+     72.0,
+     4.625
+    ]
+   ],
+   "label": "R-run toe kick board"
+  },
+  {
+   "id": "trim_crown_01",
+   "type": "box",
+   "layer": "cabinets",
+   "material": "mat_cabinet_primary",
+   "run": "L",
+   "aabb": [
+    [
+     -0.375,
+     -0.375,
+     97.125
+    ],
+    [
+     90.375,
+     13.15,
+     100.625
+    ]
+   ],
+   "label": "L-run flat crown 3-1/2in (measured 97.14-100.60)"
+  },
+  {
+   "id": "trim_crown_02",
+   "type": "box",
+   "layer": "cabinets",
+   "material": "mat_cabinet_primary",
+   "run": "R",
+   "aabb": [
+    [
+     -0.375,
+     13.15,
+     97.125
+    ],
+    [
+     13.4,
+     72.75,
+     98.75
+    ]
+   ],
+   "label": "R-run flat crown 1-5/8in (measured 97.05-98.77)"
+  },
+  {
+   "id": "trim_cap_01",
+   "type": "box",
+   "layer": "cabinets",
+   "material": "mat_cabinet_primary",
+   "run": "L",
+   "aabb": [
+    [
+     90.375,
+     -0.375,
+     96.5
+    ],
+    [
+     112.125,
+     25.25,
+     99.125
+    ]
+   ],
+   "label": "pantry cap (measured 96.58-99.13)"
+  },
+  {
+   "id": "countertop_slab_01",
+   "type": "slab",
+   "layer": "countertops",
+   "material": "mat_countertop_surface",
+   "run": "R",
+   "aabb": [
+    [
+     -0.375,
+     -0.375,
+     35.5
+    ],
+    [
+     25.25,
+     73.125,
+     36.75
+    ]
+   ],
+   "cutouts": [],
+   "label": "R-run + corner slab, 3cm quartz (Vadara), front x=25.25 (measured 25.29), end y=73.125 (measured 73.14)"
+  },
+  {
+   "id": "countertop_slab_02",
+   "type": "slab",
+   "layer": "countertops",
+   "material": "mat_countertop_surface",
+   "run": "L",
+   "aabb": [
+    [
+     25.25,
+     -0.375,
+     35.5
+    ],
+    [
+     90.375,
+     26.5,
+     36.75
+    ]
+   ],
+   "cutouts": [
+    [
+     [
+      43.125,
+      10.125,
+      34.5
+     ],
+     [
+      71.125,
+      27.5,
+      37.75
+     ]
+    ]
+   ],
+   "label": "L-run slab with farmhouse sink notch, front y=26.5 (measured 26.54), 1/4in overhang over sink back wall"
+  },
+  {
+   "id": "fixture_sink_01",
+   "type": "farmhouse_sink",
+   "layer": "fixtures",
+   "material": "mat_fixture_fireclay",
+   "run": "L",
+   "aabb": [
+    [
+     42.125,
+     8.875,
+     25.625
+    ],
+    [
+     72.125,
+     26.875,
+     35.5
+    ]
+   ],
+   "wall": 1.0,
+   "bowl_depth": 8.875,
+   "drain": {
+    "center_xy": [
+     49.625,
+     17.875
+    ],
+    "diameter": 3.5
+   },
+   "label": "Nantucket Sinks FCFS3018W-OSD 30x18x9-7/8 fireclay apron sink (read from price tag); apron 2.1in proud of doors (measured 2.06)"
+  },
+  {
+   "id": "fixture_faucet_01",
+   "type": "faucet",
+   "layer": "fixtures",
+   "material": "mat_faucet_finish",
+   "run": "L",
+   "base": [
+    57.3,
+    6.6,
+    36.75
+   ],
+   "body_height": 10.75,
+   "body_d_bottom": 2.0,
+   "body_d_top": 1.4,
+   "arm": {
+    "z": 46.0,
+    "dir_xy": [
+     -0.21,
+     0.98
+    ],
+    "length": 9.75,
+    "d": 0.9
+   },
+   "head": {
+    "z0": 44.5,
+    "z1": 49.0,
+    "d": 1.3
+   },
+   "hose": {
+    "apex_z": 57.3,
+    "d": 1.0,
+    "material": "mat_faucet_hose"
+   },
+   "label": "pull-down faucet, brushed nickel body with black hose (base triangulated at x57.3 y6.6, z36.6 vs counter 36.75)"
+  },
+  {
+   "id": "backsplash_01",
+   "type": "union_boxes",
+   "layer": "backsplash",
+   "material": "mat_backsplash_tile",
+   "run": "L",
+   "boxes": [
+    [
+     [
+      0.0,
+      -0.375,
+      36.75
+     ],
+     [
+      90.375,
+      0.0,
+      55.125
+     ]
+    ],
+    [
+     [
+      42.0,
+      -0.375,
+      55.125
+     ],
+     [
+      72.0,
+      0.0,
+      67.125
+     ]
+    ]
+   ],
+   "label": "W1 glazed subway tile field (vertical stack behind sink)"
+  },
+  {
+   "id": "backsplash_02",
+   "type": "union_boxes",
+   "layer": "backsplash",
+   "material": "mat_backsplash_tile",
+   "run": "R",
+   "boxes": [
+    [
+     [
+      -0.375,
+      -0.375,
+      36.75
+     ],
+     [
+      0.0,
+      72.0,
+      55.125
+     ]
+    ]
+   ],
+   "label": "W2 glazed subway tile field"
+  },
+  {
+   "id": "reference_wall_01",
+   "type": "box",
+   "layer": "reference",
+   "material": "mat_reference",
+   "run": "L",
+   "aabb": [
+    [
+     -4.375,
+     -4.375,
+     0
+    ],
+    [
+     120.0,
+     -0.375,
+     120.0
+    ]
+   ],
+   "label": "W1 wall (drywall face at y=-0.375)"
+  },
+  {
+   "id": "reference_wall_02",
+   "type": "box",
+   "layer": "reference",
+   "material": "mat_reference",
+   "run": "R",
+   "aabb": [
+    [
+     -4.375,
+     -0.375,
+     0
+    ],
+    [
+     -0.375,
+     84.0,
+     120.0
+    ]
+   ],
+   "label": "W2 wall (drywall face at x=-0.375)"
+  },
+  {
+   "id": "reference_floor_01",
+   "type": "box",
+   "layer": "reference",
+   "material": "mat_reference",
+   "run": null,
+   "aabb": [
+    [
+     -4.375,
+     -4.375,
+     -1.0
+    ],
+    [
+     120.0,
+     84.0,
+     0.0
+    ]
+   ],
+   "label": "floor"
+  }
+ ]
+}

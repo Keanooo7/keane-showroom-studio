@@ -1,0 +1,43 @@
+{
+ "method": "De-lit albedo estimate per material: median linear RGB of each material's visible pixels across the 4 sharp\nSfM views, white-balanced + exposure-normalised against the fireclay sink (assumed neutral albedo 0.85).",
+ "reference": "mat_fixture_fireclay=0.85 neutral",
+ "gain": [
+  1.1877,
+  1.2124,
+  1.3049
+ ],
+ "albedo_linear": {
+  "mat_cabinet_primary": [
+   0.59,
+   0.481,
+   0.392
+  ],
+  "mat_countertop_surface": [
+   0.503,
+   0.475,
+   0.459
+  ],
+  "mat_hardware_finish": [
+   0.302,
+   0.244,
+   0.184
+  ],
+  "mat_fixture_fireclay": [
+   0.85,
+   0.85,
+   0.85
+  ],
+  "mat_backsplash_tile": [
+   0.1,
+   0.081,
+   0.057
+  ]
+ },
+ "pixel_counts": {
+  "mat_cabinet_primary": 1584508,
+  "mat_countertop_surface": 194401,
+  "mat_hardware_finish": 23374,
+  "mat_fixture_fireclay": 136265,
+  "mat_backsplash_tile": 304299
+ }
+}

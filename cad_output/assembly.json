@@ -1,0 +1,11842 @@
+{
+ "schema": "keane-kitchens/assembly/v1",
+ "generator": "tools/build_cad.py",
+ "source_spec": "artifacts/geometry/layout_spec.json",
+ "units": "mm",
+ "inch_to_mm": 25.4,
+ "world_frame": {
+  "up": "+Z",
+  "handedness": "right",
+  "origin": "inside corner at floor, at backsplash tile faces",
+  "W1": "sink wall: tile face y=0, room y>0; run L along +x, fronts +y",
+  "W2": "right wall: tile face x=0, room x>0; run R along +y, fronts +x"
+ },
+ "local_frame": {
+  "convention": "right-handed, Y-up, OBJ/glTF style: +X viewer's right facing the front, +Y up, +Z out of the front; component files are in local mm with the pivot at the origin",
+  "run_L": "X=-x_world, Y=+z_world, Z=+y_world",
+  "run_R": "X=+y_world, Y=+z_world, Z=+x_world",
+  "run_none": "X=+x_world, Y=+z_world, Z=-y_world",
+  "transform": "world_mm = transform_local_to_world (4x4 row-major) @ [local_mm, 1]",
+  "pivots": {
+   "cabinet_slab_trim_backsplash_sink_reference": "rear-bottom-left corner; geometry in X[0,w] Y[0,h] Z[0,d]",
+   "door": "(hinge edge, bottom edge, FRONT face); left-hinged X[0,w], right-hinged X[-w,0]; Z[-t,0]; swing about local +Y, -110 deg left / +110 deg right (limited by door_swing.max_open_deg)",
+   "drawer_front": "centre of back face; X[-w/2,w/2] Y[-h/2,h/2] Z[0,t]; slide local +Z",
+   "hardware_handle": "centre of mounting footprint on the parent's actual front surface",
+   "faucet": "base centre at counter surface"
+  }
+ },
+ "materials": {
+  "mat_cabinet_primary": {
+   "baseColor": [
+    0.59,
+    0.481,
+    0.392
+   ],
+   "metallic": 0.0,
+   "roughness": 0.55,
+   "photo_albedo": [
+    0.59,
+    0.481,
+    0.392
+   ],
+   "note": "greige satin lacquer; photo-derived albedo"
+  },
+  "mat_countertop_surface": {
+   "baseColor": [
+    0.818,
+    0.772,
+    0.746
+   ],
+   "metallic": 0.0,
+   "roughness": 0.2,
+   "photo_albedo": [
+    0.503,
+    0.475,
+    0.459
+   ],
+   "note": "white quartz w/ gray veining (Vadara); photo chroma, luminance prior 0.78; vein texture slot"
+  },
+  "mat_hardware_finish": {
+   "baseColor": [
+    0.743,
+    0.6,
+    0.453
+   ],
+   "metallic": 1.0,
+   "roughness": 0.35,
+   "photo_albedo": [
+    0.302,
+    0.244,
+    0.184
+   ],
+   "note": "champagne bronze bar pulls; photo chroma, metal F0 luminance prior"
+  },
+  "mat_faucet_finish": {
+   "baseColor": [
+    0.66,
+    0.64,
+    0.6
+   ],
+   "metallic": 1.0,
+   "roughness": 0.4,
+   "photo_albedo": null,
+   "note": "brushed nickel faucet body"
+  },
+  "mat_fixture_fireclay": {
+   "baseColor": [
+    0.85,
+    0.85,
+    0.85
+   ],
+   "metallic": 0.0,
+   "roughness": 0.12,
+   "photo_albedo": null,
+   "note": "glossy white fireclay; white-balance reference"
+  },
+  "mat_backsplash_tile": {
+   "baseColor": [
+    0.264,
+    0.214,
+    0.151
+   ],
+   "metallic": 0.0,
+   "roughness": 0.15,
+   "photo_albedo": [
+    0.1,
+    0.081,
+    0.057
+   ],
+   "note": "glazed taupe/gray subway; photo chroma, luminance prior 0.22"
+  },
+  "mat_faucet_hose": {
+   "baseColor": [
+    0.04,
+    0.04,
+    0.04
+   ],
+   "metallic": 0.0,
+   "roughness": 0.6,
+   "photo_albedo": null,
+   "note": "black silicone hose"
+  },
+  "mat_reference": {
+   "baseColor": [
+    0.55,
+    0.55,
+    0.55
+   ],
+   "metallic": 0.0,
+   "roughness": 0.9,
+   "photo_albedo": null,
+   "note": "reference walls/floor, not for fabrication"
+  }
+ },
+ "material_file": "components/materials.mtl",
+ "layers": {
+  "cabinets": {
+   "fabrication": true,
+   "components": [
+    "base_cabinet_01",
+    "door_01",
+    "base_cabinet_02",
+    "upper_cabinet_01",
+    "door_02",
+    "upper_cabinet_02",
+    "door_03",
+    "door_04",
+    "upper_cabinet_03",
+    "door_05",
+    "door_06",
+    "base_cabinet_03",
+    "base_cabinet_04",
+    "base_cabinet_05",
+    "door_07",
+    "door_08",
+    "base_cabinet_06",
+    "tall_cabinet_01",
+    "door_09",
+    "door_10",
+    "upper_cabinet_04",
+    "door_11",
+    "upper_cabinet_05",
+    "door_12",
+    "upper_cabinet_06",
+    "door_13",
+    "door_14",
+    "upper_cabinet_07",
+    "door_15",
+    "trim_filler_01",
+    "trim_filler_02",
+    "trim_filler_03",
+    "trim_toekick_01",
+    "trim_toekick_02",
+    "trim_toekick_03",
+    "trim_crown_01",
+    "trim_crown_02",
+    "trim_cap_01"
+   ]
+  },
+  "drawers": {
+   "fabrication": true,
+   "components": [
+    "drawer_front_01",
+    "drawer_front_02",
+    "drawer_front_03",
+    "drawer_front_04",
+    "drawer_front_05",
+    "drawer_front_06",
+    "drawer_front_07",
+    "drawer_front_08",
+    "drawer_front_09",
+    "drawer_front_10"
+   ]
+  },
+  "hardware": {
+   "fabrication": true,
+   "components": [
+    "hardware_handle_01",
+    "hardware_handle_02",
+    "hardware_handle_03",
+    "hardware_handle_04",
+    "hardware_handle_05",
+    "hardware_handle_06",
+    "hardware_handle_07",
+    "hardware_handle_08",
+    "hardware_handle_09",
+    "hardware_handle_10",
+    "hardware_handle_11",
+    "hardware_handle_12",
+    "hardware_handle_13",
+    "hardware_handle_14",
+    "hardware_handle_15",
+    "hardware_handle_16",
+    "hardware_handle_17",
+    "hardware_handle_18",
+    "hardware_handle_19",
+    "hardware_handle_20",
+    "hardware_handle_21",
+    "hardware_handle_22",
+    "hardware_handle_23",
+    "hardware_handle_24"
+   ]
+  },
+  "countertops": {
+   "fabrication": true,
+   "components": [
+    "countertop_slab_01",
+    "countertop_slab_02"
+   ]
+  },
+  "fixtures": {
+   "fabrication": true,
+   "components": [
+    "fixture_sink_01",
+    "fixture_faucet_01"
+   ]
+  },
+  "backsplash": {
+   "fabrication": true,
+   "components": [
+    "backsplash_01",
+    "backsplash_02"
+   ]
+  },
+  "reference": {
+   "fabrication": false,
+   "components": [
+    "reference_wall_01",
+    "reference_wall_02",
+    "reference_floor_01"
+   ]
+  }
+ },
+ "glb_note": "artifacts/export/kitchen_world.glb: root node 'kitchen' maps world Z-up mm -> glTF Y-up m; part nodes hold local meshes, nested by parent, so door/drawer nodes animate about their origin.",
+ "components": [
+  {
+   "id": "base_cabinet_01",
+   "label": "R-run drawer-over-door base 22-5/8in (measured 22.55)",
+   "category": "base_cabinet",
+   "layer": "cabinets",
+   "run": "R",
+   "type": "carcass",
+   "parent": null,
+   "children": [
+    "drawer_front_01",
+    "door_01"
+   ],
+   "files": {
+    "obj": "components/base_cabinet_01.obj",
+    "stl": "components/base_cabinet_01.stl"
+   },
+   "material_slots": [
+    "mat_cabinet_primary"
+   ],
+   "material_default": "mat_cabinet_primary",
+   "pivot": {
+    "type": "rear_bottom_left_corner",
+    "world_position_mm": [
+     -9.525,
+     717.55,
+     0.0
+    ]
+   },
+   "transform_local_to_world": [
+    [
+     0.0,
+     0.0,
+     1.0,
+     -9.525
+    ],
+    [
+     1.0,
+     0.0,
+     0.0,
+     717.55
+    ],
+    [
+     0.0,
+     1.0,
+     0.0,
+     0.0
+    ],
+    [
+     0.0,
+     0.0,
+     0.0,
+     1.0
+    ]
+   ],
+   "local_bounds_mm": {
+    "min": [
+     0.0,
+     0.0,
+     0.0
+    ],
+    "max": [
+     574.675,
+     901.7,
+     619.125
+    ]
+   },
+   "obb": {
+    "width_mm": 574.675,
+    "height_mm": 901.6999999999999,
+    "depth_mm": 619.1249999999999,
+    "center_world_mm": [
+     300.0375,
+     1004.8875,
+     450.85
+    ],
+    "axes": [
+     [
+      0.0,
+      1.0,
+      0.0
+     ],
+     [
+      0.0,
+      0.0,
+      1.0
+     ],
+     [
+      1.0,
+      0.0,
+      0.0
+     ]
+    ],
+    "method": "local_aabb (trimesh OBB volume equal within 1e-6)",
+    "transform": [
+     [
+      0.0,
+      0.0,
+      1.0,
+      300.0375
+     ],
+     [
+      1.0,
+      0.0,
+      0.0,
+      1004.8875
+     ],
+     [
+      0.0,
+      1.0,
+      0.0,
+      450.85
+     ],
+     [
+      0.0,
+      0.0,
+      0.0,
+      1.0
+     ]
+    ]
+   },
+   "nominal_size_in": "22.625W x 35.5H x 24.375D",
+   "nominal_size_frac": "22-5/8W x 35-1/2H x 24-3/8D",
+   "uv": {
+    "charts": 8,
+    "uv_mm_per_unit": 1893.149517,
+    "margin_mm": 10.1718
+   },
+   "mesh": {
+    "vertices": 12,
+    "faces": 20,
+    "volume_mm3": 315676688.2018,
+    "watertight": true
+   }
+  },
+  {
+   "id": "drawer_front_01",
+   "label": "top drawer",
+   "category": "drawer_front",
+   "layer": "drawers",
+   "run": "R",
+   "type": "shaker_front",
+   "parent": "base_cabinet_01",
+   "children": [
+    "hardware_handle_01"
+   ],
+   "files": {
+    "obj": "components/drawer_front_01.obj",
+    "stl": "components/drawer_front_01.stl"
+   },
+   "material_slots": [
+    "mat_cabinet_primary"
+   ],
+   "material_default": "mat_cabinet_primary",
+   "pivot": {
+    "type": "slide_axis_center_of_back_face",
+    "world_position_mm": [
+     609.6,
+     1004.8875,
+     819.15
+    ]
+   },
+   "transform_local_to_world": [
+    [
+     0.0,
+     0.0,
+     1.0,
+     609.6
+    ],
+    [
+     1.0,
+     0.0,
+     0.0,
+     1004.8875
+    ],
+    [
+     0.0,
+     1.0,
+     0.0,
+     819.15
+    ],
+    [
+     0.0,
+     0.0,
+     0.0,
+     1.0
+    ]
+   ],
+   "local_bounds_mm": {
+    "min": [
+     -285.75,
+     -79.375,
+     0.0
+    ],
+    "max": [
+     285.75,
+     79.375,
+     19.05
+    ]
+   },
+   "obb": {
+    "width_mm": 571.4999999999999,
+    "height_mm": 158.75,
+    "depth_mm": 19.050000000000068,
+    "center_world_mm": [
+     619.125,
+     1004.8875,
+     819.15
+    ],
+    "axes": [
+     [
+      0.0,
+      1.0,
+      0.0
+     ],
+     [
+      0.0,
+      0.0,
+      1.0
+     ],
+     [
+      1.0,
+      0.0,
+      0.0
+     ]
+    ],
+    "method": "local_aabb (trimesh OBB volume equal within 1e-6)",
+    "transform": [
+     [
+      0.0,
+      0.0,
+      1.0,
+      619.125
+     ],
+     [
+      1.0,
+      0.0,
+      0.0,
+      1004.8875
+     ],
+     [
+      0.0,
+      1.0,
+      0.0,
+      819.15
+     ],
+     [
+      0.0,
+      0.0,
+      0.0,
+      1.0
+     ]
+    ]
+   },
+   "nominal_size_in": "22.5W x 6.25H x 0.75D",
+   "nominal_size_frac": "22-1/2W x 6-1/4H x 3/4D",
+   "uv": {
+    "charts": 11,
+    "uv_mm_per_unit": 577.556024,
+    "margin_mm": 3.028
+   },
+   "drawer_slide": {
+    "role": "drawer",
+    "axis_local": [
+     0,
+     0,
+     1
+    ],
+    "axis_world": [
+     1.0,
+     0.0,
+     0.0
+    ],
+    "parent_carcass_depth_in": 24.375,
+    "travel_in": 21.375,
+    "travel_mm": 542.925,
+    "rule": "travel = carcass depth - 3 in"
+   },
+   "mesh": {
+    "vertices": 16,
+    "faces": 28,
+    "volume_mm3": 1514267.1328,
+    "watertight": true
+   }
+  },
+  {
+   "id": "hardware_handle_01",
+   "label": "6.75in bar pull",
+   "category": "hardware_handle",
+   "layer": "hardware",
+   "run": "R",
+   "type": "bar_pull",
+   "parent": "drawer_front_01",
+   "children": [],
+   "files": {
+    "obj": "components/hardware_handle_01.obj",
+    "stl": "components/hardware_handle_01.stl"
+   },
+   "material_slots": [
+    "mat_hardware_finish"
+   ],
+   "material_default": "mat_hardware_finish",
+   "pivot": {
+    "type": "mounting_footprint_center_on_parent_front",
+    "world_position_mm": [
+     622.3,
+     1004.8875,
+     819.15
+    ]
+   },
+   "transform_local_to_world": [
+    [
+     0.0,
+     0.0,
+     1.0,
+     622.3
+    ],
+    [
+     1.0,
+     0.0,
+     0.0,
+     1004.8875
+    ],
+    [
+     0.0,
+     1.0,
+     0.0,
+     819.15
+    ],
+    [
+     0.0,
+     0.0,
+     0.0,
+     1.0
+    ]
+   ],
+   "local_bounds_mm": {
+    "min": [
+     -85.725,
+     -6.35,
+     0.0
+    ],
+    "max": [
+     85.725,
+     6.35,
+     41.275
+    ]
+   },
+   "obb": {
+    "width_mm": 171.45000000000005,
+    "height_mm": 12.700000000000045,
+    "depth_mm": 41.27499999999998,
+    "center_world_mm": [
+     642.9375,
+     1004.8875,
+     819.15
+    ],
+    "axes": [
+     [
+      0.0,
+      1.0,
+      0.0
+     ],
+     [
+      0.0,
+      0.0,
+      1.0
+     ],
+     [
+      1.0,
+      0.0,
+      0.0
+     ]
+    ],
+    "method": "local_aabb (trimesh OBB volume equal within 1e-6)",
+    "transform": [
+     [
+      0.0,
+      0.0,
+      1.0,
+      642.9375
+     ],
+     [
+      1.0,
+      0.0,
+      0.0,
+      1004.8875
+     ],
+     [
+      0.0,
+      1.0,
+      0.0,
+      819.15
+     ],
+     [
+      0.0,
+      0.0,
+      0.0,
+      1.0
+     ]
+    ]
+   },
+   "nominal_size_in": "6.75W x 0.5H x 1.625D",
+   "nominal_size_frac": "6-3/4W x 1/2H x 1-5/8D",
+   "uv": {
+    "charts": 14,
+    "uv_mm_per_unit": 174.45,
+    "margin_mm": 1.5
+   },
+   "mount": {
+    "post_status": [
+     "panel",
+     "panel"
+    ],
+    "bar_within_front": true,
+    "spec_mount_face_in": 24.75,
+    "contact_surface_in": 24.5,
+    "surface": "recessed_panel",
+    "offset_from_spec_mm": -6.35
+   },
+   "mesh": {
+    "vertices": 28,
+    "faces": 52,
+    "volume_mm3": 26500.9551,
+    "watertight": true
+   }
+  },
+  {
+   "id": "door_01",
+   "label": "door, hinge at corner side",
+   "category": "door",
+   "layer": "cabinets",
+   "run": "R",
+   "type": "shaker_front",
+   "parent": "base_cabinet_01",
+   "children": [
+    "hardware_handle_02"
+   ],
+   "files": {
+    "obj": "components/door_01.obj",
+    "stl": "components/door_01.stl"
+   },
+   "material_slots": [
+    "mat_cabinet_primary"
+   ],
+   "material_default": "mat_cabinet_primary",
+   "pivot": {
+    "type": "hinge_axis_front_face",
+    "world_position_mm": [
+     628.65,
+     719.1375,
+     117.475
+    ]
+   },
+   "transform_local_to_world": [
+    [
+     0.0,
+     0.0,
+     1.0,
+     628.65
+    ],
+    [
+     1.0,
+     0.0,
+     0.0,
+     719.1375
+    ],
+    [
+     0.0,
+     1.0,
+     0.0,
+     117.475
+    ],
+    [
+     0.0,
+     0.0,
+     0.0,
+     1.0
+    ]
+   ],
+   "local_bounds_mm": {
+    "min": [
+     0.0,
+     0.0,
+     -19.05
+    ],
+    "max": [
+     571.5,
+     619.125,
+     0.0
+    ]
+   },
+   "obb": {
+    "width_mm": 571.4999999999999,
+    "height_mm": 619.1249999999999,
+    "depth_mm": 19.050000000000068,
+    "center_world_mm": [
+     619.125,
+     1004.8875,
+     427.0375
+    ],
+    "axes": [
+     [
+      0.0,
+      1.0,
+      0.0
+     ],
+     [
+      0.0,
+      0.0,
+      1.0
+     ],
+     [
+      1.0,
+      0.0,
+      0.0
+     ]
+    ],
+    "method": "local_aabb (trimesh OBB volume equal within 1e-6)",
+    "transform": [
+     [
+      0.0,
+      0.0,
+      1.0,
+      619.125
+     ],
+     [
+      1.0,
+      0.0,
+      0.0,
+      1004.8875
+     ],
+     [
+      0.0,
+      1.0,
+      0.0,
+      427.0375
+     ],
+     [
+      0.0,
+      0.0,
+      0.0,
+      1.0
+     ]
+    ]
+   },
+   "nominal_size_in": "22.5W x 24.375H x 0.75D",
+   "nominal_size_frac": "22-1/2W x 24-3/8H x 3/4D",
+   "uv": {
+    "charts": 11,
+    "uv_mm_per_unit": 1224.841595,
+    "margin_mm": 6.0114
+   },
+   "door_swing": {
+    "hinge_side": "left",
+    "axis_local": [
+     0,
+     1,
+     0
+    ],
+    "axis_world": [
+     0.0,
+     0.0,
+     1.0
+    ],
+    "axis_point_world_mm": [
+     628.65,
+     719.1375,
+     117.475
+    ],
+    "open_angle_deg": -110.0,
+    "convention": "right-hand rotation about local +Y through the pivot (hinge line on the front face)",
+    "max_open_deg": 85,
+    "first_collision": {
+     "angle_deg": 90,
+     "parts": [
+      "fixture_sink_01"
+     ],
+     "intersection_mm3": {
+      "fixture_sink_01": 1344.251
+     }
+    },
+    "sweep": "door + pulls vs all other fabrication parts, 5 deg steps, cap 110, flag > 1.0 mm3",
+    "verified": {
+     "free_edge_mean_z_mm_at_open": 540.292,
+     "free_edge_mean_z_mm_opposite_sign": -533.777,
+     "opens_toward_plus_z": true
+    }
+   },
+   "mesh": {
+    "vertices": 16,
+    "faces": 28,
+    "volume_mm3": 5274842.2729,
+    "watertight": true
+   }
+  },
+  {
+   "id": "hardware_handle_02",
+   "label": "6.75in bar pull",
+   "category": "hardware_handle",
+   "layer": "hardware",
+   "run": "R",
+   "type": "bar_pull",
+   "parent": "door_01",
+   "children": [],
+   "files": {
+    "obj": "components/hardware_handle_02.obj",
+    "stl": "components/hardware_handle_02.stl"
+   },
+   "material_slots": [
+    "mat_hardware_finish"
+   ],
+   "material_default": "mat_hardware_finish",
+   "pivot": {
+    "type": "mounting_footprint_center_on_parent_front",
+    "world_position_mm": [
+     628.65,
+     1246.1875,
+     587.375
+    ]
+   },
+   "transform_local_to_world": [
+    [
+     0.0,
+     0.0,
+     1.0,
+     628.65
+    ],
+    [
+     1.0,
+     0.0,
+     0.0,
+     1246.1875
+    ],
+    [
+     0.0,
+     1.0,
+     0.0,
+     587.375
+    ],
+    [
+     0.0,
+     0.0,
+     0.0,
+     1.0
+    ]
+   ],
+   "local_bounds_mm": {
+    "min": [
+     -6.35,
+     -85.725,
+     0.0
+    ],
+    "max": [
+     6.35,
+     85.725,
+     41.275
+    ]
+   },
+   "obb": {
+    "width_mm": 12.699999999999818,
+    "height_mm": 171.45000000000005,
+    "depth_mm": 41.27499999999998,
+    "center_world_mm": [
+     649.2875,
+     1246.1875,
+     587.375
+    ],
+    "axes": [
+     [
+      0.0,
+      1.0,
+      0.0
+     ],
+     [
+      0.0,
+      0.0,
+      1.0
+     ],
+     [
+      1.0,
+      0.0,
+      0.0
+     ]
+    ],
+    "method": "local_aabb (trimesh OBB volume equal within 1e-6)",
+    "transform": [
+     [
+      0.0,
+      0.0,
+      1.0,
+      649.2875
+     ],
+     [
+      1.0,
+      0.0,
+      0.0,
+      1246.1875
+     ],
+     [
+      0.0,
+      1.0,
+      0.0,
+      587.375
+     ],
+     [
+      0.0,
+      0.0,
+      0.0,
+      1.0
+     ]
+    ]
+   },
+   "nominal_size_in": "0.5W x 6.75H x 1.625D",
+   "nominal_size_frac": "1/2W x 6-3/4H x 1-5/8D",
+   "uv": {
+    "charts": 14,
+    "uv_mm_per_unit": 185.475,
+    "margin_mm": 1.5
+   },
+   "mount": {
+    "post_status": [
+     "frame",
+     "frame"
+    ],
+    "bar_within_front": true,
+    "spec_mount_face_in": 24.75,
+    "contact_surface_in": 24.75,
+    "surface": "frame_face",
+    "offset_from_spec_mm": 0.0
+   },
+   "mesh": {
+    "vertices": 24,
+    "faces": 44,
+    "volume_mm3": 26500.9551,
+    "watertight": true
+   }
+  },
+  {
+   "id": "base_cabinet_02",
+   "label": "R-run 4-drawer base 21in (measured 21.15)",
+   "category": "base_cabinet",
+   "layer": "cabinets",
+   "run": "R",
+   "type": "carcass",
+   "parent": null,
+   "children": [
+    "drawer_front_02",
+    "drawer_front_03",
+    "drawer_front_04",
+    "drawer_front_05"
+   ],
+   "files": {
+    "obj": "components/base_cabinet_02.obj",
+    "stl": "components/base_cabinet_02.stl"
+   },
+   "material_slots": [
+    "mat_cabinet_primary"
+   ],
+   "material_default": "mat_cabinet_primary",
+   "pivot": {
+    "type": "rear_bottom_left_corner",
+    "world_position_mm": [
+     -9.525,
+     1292.225,
+     0.0
+    ]
+   },
+   "transform_local_to_world": [
+    [
+     0.0,
+     0.0,
+     1.0,
+     -9.525
+    ],
+    [
+     1.0,
+     0.0,
+     0.0,
+     1292.225
+    ],
+    [
+     0.0,
+     1.0,
+     0.0,
+     0.0
+    ],
+    [
+     0.0,
+     0.0,
+     0.0,
+     1.0
+    ]
+   ],
+   "local_bounds_mm": {
+    "min": [
+     0.0,
+     0.0,
+     0.0
+    ],
+    "max": [
+     536.575,
+     901.7,
+     619.125
+    ]
+   },
+   "obb": {
+    "width_mm": 536.575,
+    "height_mm": 901.6999999999999,
+    "depth_mm": 619.1249999999999,
+    "center_world_mm": [
+     300.0375,
+     1560.5125,
+     450.85
+    ],
+    "axes": [
+     [
+      0.0,
+      1.0,
+      0.0
+     ],
+     [
+      0.0,
+      0.0,
+      1.0
+     ],
+     [
+      1.0,
+      0.0,
+      0.0
+     ]
+    ],
+    "method": "local_aabb (trimesh OBB volume equal within 1e-6)",
+    "transform": [
+     [
+      0.0,
+      0.0,
+      1.0,
+      300.0375
+     ],
+     [
+      1.0,
+      0.0,
+      0.0,
+      1560.5125
+     ],
+     [
+      0.0,
+      1.0,
+      0.0,
+      450.85
+     ],
+     [
+      0.0,
+      0.0,
+      0.0,
+      1.0
+     ]
+    ]
+   },
+   "nominal_size_in": "21.125W x 35.5H x 24.375D",
+   "nominal_size_frac": "21-1/8W x 35-1/2H x 24-3/8D",
+   "uv": {
+    "charts": 8,
+    "uv_mm_per_unit": 1843.256725,
+    "margin_mm": 9.9642
+   },
+   "mesh": {
+    "vertices": 12,
+    "faces": 20,
+    "volume_mm3": 294747846.9951,
+    "watertight": true
+   }
+  },
+  {
+   "id": "drawer_front_02",
+   "label": "drawer 1 of 4",
+   "category": "drawer_front",
+   "layer": "drawers",
+   "run": "R",
+   "type": "shaker_front",
+   "parent": "base_cabinet_02",
+   "children": [
+    "hardware_handle_03"
+   ],
+   "files": {
+    "obj": "components/drawer_front_02.obj",
+    "stl": "components/drawer_front_02.stl"
+   },
+   "material_slots": [
+    "mat_cabinet_primary"
+   ],
+   "material_default": "mat_cabinet_primary",
+   "pivot": {
+    "type": "slide_axis_center_of_back_face",
+    "world_position_mm": [
+     609.6,
+     1560.5125,
+     819.15
+    ]
+   },
+   "transform_local_to_world": [
+    [
+     0.0,
+     0.0,
+     1.0,
+     609.6
+    ],
+    [
+     1.0,
+     0.0,
+     0.0,
+     1560.5125
+    ],
+    [
+     0.0,
+     1.0,
+     0.0,
+     819.15
+    ],
+    [
+     0.0,
+     0.0,
+     0.0,
+     1.0
+    ]
+   ],
+   "local_bounds_mm": {
+    "min": [
+     -266.7,
+     -79.375,
+     0.0
+    ],
+    "max": [
+     266.7,
+     79.375,
+     19.05
+    ]
+   },
+   "obb": {
+    "width_mm": 533.3999999999999,
+    "height_mm": 158.75,
+    "depth_mm": 19.050000000000068,
+    "center_world_mm": [
+     619.125,
+     1560.5125,
+     819.15
+    ],
+    "axes": [
+     [
+      0.0,
+      1.0,
+      0.0
+     ],
+     [
+      0.0,
+      0.0,
+      1.0
+     ],
+     [
+      1.0,
+      0.0,
+      0.0
+     ]
+    ],
+    "method": "local_aabb (trimesh OBB volume equal within 1e-6)",
+    "transform": [
+     [
+      0.0,
+      0.0,
+      1.0,
+      619.125
+     ],
+     [
+      1.0,
+      0.0,
+      0.0,
+      1560.5125
+     ],
+     [
+      0.0,
+      1.0,
+      0.0,
+      819.15
+     ],
+     [
+      0.0,
+      0.0,
+      0.0,
+      1.0
+     ]
+    ]
+   },
+   "nominal_size_in": "21W x 6.25H x 0.75D",
+   "nominal_size_frac": "21W x 6-1/4H x 3/4D",
+   "uv": {
+    "charts": 11,
+    "uv_mm_per_unit": 550.453642,
+    "margin_mm": 2.9255
+   },
+   "drawer_slide": {
+    "role": "drawer",
+    "axis_local": [
+     0,
+     0,
+     1
+    ],
+    "axis_world": [
+     1.0,
+     0.0,
+     0.0
+    ],
+    "parent_carcass_depth_in": 24.375,
+    "travel_in": 21.375,
+    "travel_mm": 542.925,
+    "rule": "travel = carcass depth - 3 in"
+   },
+   "mesh": {
+    "vertices": 16,
+    "faces": 28,
+    "volume_mm3": 1415944.7487,
+    "watertight": true
+   }
+  },
+  {
+   "id": "hardware_handle_03",
+   "label": "6.75in bar pull",
+   "category": "hardware_handle",
+   "layer": "hardware",
+   "run": "R",
+   "type": "bar_pull",
+   "parent": "drawer_front_02",
+   "children": [],
+   "files": {
+    "obj": "components/hardware_handle_03.obj",
+    "stl": "components/hardware_handle_03.stl"
+   },
+   "material_slots": [
+    "mat_hardware_finish"
+   ],
+   "material_default": "mat_hardware_finish",
+   "pivot": {
+    "type": "mounting_footprint_center_on_parent_front",
+    "world_position_mm": [
+     622.3,
+     1560.5125,
+     819.15
+    ]
+   },
+   "transform_local_to_world": [
+    [
+     0.0,
+     0.0,
+     1.0,
+     622.3
+    ],
+    [
+     1.0,
+     0.0,
+     0.0,
+     1560.5125
+    ],
+    [
+     0.0,
+     1.0,
+     0.0,
+     819.15
+    ],
+    [
+     0.0,
+     0.0,
+     0.0,
+     1.0
+    ]
+   ],
+   "local_bounds_mm": {
+    "min": [
+     -85.725,
+     -6.35,
+     0.0
+    ],
+    "max": [
+     85.725,
+     6.35,
+     41.275
+    ]
+   },
+   "obb": {
+    "width_mm": 171.44999999999982,
+    "height_mm": 12.700000000000045,
+    "depth_mm": 41.27499999999998,
+    "center_world_mm": [
+     642.9375,
+     1560.5125,
+     819.15
+    ],
+    "axes": [
+     [
+      0.0,
+      1.0,
+      0.0
+     ],
+     [
+      0.0,
+      0.0,
+      1.0
+     ],
+     [
+      1.0,
+      0.0,
+      0.0
+     ]
+    ],
+    "method": "local_aabb (trimesh OBB volume equal within 1e-6)",
+    "transform": [
+     [
+      0.0,
+      0.0,
+      1.0,
+      642.9375
+     ],
+     [
+      1.0,
+      0.0,
+      0.0,
+      1560.5125
+     ],
+     [
+      0.0,
+      1.0,
+      0.0,
+      819.15
+     ],
+     [
+      0.0,
+      0.0,
+      0.0,
+      1.0
+     ]
+    ]
+   },
+   "nominal_size_in": "6.75W x 0.5H x 1.625D",
+   "nominal_size_frac": "6-3/4W x 1/2H x 1-5/8D",
+   "uv": {
+    "charts": 14,
+    "uv_mm_per_unit": 174.45,
+    "margin_mm": 1.5
+   },
+   "mount": {
+    "post_status": [
+     "panel",
+     "panel"
+    ],
+    "bar_within_front": true,
+    "spec_mount_face_in": 24.75,
+    "contact_surface_in": 24.5,
+    "surface": "recessed_panel",
+    "offset_from_spec_mm": -6.35
+   },
+   "mesh": {
+    "vertices": 28,
+    "faces": 52,
+    "volume_mm3": 26500.9551,
+    "watertight": true
+   }
+  },
+  {
+   "id": "drawer_front_03",
+   "label": "drawer 2 of 4",
+   "category": "drawer_front",
+   "layer": "drawers",
+   "run": "R",
+   "type": "shaker_front",
+   "parent": "base_cabinet_02",
+   "children": [
+    "hardware_handle_04"
+   ],
+   "files": {
+    "obj": "components/drawer_front_03.obj",
+    "stl": "components/drawer_front_03.stl"
+   },
+   "material_slots": [
+    "mat_cabinet_primary"
+   ],
+   "material_default": "mat_cabinet_primary",
+   "pivot": {
+    "type": "slide_axis_center_of_back_face",
+    "world_position_mm": [
+     609.6,
+     1560.5125,
+     657.225
+    ]
+   },
+   "transform_local_to_world": [
+    [
+     0.0,
+     0.0,
+     1.0,
+     609.6
+    ],
+    [
+     1.0,
+     0.0,
+     0.0,
+     1560.5125
+    ],
+    [
+     0.0,
+     1.0,
+     0.0,
+     657.225
+    ],
+    [
+     0.0,
+     0.0,
+     0.0,
+     1.0
+    ]
+   ],
+   "local_bounds_mm": {
+    "min": [
+     -266.7,
+     -79.375,
+     0.0
+    ],
+    "max": [
+     266.7,
+     79.375,
+     19.05
+    ]
+   },
+   "obb": {
+    "width_mm": 533.3999999999999,
+    "height_mm": 158.7499999999999,
+    "depth_mm": 19.050000000000068,
+    "center_world_mm": [
+     619.125,
+     1560.5125,
+     657.225
+    ],
+    "axes": [
+     [
+      0.0,
+      1.0,
+      0.0
+     ],
+     [
+      0.0,
+      0.0,
+      1.0
+     ],
+     [
+      1.0,
+      0.0,
+      0.0
+     ]
+    ],
+    "method": "local_aabb (trimesh OBB volume equal within 1e-6)",
+    "transform": [
+     [
+      0.0,
+      0.0,
+      1.0,
+      619.125
+     ],
+     [
+      1.0,
+      0.0,
+      0.0,
+      1560.5125
+     ],
+     [
+      0.0,
+      1.0,
+      0.0,
+      657.225
+     ],
+     [
+      0.0,
+      0.0,
+      0.0,
+      1.0
+     ]
+    ]
+   },
+   "nominal_size_in": "21W x 6.25H x 0.75D",
+   "nominal_size_frac": "21W x 6-1/4H x 3/4D",
+   "uv": {
+    "charts": 11,
+    "uv_mm_per_unit": 550.453642,
+    "margin_mm": 2.9255
+   },
+   "drawer_slide": {
+    "role": "drawer",
+    "axis_local": [
+     0,
+     0,
+     1
+    ],
+    "axis_world": [
+     1.0,
+     0.0,
+     0.0
+    ],
+    "parent_carcass_depth_in": 24.375,
+    "travel_in": 21.375,
+    "travel_mm": 542.925,
+    "rule": "travel = carcass depth - 3 in"
+   },
+   "mesh": {
+    "vertices": 16,
+    "faces": 28,
+    "volume_mm3": 1415944.7488,
+    "watertight": true
+   }
+  },
+  {
+   "id": "hardware_handle_04",
+   "label": "6.75in bar pull",
+   "category": "hardware_handle",
+   "layer": "hardware",
+   "run": "R",
+   "type": "bar_pull",
+   "parent": "drawer_front_03",
+   "children": [],
+   "files": {
+    "obj": "components/hardware_handle_04.obj",
+    "stl": "components/hardware_handle_04.stl"
+   },
+   "material_slots": [
+    "mat_hardware_finish"
+   ],
+   "material_default": "mat_hardware_finish",
+   "pivot": {
+    "type": "mounting_footprint_center_on_parent_front",
+    "world_position_mm": [
+     622.3,
+     1560.5125,
+     657.225
+    ]
+   },
+   "transform_local_to_world": [
+    [
+     0.0,
+     0.0,
+     1.0,
+     622.3
+    ],
+    [
+     1.0,
+     0.0,
+     0.0,
+     1560.5125
+    ],
+    [
+     0.0,
+     1.0,
+     0.0,
+     657.225
+    ],
+    [
+     0.0,
+     0.0,
+     0.0,
+     1.0
+    ]
+   ],
+   "local_bounds_mm": {
+    "min": [
+     -85.725,
+     -6.35,
+     0.0
+    ],
+    "max": [
+     85.725,
+     6.35,
+     41.275
+    ]
+   },
+   "obb": {
+    "width_mm": 171.44999999999982,
+    "height_mm": 12.700000000000045,
+    "depth_mm": 41.27499999999998,
+    "center_world_mm": [
+     642.9375,
+     1560.5125,
+     657.225
+    ],
+    "axes": [
+     [
+      0.0,
+      1.0,
+      0.0
+     ],
+     [
+      0.0,
+      0.0,
+      1.0
+     ],
+     [
+      1.0,
+      0.0,
+      0.0
+     ]
+    ],
+    "method": "local_aabb (trimesh OBB volume equal within 1e-6)",
+    "transform": [
+     [
+      0.0,
+      0.0,
+      1.0,
+      642.9375
+     ],
+     [
+      1.0,
+      0.0,
+      0.0,
+      1560.5125
+     ],
+     [
+      0.0,
+      1.0,
+      0.0,
+      657.225
+     ],
+     [
+      0.0,
+      0.0,
+      0.0,
+      1.0
+     ]
+    ]
+   },
+   "nominal_size_in": "6.75W x 0.5H x 1.625D",
+   "nominal_size_frac": "6-3/4W x 1/2H x 1-5/8D",
+   "uv": {
+    "charts": 14,
+    "uv_mm_per_unit": 174.45,
+    "margin_mm": 1.5
+   },
+   "mount": {
+    "post_status": [
+     "panel",
+     "panel"
+    ],
+    "bar_within_front": true,
+    "spec_mount_face_in": 24.75,
+    "contact_surface_in": 24.5,
+    "surface": "recessed_panel",
+    "offset_from_spec_mm": -6.35
+   },
+   "mesh": {
+    "vertices": 28,
+    "faces": 52,
+    "volume_mm3": 26500.9551,
+    "watertight": true
+   }
+  },
+  {
+   "id": "drawer_front_04",
+   "label": "drawer 3 of 4",
+   "category": "drawer_front",
+   "layer": "drawers",
+   "run": "R",
+   "type": "shaker_front",
+   "parent": "base_cabinet_02",
+   "children": [
+    "hardware_handle_05"
+   ],
+   "files": {
+    "obj": "components/drawer_front_04.obj",
+    "stl": "components/drawer_front_04.stl"
+   },
+   "material_slots": [
+    "mat_cabinet_primary"
+   ],
+   "material_default": "mat_cabinet_primary",
+   "pivot": {
+    "type": "slide_axis_center_of_back_face",
+    "world_position_mm": [
+     609.6,
+     1560.5125,
+     495.3
+    ]
+   },
+   "transform_local_to_world": [
+    [
+     0.0,
+     0.0,
+     1.0,
+     609.6
+    ],
+    [
+     1.0,
+     0.0,
+     0.0,
+     1560.5125
+    ],
+    [
+     0.0,
+     1.0,
+     0.0,
+     495.3
+    ],
+    [
+     0.0,
+     0.0,
+     0.0,
+     1.0
+    ]
+   ],
+   "local_bounds_mm": {
+    "min": [
+     -266.7,
+     -79.375,
+     0.0
+    ],
+    "max": [
+     266.7,
+     79.375,
+     19.05
+    ]
+   },
+   "obb": {
+    "width_mm": 533.3999999999999,
+    "height_mm": 158.75,
+    "depth_mm": 19.050000000000068,
+    "center_world_mm": [
+     619.125,
+     1560.5125,
+     495.3
+    ],
+    "axes": [
+     [
+      0.0,
+      1.0,
+      0.0
+     ],
+     [
+      0.0,
+      0.0,
+      1.0
+     ],
+     [
+      1.0,
+      0.0,
+      0.0
+     ]
+    ],
+    "method": "local_aabb (trimesh OBB volume equal within 1e-6)",
+    "transform": [
+     [
+      0.0,
+      0.0,
+      1.0,
+      619.125
+     ],
+     [
+      1.0,
+      0.0,
+      0.0,
+      1560.5125
+     ],
+     [
+      0.0,
+      1.0,
+      0.0,
+      495.3
+     ],
+     [
+      0.0,
+      0.0,
+      0.0,
+      1.0
+     ]
+    ]
+   },
+   "nominal_size_in": "21W x 6.25H x 0.75D",
+   "nominal_size_frac": "21W x 6-1/4H x 3/4D",
+   "uv": {
+    "charts": 11,
+    "uv_mm_per_unit": 550.453642,
+    "margin_mm": 2.9255
+   },
+   "drawer_slide": {
+    "role": "drawer",
+    "axis_local": [
+     0,
+     0,
+     1
+    ],
+    "axis_world": [
+     1.0,
+     0.0,
+     0.0
+    ],
+    "parent_carcass_depth_in": 24.375,
+    "travel_in": 21.375,
+    "travel_mm": 542.925,
+    "rule": "travel = carcass depth - 3 in"
+   },
+   "mesh": {
+    "vertices": 16,
+    "faces": 28,
+    "volume_mm3": 1415944.7488,
+    "watertight": true
+   }
+  },
+  {
+   "id": "hardware_handle_05",
+   "label": "6.75in bar pull",
+   "category": "hardware_handle",
+   "layer": "hardware",
+   "run": "R",
+   "type": "bar_pull",
+   "parent": "drawer_front_04",
+   "children": [],
+   "files": {
+    "obj": "components/hardware_handle_05.obj",
+    "stl": "components/hardware_handle_05.stl"
+   },
+   "material_slots": [
+    "mat_hardware_finish"
+   ],
+   "material_default": "mat_hardware_finish",
+   "pivot": {
+    "type": "mounting_footprint_center_on_parent_front",
+    "world_position_mm": [
+     622.3,
+     1560.5125,
+     495.3
+    ]
+   },
+   "transform_local_to_world": [
+    [
+     0.0,
+     0.0,
+     1.0,
+     622.3
+    ],
+    [
+     1.0,
+     0.0,
+     0.0,
+     1560.5125
+    ],
+    [
+     0.0,
+     1.0,
+     0.0,
+     495.3
+    ],
+    [
+     0.0,
+     0.0,
+     0.0,
+     1.0
+    ]
+   ],
+   "local_bounds_mm": {
+    "min": [
+     -85.725,
+     -6.35,
+     0.0
+    ],
+    "max": [
+     85.725,
+     6.35,
+     41.275
+    ]
+   },
+   "obb": {
+    "width_mm": 171.44999999999982,
+    "height_mm": 12.700000000000045,
+    "depth_mm": 41.27499999999998,
+    "center_world_mm": [
+     642.9375,
+     1560.5125,
+     495.3
+    ],
+    "axes": [
+     [
+      0.0,
+      1.0,
+      0.0
+     ],
+     [
+      0.0,
+      0.0,
+      1.0
+     ],
+     [
+      1.0,
+      0.0,
+      0.0
+     ]
+    ],
+    "method": "local_aabb (trimesh OBB volume equal within 1e-6)",
+    "transform": [
+     [
+      0.0,
+      0.0,
+      1.0,
+      642.9375
+     ],
+     [
+      1.0,
+      0.0,
+      0.0,
+      1560.5125
+     ],
+     [
+      0.0,
+      1.0,
+      0.0,
+      495.3
+     ],
+     [
+      0.0,
+      0.0,
+      0.0,
+      1.0
+     ]
+    ]
+   },
+   "nominal_size_in": "6.75W x 0.5H x 1.625D",
+   "nominal_size_frac": "6-3/4W x 1/2H x 1-5/8D",
+   "uv": {
+    "charts": 14,
+    "uv_mm_per_unit": 174.45,
+    "margin_mm": 1.5
+   },
+   "mount": {
+    "post_status": [
+     "panel",
+     "panel"
+    ],
+    "bar_within_front": true,
+    "spec_mount_face_in": 24.75,
+    "contact_surface_in": 24.5,
+    "surface": "recessed_panel",
+    "offset_from_spec_mm": -6.35
+   },
+   "mesh": {
+    "vertices": 28,
+    "faces": 52,
+    "volume_mm3": 26500.9551,
+    "watertight": true
+   }
+  },
+  {
+   "id": "drawer_front_05",
+   "label": "drawer 4 of 4",
+   "category": "drawer_front",
+   "layer": "drawers",
+   "run": "R",
+   "type": "shaker_front",
+   "parent": "base_cabinet_02",
+   "children": [
+    "hardware_handle_06"
+   ],
+   "files": {
+    "obj": "components/drawer_front_05.obj",
+    "stl": "components/drawer_front_05.stl"
+   },
+   "material_slots": [
+    "mat_cabinet_primary"
+   ],
+   "material_default": "mat_cabinet_primary",
+   "pivot": {
+    "type": "slide_axis_center_of_back_face",
+    "world_position_mm": [
+     609.6,
+     1560.5125,
+     265.1125
+    ]
+   },
+   "transform_local_to_world": [
+    [
+     0.0,
+     0.0,
+     1.0,
+     609.6
+    ],
+    [
+     1.0,
+     0.0,
+     0.0,
+     1560.5125
+    ],
+    [
+     0.0,
+     1.0,
+     0.0,
+     265.1125
+    ],
+    [
+     0.0,
+     0.0,
+     0.0,
+     1.0
+    ]
+   ],
+   "local_bounds_mm": {
+    "min": [
+     -266.7,
+     -147.6375,
+     0.0
+    ],
+    "max": [
+     266.7,
+     147.6375,
+     19.05
+    ]
+   },
+   "obb": {
+    "width_mm": 533.3999999999999,
+    "height_mm": 295.275,
+    "depth_mm": 19.050000000000068,
+    "center_world_mm": [
+     619.125,
+     1560.5125,
+     265.1125
+    ],
+    "axes": [
+     [
+      0.0,
+      1.0,
+      0.0
+     ],
+     [
+      0.0,
+      0.0,
+      1.0
+     ],
+     [
+      1.0,
+      0.0,
+      0.0
+     ]
+    ],
+    "method": "local_aabb (trimesh OBB volume equal within 1e-6)",
+    "transform": [
+     [
+      0.0,
+      0.0,
+      1.0,
+      619.125
+     ],
+     [
+      1.0,
+      0.0,
+      0.0,
+      1560.5125
+     ],
+     [
+      0.0,
+      1.0,
+      0.0,
+      265.1125
+     ],
+     [
+      0.0,
+      0.0,
+      0.0,
+      1.0
+     ]
+    ]
+   },
+   "nominal_size_in": "21W x 11.625H x 0.75D",
+   "nominal_size_frac": "21W x 11-5/8H x 3/4D",
+   "uv": {
+    "charts": 11,
+    "uv_mm_per_unit": 853.992888,
+    "margin_mm": 3.9585
+   },
+   "drawer_slide": {
+    "role": "drawer",
+    "axis_local": [
+     0,
+     0,
+     1
+    ],
+    "axis_world": [
+     1.0,
+     0.0,
+     0.0
+    ],
+    "parent_carcass_depth_in": 24.375,
+    "travel_in": 21.375,
+    "travel_mm": 542.925,
+    "rule": "travel = carcass depth - 3 in"
+   },
+   "mesh": {
+    "vertices": 16,
+    "faces": 28,
+    "volume_mm3": 2518742.9464,
+    "watertight": true
+   }
+  },
+  {
+   "id": "hardware_handle_06",
+   "label": "6.75in bar pull",
+   "category": "hardware_handle",
+   "layer": "hardware",
+   "run": "R",
+   "type": "bar_pull",
+   "parent": "drawer_front_05",
+   "children": [],
+   "files": {
+    "obj": "components/hardware_handle_06.obj",
+    "stl": "components/hardware_handle_06.stl"
+   },
+   "material_slots": [
+    "mat_hardware_finish"
+   ],
+   "material_default": "mat_hardware_finish",
+   "pivot": {
+    "type": "mounting_footprint_center_on_parent_front",
+    "world_position_mm": [
+     622.3,
+     1560.5125,
+     265.1125
+    ]
+   },
+   "transform_local_to_world": [
+    [
+     0.0,
+     0.0,
+     1.0,
+     622.3
+    ],
+    [
+     1.0,
+     0.0,
+     0.0,
+     1560.5125
+    ],
+    [
+     0.0,
+     1.0,
+     0.0,
+     265.1125
+    ],
+    [
+     0.0,
+     0.0,
+     0.0,
+     1.0
+    ]
+   ],
+   "local_bounds_mm": {
+    "min": [
+     -85.725,
+     -6.35,
+     0.0
+    ],
+    "max": [
+     85.725,
+     6.35,
+     41.275
+    ]
+   },
+   "obb": {
+    "width_mm": 171.44999999999982,
+    "height_mm": 12.700000000000045,
+    "depth_mm": 41.27499999999998,
+    "center_world_mm": [
+     642.9375,
+     1560.5125,
+     265.1125
+    ],
+    "axes": [
+     [
+      0.0,
+      1.0,
+      0.0
+     ],
+     [
+      0.0,
+      0.0,
+      1.0
+     ],
+     [
+      1.0,
+      0.0,
+      0.0
+     ]
+    ],
+    "method": "local_aabb (trimesh OBB volume equal within 1e-6)",
+    "transform": [
+     [
+      0.0,
+      0.0,
+      1.0,
+      642.9375
+     ],
+     [
+      1.0,
+      0.0,
+      0.0,
+      1560.5125
+     ],
+     [
+      0.0,
+      1.0,
+      0.0,
+      265.1125
+     ],
+     [
+      0.0,
+      0.0,
+      0.0,
+      1.0
+     ]
+    ]
+   },
+   "nominal_size_in": "6.75W x 0.5H x 1.625D",
+   "nominal_size_frac": "6-3/4W x 1/2H x 1-5/8D",
+   "uv": {
+    "charts": 14,
+    "uv_mm_per_unit": 174.45,
+    "margin_mm": 1.5
+   },
+   "mount": {
+    "post_status": [
+     "panel",
+     "panel"
+    ],
+    "bar_within_front": true,
+    "spec_mount_face_in": 24.75,
+    "contact_surface_in": 24.5,
+    "surface": "recessed_panel",
+    "offset_from_spec_mm": -6.35
+   },
+   "mesh": {
+    "vertices": 28,
+    "faces": 52,
+    "volume_mm3": 26500.9551,
+    "watertight": true
+   }
+  },
+  {
+   "id": "upper_cabinet_01",
+   "label": "R-run narrow upper 11-1/2in x 42in (no visible pull)",
+   "category": "upper_cabinet",
+   "layer": "cabinets",
+   "run": "R",
+   "type": "carcass",
+   "parent": null,
+   "children": [
+    "door_02"
+   ],
+   "files": {
+    "obj": "components/upper_cabinet_01.obj",
+    "stl": "components/upper_cabinet_01.stl"
+   },
+   "material_slots": [
+    "mat_cabinet_primary"
+   ],
+   "material_default": "mat_cabinet_primary",
+   "pivot": {
+    "type": "rear_bottom_left_corner",
+    "world_position_mm": [
+     -9.525,
+     317.5,
+     1400.175
+    ]
+   },
+   "transform_local_to_world": [
+    [
+     0.0,
+     0.0,
+     1.0,
+     -9.525
+    ],
+    [
+     1.0,
+     0.0,
+     0.0,
+     317.5
+    ],
+    [
+     0.0,
+     1.0,
+     0.0,
+     1400.175
+    ],
+    [
+     0.0,
+     0.0,
+     0.0,
+     1.0
+    ]
+   ],
+   "local_bounds_mm": {
+    "min": [
+     0.0,
+     0.0,
+     0.0
+    ],
+    "max": [
+     292.1,
+     1066.8,
+     311.785
+    ]
+   },
+   "obb": {
+    "width_mm": 292.0999999999999,
+    "height_mm": 1066.8,
+    "depth_mm": 311.78499999999997,
+    "center_world_mm": [
+     146.3675,
+     463.55,
+     1933.575
+    ],
+    "axes": [
+     [
+      0.0,
+      1.0,
+      0.0
+     ],
+     [
+      0.0,
+      0.0,
+      1.0
+     ],
+     [
+      1.0,
+      0.0,
+      0.0
+     ]
+    ],
+    "method": "local_aabb (trimesh OBB volume equal within 1e-6)",
+    "transform": [
+     [
+      0.0,
+      0.0,
+      1.0,
+      146.3675
+     ],
+     [
+      1.0,
+      0.0,
+      0.0,
+      463.55
+     ],
+     [
+      0.0,
+      1.0,
+      0.0,
+      1933.575
+     ],
+     [
+      0.0,
+      0.0,
+      0.0,
+      1.0
+     ]
+    ]
+   },
+   "nominal_size_in": "11.5W x 42H x 12.275D",
+   "nominal_size_frac": "11-1/2W x 42H x 12.275D",
+   "uv": {
+    "charts": 6,
+    "uv_mm_per_unit": 1400.462832,
+    "margin_mm": 7.2926
+   },
+   "mesh": {
+    "vertices": 8,
+    "faces": 12,
+    "volume_mm3": 97156034.7198,
+    "watertight": true
+   }
+  },
+  {
+   "id": "door_02",
+   "label": "narrow door, no pull visible (push-latch?); hinged away from corner so it clears door at inside corner",
+   "category": "door",
+   "layer": "cabinets",
+   "run": "R",
+   "type": "shaker_front",
+   "parent": "upper_cabinet_01",
+   "children": [],
+   "files": {
+    "obj": "components/door_02.obj",
+    "stl": "components/door_02.stl"
+   },
+   "material_slots": [
+    "mat_cabinet_primary"
+   ],
+   "material_default": "mat_cabinet_primary",
+   "pivot": {
+    "type": "hinge_axis_front_face",
+    "world_position_mm": [
+     321.31,
+     608.0125,
+     1401.7625
+    ]
+   },
+   "transform_local_to_world": [
+    [
+     0.0,
+     0.0,
+     1.0,
+     321.31
+    ],
+    [
+     1.0,
+     0.0,
+     0.0,
+     608.0125
+    ],
+    [
+     0.0,
+     1.0,
+     0.0,
+     1401.7625
+    ],
+    [
+     0.0,
+     0.0,
+     0.0,
+     1.0
+    ]
+   ],
+   "local_bounds_mm": {
+    "min": [
+     -288.925,
+     0.0,
+     -19.05
+    ],
+    "max": [
+     0.0,
+     1063.625,
+     0.0
+    ]
+   },
+   "obb": {
+    "width_mm": 288.92499999999995,
+    "height_mm": 1063.625,
+    "depth_mm": 19.05000000000001,
+    "center_world_mm": [
+     311.785,
+     463.55,
+     1933.575
+    ],
+    "axes": [
+     [
+      0.0,
+      1.0,
+      0.0
+     ],
+     [
+      0.0,
+      0.0,
+      1.0
+     ],
+     [
+      1.0,
+      0.0,
+      0.0
+     ]
+    ],
+    "method": "local_aabb (trimesh OBB volume equal within 1e-6)",
+    "transform": [
+     [
+      0.0,
+      0.0,
+      1.0,
+      311.785
+     ],
+     [
+      1.0,
+      0.0,
+      0.0,
+      463.55
+     ],
+     [
+      0.0,
+      1.0,
+      0.0,
+      1933.575
+     ],
+     [
+      0.0,
+      0.0,
+      0.0,
+      1.0
+     ]
+    ]
+   },
+   "nominal_size_in": "11.375W x 41.875H x 0.75D",
+   "nominal_size_frac": "11-3/8W x 41-7/8H x 3/4D",
+   "uv": {
+    "charts": 11,
+    "uv_mm_per_unit": 1099.319819,
+    "margin_mm": 5.5483
+   },
+   "door_swing": {
+    "hinge_side": "right",
+    "axis_local": [
+     0,
+     1,
+     0
+    ],
+    "axis_world": [
+     0.0,
+     0.0,
+     1.0
+    ],
+    "axis_point_world_mm": [
+     321.31,
+     608.0125,
+     1401.7625
+    ],
+    "open_angle_deg": 110.0,
+    "convention": "right-hand rotation about local +Y through the pivot (hinge line on the front face)",
+    "max_open_deg": 110,
+    "first_collision": null,
+    "sweep": "door + pulls vs all other fabrication parts, 5 deg steps, cap 110, flag > 1.0 mm3",
+    "verified": {
+     "free_edge_mean_z_mm_at_open": 274.758,
+     "free_edge_mean_z_mm_opposite_sign": -268.243,
+     "opens_toward_plus_z": true
+    }
+   },
+   "mesh": {
+    "vertices": 16,
+    "faces": 28,
+    "volume_mm3": 4801537.7759,
+    "watertight": true
+   }
+  },
+  {
+   "id": "upper_cabinet_02",
+   "label": "R-run 24in x 42in double-door upper",
+   "category": "upper_cabinet",
+   "layer": "cabinets",
+   "run": "R",
+   "type": "carcass",
+   "parent": null,
+   "children": [
+    "door_03",
+    "door_04"
+   ],
+   "files": {
+    "obj": "components/upper_cabinet_02.obj",
+    "stl": "components/upper_cabinet_02.stl"
+   },
+   "material_slots": [
+    "mat_cabinet_primary"
+   ],
+   "material_default": "mat_cabinet_primary",
+   "pivot": {
+    "type": "rear_bottom_left_corner",
+    "world_position_mm": [
+     -9.525,
+     609.6,
+     1400.175
+    ]
+   },
+   "transform_local_to_world": [
+    [
+     0.0,
+     0.0,
+     1.0,
+     -9.525
+    ],
+    [
+     1.0,
+     0.0,
+     0.0,
+     609.6
+    ],
+    [
+     0.0,
+     1.0,
+     0.0,
+     1400.175
+    ],
+    [
+     0.0,
+     0.0,
+     0.0,
+     1.0
+    ]
+   ],
+   "local_bounds_mm": {
+    "min": [
+     0.0,
+     0.0,
+     0.0
+    ],
+    "max": [
+     609.6,
+     1066.8,
+     311.785
+    ]
+   },
+   "obb": {
+    "width_mm": 609.5999999999999,
+    "height_mm": 1066.8,
+    "depth_mm": 311.78499999999997,
+    "center_world_mm": [
+     146.3675,
+     914.4,
+     1933.575
+    ],
+    "axes": [
+     [
+      0.0,
+      1.0,
+      0.0
+     ],
+     [
+      0.0,
+      0.0,
+      1.0
+     ],
+     [
+      1.0,
+      0.0,
+      0.0
+     ]
+    ],
+    "method": "local_aabb (trimesh OBB volume equal within 1e-6)",
+    "transform": [
+     [
+      0.0,
+      0.0,
+      1.0,
+      146.3675
+     ],
+     [
+      1.0,
+      0.0,
+      0.0,
+      914.4
+     ],
+     [
+      0.0,
+      1.0,
+      0.0,
+      1933.575
+     ],
+     [
+      0.0,
+      0.0,
+      0.0,
+      1.0
+     ]
+    ]
+   },
+   "nominal_size_in": "24W x 42H x 12.275D",
+   "nominal_size_frac": "24W x 42H x 12.275D",
+   "uv": {
+    "charts": 6,
+    "uv_mm_per_unit": 1926.707437,
+    "margin_mm": 9.2056
+   },
+   "mesh": {
+    "vertices": 8,
+    "faces": 12,
+    "volume_mm3": 202760420.2848,
+    "watertight": true
+   }
+  },
+  {
+   "id": "door_03",
+   "label": "left leaf",
+   "category": "door",
+   "layer": "cabinets",
+   "run": "R",
+   "type": "shaker_front",
+   "parent": "upper_cabinet_02",
+   "children": [
+    "hardware_handle_07"
+   ],
+   "files": {
+    "obj": "components/door_03.obj",
+    "stl": "components/door_03.stl"
+   },
+   "material_slots": [
+    "mat_cabinet_primary"
+   ],
+   "material_default": "mat_cabinet_primary",
+   "pivot": {
+    "type": "hinge_axis_front_face",
+    "world_position_mm": [
+     321.31,
+     611.1875,
+     1401.7625
+    ]
+   },
+   "transform_local_to_world": [
+    [
+     0.0,
+     0.0,
+     1.0,
+     321.31
+    ],
+    [
+     1.0,
+     0.0,
+     0.0,
+     611.1875
+    ],
+    [
+     0.0,
+     1.0,
+     0.0,
+     1401.7625
+    ],
+    [
+     0.0,
+     0.0,
+     0.0,
+     1.0
+    ]
+   ],
+   "local_bounds_mm": {
+    "min": [
+     0.0,
+     0.0,
+     -19.05
+    ],
+    "max": [
+     301.625,
+     1063.625,
+     0.0
+    ]
+   },
+   "obb": {
+    "width_mm": 301.625,
+    "height_mm": 1063.625,
+    "depth_mm": 19.05000000000001,
+    "center_world_mm": [
+     311.785,
+     762.0,
+     1933.575
+    ],
+    "axes": [
+     [
+      0.0,
+      1.0,
+      0.0
+     ],
+     [
+      0.0,
+      0.0,
+      1.0
+     ],
+     [
+      1.0,
+      0.0,
+      0.0
+     ]
+    ],
+    "method": "local_aabb (trimesh OBB volume equal within 1e-6)",
+    "transform": [
+     [
+      0.0,
+      0.0,
+      1.0,
+      311.785
+     ],
+     [
+      1.0,
+      0.0,
+      0.0,
+      762.0
+     ],
+     [
+      0.0,
+      1.0,
+      0.0,
+      1933.575
+     ],
+     [
+      0.0,
+      0.0,
+      0.0,
+      1.0
+     ]
+    ]
+   },
+   "nominal_size_in": "11.875W x 41.875H x 0.75D",
+   "nominal_size_frac": "11-7/8W x 41-7/8H x 3/4D",
+   "uv": {
+    "charts": 11,
+    "uv_mm_per_unit": 1099.702839,
+    "margin_mm": 5.6759
+   },
+   "door_swing": {
+    "hinge_side": "left",
+    "axis_local": [
+     0,
+     1,
+     0
+    ],
+    "axis_world": [
+     0.0,
+     0.0,
+     1.0
+    ],
+    "axis_point_world_mm": [
+     321.31,
+     611.1875,
+     1401.7625
+    ],
+    "open_angle_deg": -110.0,
+    "convention": "right-hand rotation about local +Y through the pivot (hinge line on the front face)",
+    "max_open_deg": 110,
+    "first_collision": null,
+    "sweep": "door + pulls vs all other fabrication parts, 5 deg steps, cap 110, flag > 1.0 mm3",
+    "verified": {
+     "free_edge_mean_z_mm_at_open": 286.693,
+     "free_edge_mean_z_mm_opposite_sign": -280.177,
+     "opens_toward_plus_z": true
+    }
+   },
+   "mesh": {
+    "vertices": 16,
+    "faces": 28,
+    "volume_mm3": 4982307.5757,
+    "watertight": true
+   }
+  },
+  {
+   "id": "hardware_handle_07",
+   "label": "6.75in bar pull",
+   "category": "hardware_handle",
+   "layer": "hardware",
+   "run": "R",
+   "type": "bar_pull",
+   "parent": "door_03",
+   "children": [],
+   "files": {
+    "obj": "components/hardware_handle_07.obj",
+    "stl": "components/hardware_handle_07.stl"
+   },
+   "material_slots": [
+    "mat_hardware_finish"
+   ],
+   "material_default": "mat_hardware_finish",
+   "pivot": {
+    "type": "mounting_footprint_center_on_parent_front",
+    "world_position_mm": [
+     321.31,
+     868.3625,
+     1550.9875
+    ]
+   },
+   "transform_local_to_world": [
+    [
+     0.0,
+     0.0,
+     1.0,
+     321.31
+    ],
+    [
+     1.0,
+     0.0,
+     0.0,
+     868.3625
+    ],
+    [
+     0.0,
+     1.0,
+     0.0,
+     1550.9875
+    ],
+    [
+     0.0,
+     0.0,
+     0.0,
+     1.0
+    ]
+   ],
+   "local_bounds_mm": {
+    "min": [
+     -6.35,
+     -85.725,
+     0.0
+    ],
+    "max": [
+     6.35,
+     85.725,
+     41.275
+    ]
+   },
+   "obb": {
+    "width_mm": 12.700000000000045,
+    "height_mm": 171.44999999999982,
+    "depth_mm": 41.27499999999998,
+    "center_world_mm": [
+     341.9475,
+     868.3625,
+     1550.9875
+    ],
+    "axes": [
+     [
+      0.0,
+      1.0,
+      0.0
+     ],
+     [
+      0.0,
+      0.0,
+      1.0
+     ],
+     [
+      1.0,
+      0.0,
+      0.0
+     ]
+    ],
+    "method": "local_aabb (trimesh OBB volume equal within 1e-6)",
+    "transform": [
+     [
+      0.0,
+      0.0,
+      1.0,
+      341.9475
+     ],
+     [
+      1.0,
+      0.0,
+      0.0,
+      868.3625
+     ],
+     [
+      0.0,
+      1.0,
+      0.0,
+      1550.9875
+     ],
+     [
+      0.0,
+      0.0,
+      0.0,
+      1.0
+     ]
+    ]
+   },
+   "nominal_size_in": "0.5W x 6.75H x 1.625D",
+   "nominal_size_frac": "1/2W x 6-3/4H x 1-5/8D",
+   "uv": {
+    "charts": 14,
+    "uv_mm_per_unit": 185.475,
+    "margin_mm": 1.5
+   },
+   "mount": {
+    "post_status": [
+     "frame",
+     "frame"
+    ],
+    "bar_within_front": true,
+    "spec_mount_face_in": 12.65,
+    "contact_surface_in": 12.65,
+    "surface": "frame_face",
+    "offset_from_spec_mm": 0.0
+   },
+   "mesh": {
+    "vertices": 24,
+    "faces": 44,
+    "volume_mm3": 26500.9551,
+    "watertight": true
+   }
+  },
+  {
+   "id": "door_04",
+   "label": "right leaf",
+   "category": "door",
+   "layer": "cabinets",
+   "run": "R",
+   "type": "shaker_front",
+   "parent": "upper_cabinet_02",
+   "children": [
+    "hardware_handle_08"
+   ],
+   "files": {
+    "obj": "components/door_04.obj",
+    "stl": "components/door_04.stl"
+   },
+   "material_slots": [
+    "mat_cabinet_primary"
+   ],
+   "material_default": "mat_cabinet_primary",
+   "pivot": {
+    "type": "hinge_axis_front_face",
+    "world_position_mm": [
+     321.31,
+     1217.6125,
+     1401.7625
+    ]
+   },
+   "transform_local_to_world": [
+    [
+     0.0,
+     0.0,
+     1.0,
+     321.31
+    ],
+    [
+     1.0,
+     0.0,
+     0.0,
+     1217.6125
+    ],
+    [
+     0.0,
+     1.0,
+     0.0,
+     1401.7625
+    ],
+    [
+     0.0,
+     0.0,
+     0.0,
+     1.0
+    ]
+   ],
+   "local_bounds_mm": {
+    "min": [
+     -301.625,
+     0.0,
+     -19.05
+    ],
+    "max": [
+     0.0,
+     1063.625,
+     0.0
+    ]
+   },
+   "obb": {
+    "width_mm": 301.625,
+    "height_mm": 1063.625,
+    "depth_mm": 19.05000000000001,
+    "center_world_mm": [
+     311.785,
+     1066.8,
+     1933.575
+    ],
+    "axes": [
+     [
+      0.0,
+      1.0,
+      0.0
+     ],
+     [
+      0.0,
+      0.0,
+      1.0
+     ],
+     [
+      1.0,
+      0.0,
+      0.0
+     ]
+    ],
+    "method": "local_aabb (trimesh OBB volume equal within 1e-6)",
+    "transform": [
+     [
+      0.0,
+      0.0,
+      1.0,
+      311.785
+     ],
+     [
+      1.0,
+      0.0,
+      0.0,
+      1066.8
+     ],
+     [
+      0.0,
+      1.0,
+      0.0,
+      1933.575
+     ],
+     [
+      0.0,
+      0.0,
+      0.0,
+      1.0
+     ]
+    ]
+   },
+   "nominal_size_in": "11.875W x 41.875H x 0.75D",
+   "nominal_size_frac": "11-7/8W x 41-7/8H x 3/4D",
+   "uv": {
+    "charts": 11,
+    "uv_mm_per_unit": 1099.702839,
+    "margin_mm": 5.6759
+   },
+   "door_swing": {
+    "hinge_side": "right",
+    "axis_local": [
+     0,
+     1,
+     0
+    ],
+    "axis_world": [
+     0.0,
+     0.0,
+     1.0
+    ],
+    "axis_point_world_mm": [
+     321.31,
+     1217.6125,
+     1401.7625
+    ],
+    "open_angle_deg": 110.0,
+    "convention": "right-hand rotation about local +Y through the pivot (hinge line on the front face)",
+    "max_open_deg": 110,
+    "first_collision": null,
+    "sweep": "door + pulls vs all other fabrication parts, 5 deg steps, cap 110, flag > 1.0 mm3",
+    "verified": {
+     "free_edge_mean_z_mm_at_open": 286.693,
+     "free_edge_mean_z_mm_opposite_sign": -280.177,
+     "opens_toward_plus_z": true
+    }
+   },
+   "mesh": {
+    "vertices": 16,
+    "faces": 28,
+    "volume_mm3": 4982307.5757,
+    "watertight": true
+   }
+  },
+  {
+   "id": "hardware_handle_08",
+   "label": "6.75in bar pull",
+   "category": "hardware_handle",
+   "layer": "hardware",
+   "run": "R",
+   "type": "bar_pull",
+   "parent": "door_04",
+   "children": [],
+   "files": {
+    "obj": "components/hardware_handle_08.obj",
+    "stl": "components/hardware_handle_08.stl"
+   },
+   "material_slots": [
+    "mat_hardware_finish"
+   ],
+   "material_default": "mat_hardware_finish",
+   "pivot": {
+    "type": "mounting_footprint_center_on_parent_front",
+    "world_position_mm": [
+     321.31,
+     960.4375,
+     1550.9875
+    ]
+   },
+   "transform_local_to_world": [
+    [
+     0.0,
+     0.0,
+     1.0,
+     321.31
+    ],
+    [
+     1.0,
+     0.0,
+     0.0,
+     960.4375
+    ],
+    [
+     0.0,
+     1.0,
+     0.0,
+     1550.9875
+    ],
+    [
+     0.0,
+     0.0,
+     0.0,
+     1.0
+    ]
+   ],
+   "local_bounds_mm": {
+    "min": [
+     -6.35,
+     -85.725,
+     0.0
+    ],
+    "max": [
+     6.35,
+     85.725,
+     41.275
+    ]
+   },
+   "obb": {
+    "width_mm": 12.700000000000045,
+    "height_mm": 171.44999999999982,
+    "depth_mm": 41.27499999999998,
+    "center_world_mm": [
+     341.9475,
+     960.4375,
+     1550.9875
+    ],
+    "axes": [
+     [
+      0.0,
+      1.0,
+      0.0
+     ],
+     [
+      0.0,
+      0.0,
+      1.0
+     ],
+     [
+      1.0,
+      0.0,
+      0.0
+     ]
+    ],
+    "method": "local_aabb (trimesh OBB volume equal within 1e-6)",
+    "transform": [
+     [
+      0.0,
+      0.0,
+      1.0,
+      341.9475
+     ],
+     [
+      1.0,
+      0.0,
+      0.0,
+      960.4375
+     ],
+     [
+      0.0,
+      1.0,
+      0.0,
+      1550.9875
+     ],
+     [
+      0.0,
+      0.0,
+      0.0,
+      1.0
+     ]
+    ]
+   },
+   "nominal_size_in": "0.5W x 6.75H x 1.625D",
+   "nominal_size_frac": "1/2W x 6-3/4H x 1-5/8D",
+   "uv": {
+    "charts": 14,
+    "uv_mm_per_unit": 185.475,
+    "margin_mm": 1.5
+   },
+   "mount": {
+    "post_status": [
+     "frame",
+     "frame"
+    ],
+    "bar_within_front": true,
+    "spec_mount_face_in": 12.65,
+    "contact_surface_in": 12.65,
+    "surface": "frame_face",
+    "offset_from_spec_mm": 0.0
+   },
+   "mesh": {
+    "vertices": 24,
+    "faces": 44,
+    "volume_mm3": 26500.9551,
+    "watertight": true
+   }
+  },
+  {
+   "id": "upper_cabinet_03",
+   "label": "R-run 24in x 42in double-door upper",
+   "category": "upper_cabinet",
+   "layer": "cabinets",
+   "run": "R",
+   "type": "carcass",
+   "parent": null,
+   "children": [
+    "door_05",
+    "door_06"
+   ],
+   "files": {
+    "obj": "components/upper_cabinet_03.obj",
+    "stl": "components/upper_cabinet_03.stl"
+   },
+   "material_slots": [
+    "mat_cabinet_primary"
+   ],
+   "material_default": "mat_cabinet_primary",
+   "pivot": {
+    "type": "rear_bottom_left_corner",
+    "world_position_mm": [
+     -9.525,
+     1219.2,
+     1400.175
+    ]
+   },
+   "transform_local_to_world": [
+    [
+     0.0,
+     0.0,
+     1.0,
+     -9.525
+    ],
+    [
+     1.0,
+     0.0,
+     0.0,
+     1219.2
+    ],
+    [
+     0.0,
+     1.0,
+     0.0,
+     1400.175
+    ],
+    [
+     0.0,
+     0.0,
+     0.0,
+     1.0
+    ]
+   ],
+   "local_bounds_mm": {
+    "min": [
+     0.0,
+     0.0,
+     0.0
+    ],
+    "max": [
+     609.6,
+     1066.8,
+     311.785
+    ]
+   },
+   "obb": {
+    "width_mm": 609.6000000000001,
+    "height_mm": 1066.8,
+    "depth_mm": 311.78499999999997,
+    "center_world_mm": [
+     146.3675,
+     1524.0,
+     1933.575
+    ],
+    "axes": [
+     [
+      0.0,
+      1.0,
+      0.0
+     ],
+     [
+      0.0,
+      0.0,
+      1.0
+     ],
+     [
+      1.0,
+      0.0,
+      0.0
+     ]
+    ],
+    "method": "local_aabb (trimesh OBB volume equal within 1e-6)",
+    "transform": [
+     [
+      0.0,
+      0.0,
+      1.0,
+      146.3675
+     ],
+     [
+      1.0,
+      0.0,
+      0.0,
+      1524.0
+     ],
+     [
+      0.0,
+      1.0,
+      0.0,
+      1933.575
+     ],
+     [
+      0.0,
+      0.0,
+      0.0,
+      1.0
+     ]
+    ]
+   },
+   "nominal_size_in": "24W x 42H x 12.275D",
+   "nominal_size_frac": "24W x 42H x 12.275D",
+   "uv": {
+    "charts": 6,
+    "uv_mm_per_unit": 1926.707437,
+    "margin_mm": 9.2056
+   },
+   "mesh": {
+    "vertices": 8,
+    "faces": 12,
+    "volume_mm3": 202760420.2848,
+    "watertight": true
+   }
+  },
+  {
+   "id": "door_05",
+   "label": "left leaf",
+   "category": "door",
+   "layer": "cabinets",
+   "run": "R",
+   "type": "shaker_front",
+   "parent": "upper_cabinet_03",
+   "children": [
+    "hardware_handle_09"
+   ],
+   "files": {
+    "obj": "components/door_05.obj",
+    "stl": "components/door_05.stl"
+   },
+   "material_slots": [
+    "mat_cabinet_primary"
+   ],
+   "material_default": "mat_cabinet_primary",
+   "pivot": {
+    "type": "hinge_axis_front_face",
+    "world_position_mm": [
+     321.31,
+     1220.7875,
+     1401.7625
+    ]
+   },
+   "transform_local_to_world": [
+    [
+     0.0,
+     0.0,
+     1.0,
+     321.31
+    ],
+    [
+     1.0,
+     0.0,
+     0.0,
+     1220.7875
+    ],
+    [
+     0.0,
+     1.0,
+     0.0,
+     1401.7625
+    ],
+    [
+     0.0,
+     0.0,
+     0.0,
+     1.0
+    ]
+   ],
+   "local_bounds_mm": {
+    "min": [
+     0.0,
+     0.0,
+     -19.05
+    ],
+    "max": [
+     301.625,
+     1063.625,
+     0.0
+    ]
+   },
+   "obb": {
+    "width_mm": 301.625,
+    "height_mm": 1063.625,
+    "depth_mm": 19.05000000000001,
+    "center_world_mm": [
+     311.785,
+     1371.6,
+     1933.575
+    ],
+    "axes": [
+     [
+      0.0,
+      1.0,
+      0.0
+     ],
+     [
+      0.0,
+      0.0,
+      1.0
+     ],
+     [
+      1.0,
+      0.0,
+      0.0
+     ]
+    ],
+    "method": "local_aabb (trimesh OBB volume equal within 1e-6)",
+    "transform": [
+     [
+      0.0,
+      0.0,
+      1.0,
+      311.785
+     ],
+     [
+      1.0,
+      0.0,
+      0.0,
+      1371.6
+     ],
+     [
+      0.0,
+      1.0,
+      0.0,
+      1933.575
+     ],
+     [
+      0.0,
+      0.0,
+      0.0,
+      1.0
+     ]
+    ]
+   },
+   "nominal_size_in": "11.875W x 41.875H x 0.75D",
+   "nominal_size_frac": "11-7/8W x 41-7/8H x 3/4D",
+   "uv": {
+    "charts": 11,
+    "uv_mm_per_unit": 1099.702839,
+    "margin_mm": 5.6759
+   },
+   "door_swing": {
+    "hinge_side": "left",
+    "axis_local": [
+     0,
+     1,
+     0
+    ],
+    "axis_world": [
+     0.0,
+     0.0,
+     1.0
+    ],
+    "axis_point_world_mm": [
+     321.31,
+     1220.7875,
+     1401.7625
+    ],
+    "open_angle_deg": -110.0,
+    "convention": "right-hand rotation about local +Y through the pivot (hinge line on the front face)",
+    "max_open_deg": 110,
+    "first_collision": null,
+    "sweep": "door + pulls vs all other fabrication parts, 5 deg steps, cap 110, flag > 1.0 mm3",
+    "verified": {
+     "free_edge_mean_z_mm_at_open": 286.693,
+     "free_edge_mean_z_mm_opposite_sign": -280.177,
+     "opens_toward_plus_z": true
+    }
+   },
+   "mesh": {
+    "vertices": 16,
+    "faces": 28,
+    "volume_mm3": 4982307.5757,
+    "watertight": true
+   }
+  },
+  {
+   "id": "hardware_handle_09",
+   "label": "6.75in bar pull",
+   "category": "hardware_handle",
+   "layer": "hardware",
+   "run": "R",
+   "type": "bar_pull",
+   "parent": "door_05",
+   "children": [],
+   "files": {
+    "obj": "components/hardware_handle_09.obj",
+    "stl": "components/hardware_handle_09.stl"
+   },
+   "material_slots": [
+    "mat_hardware_finish"
+   ],
+   "material_default": "mat_hardware_finish",
+   "pivot": {
+    "type": "mounting_footprint_center_on_parent_front",
+    "world_position_mm": [
+     321.31,
+     1477.9625,
+     1550.9875
+    ]
+   },
+   "transform_local_to_world": [
+    [
+     0.0,
+     0.0,
+     1.0,
+     321.31
+    ],
+    [
+     1.0,
+     0.0,
+     0.0,
+     1477.9625
+    ],
+    [
+     0.0,
+     1.0,
+     0.0,
+     1550.9875
+    ],
+    [
+     0.0,
+     0.0,
+     0.0,
+     1.0
+    ]
+   ],
+   "local_bounds_mm": {
+    "min": [
+     -6.35,
+     -85.725,
+     0.0
+    ],
+    "max": [
+     6.35,
+     85.725,
+     41.275
+    ]
+   },
+   "obb": {
+    "width_mm": 12.699999999999818,
+    "height_mm": 171.44999999999982,
+    "depth_mm": 41.27499999999998,
+    "center_world_mm": [
+     341.9475,
+     1477.9625,
+     1550.9875
+    ],
+    "axes": [
+     [
+      0.0,
+      1.0,
+      0.0
+     ],
+     [
+      0.0,
+      0.0,
+      1.0
+     ],
+     [
+      1.0,
+      0.0,
+      0.0
+     ]
+    ],
+    "method": "local_aabb (trimesh OBB volume equal within 1e-6)",
+    "transform": [
+     [
+      0.0,
+      0.0,
+      1.0,
+      341.9475
+     ],
+     [
+      1.0,
+      0.0,
+      0.0,
+      1477.9625
+     ],
+     [
+      0.0,
+      1.0,
+      0.0,
+      1550.9875
+     ],
+     [
+      0.0,
+      0.0,
+      0.0,
+      1.0
+     ]
+    ]
+   },
+   "nominal_size_in": "0.5W x 6.75H x 1.625D",
+   "nominal_size_frac": "1/2W x 6-3/4H x 1-5/8D",
+   "uv": {
+    "charts": 14,
+    "uv_mm_per_unit": 185.475,
+    "margin_mm": 1.5
+   },
+   "mount": {
+    "post_status": [
+     "frame",
+     "frame"
+    ],
+    "bar_within_front": true,
+    "spec_mount_face_in": 12.65,
+    "contact_surface_in": 12.65,
+    "surface": "frame_face",
+    "offset_from_spec_mm": 0.0
+   },
+   "mesh": {
+    "vertices": 24,
+    "faces": 44,
+    "volume_mm3": 26500.9551,
+    "watertight": true
+   }
+  },
+  {
+   "id": "door_06",
+   "label": "right leaf",
+   "category": "door",
+   "layer": "cabinets",
+   "run": "R",
+   "type": "shaker_front",
+   "parent": "upper_cabinet_03",
+   "children": [
+    "hardware_handle_10"
+   ],
+   "files": {
+    "obj": "components/door_06.obj",
+    "stl": "components/door_06.stl"
+   },
+   "material_slots": [
+    "mat_cabinet_primary"
+   ],
+   "material_default": "mat_cabinet_primary",
+   "pivot": {
+    "type": "hinge_axis_front_face",
+    "world_position_mm": [
+     321.31,
+     1827.2125,
+     1401.7625
+    ]
+   },
+   "transform_local_to_world": [
+    [
+     0.0,
+     0.0,
+     1.0,
+     321.31
+    ],
+    [
+     1.0,
+     0.0,
+     0.0,
+     1827.2125
+    ],
+    [
+     0.0,
+     1.0,
+     0.0,
+     1401.7625
+    ],
+    [
+     0.0,
+     0.0,
+     0.0,
+     1.0
+    ]
+   ],
+   "local_bounds_mm": {
+    "min": [
+     -301.625,
+     0.0,
+     -19.05
+    ],
+    "max": [
+     0.0,
+     1063.625,
+     0.0
+    ]
+   },
+   "obb": {
+    "width_mm": 301.625,
+    "height_mm": 1063.625,
+    "depth_mm": 19.05000000000001,
+    "center_world_mm": [
+     311.785,
+     1676.4,
+     1933.575
+    ],
+    "axes": [
+     [
+      0.0,
+      1.0,
+      0.0
+     ],
+     [
+      0.0,
+      0.0,
+      1.0
+     ],
+     [
+      1.0,
+      0.0,
+      0.0
+     ]
+    ],
+    "method": "local_aabb (trimesh OBB volume equal within 1e-6)",
+    "transform": [
+     [
+      0.0,
+      0.0,
+      1.0,
+      311.785
+     ],
+     [
+      1.0,
+      0.0,
+      0.0,
+      1676.4
+     ],
+     [
+      0.0,
+      1.0,
+      0.0,
+      1933.575
+     ],
+     [
+      0.0,
+      0.0,
+      0.0,
+      1.0
+     ]
+    ]
+   },
+   "nominal_size_in": "11.875W x 41.875H x 0.75D",
+   "nominal_size_frac": "11-7/8W x 41-7/8H x 3/4D",
+   "uv": {
+    "charts": 11,
+    "uv_mm_per_unit": 1099.702839,
+    "margin_mm": 5.6759
+   },
+   "door_swing": {
+    "hinge_side": "right",
+    "axis_local": [
+     0,
+     1,
+     0
+    ],
+    "axis_world": [
+     0.0,
+     0.0,
+     1.0
+    ],
+    "axis_point_world_mm": [
+     321.31,
+     1827.2125,
+     1401.7625
+    ],
+    "open_angle_deg": 110.0,
+    "convention": "right-hand rotation about local +Y through the pivot (hinge line on the front face)",
+    "max_open_deg": 110,
+    "first_collision": null,
+    "sweep": "door + pulls vs all other fabrication parts, 5 deg steps, cap 110, flag > 1.0 mm3",
+    "verified": {
+     "free_edge_mean_z_mm_at_open": 286.693,
+     "free_edge_mean_z_mm_opposite_sign": -280.177,
+     "opens_toward_plus_z": true
+    }
+   },
+   "mesh": {
+    "vertices": 16,
+    "faces": 28,
+    "volume_mm3": 4982307.5757,
+    "watertight": true
+   }
+  },
+  {
+   "id": "hardware_handle_10",
+   "label": "6.75in bar pull",
+   "category": "hardware_handle",
+   "layer": "hardware",
+   "run": "R",
+   "type": "bar_pull",
+   "parent": "door_06",
+   "children": [],
+   "files": {
+    "obj": "components/hardware_handle_10.obj",
+    "stl": "components/hardware_handle_10.stl"
+   },
+   "material_slots": [
+    "mat_hardware_finish"
+   ],
+   "material_default": "mat_hardware_finish",
+   "pivot": {
+    "type": "mounting_footprint_center_on_parent_front",
+    "world_position_mm": [
+     321.31,
+     1570.0375,
+     1550.9875
+    ]
+   },
+   "transform_local_to_world": [
+    [
+     0.0,
+     0.0,
+     1.0,
+     321.31
+    ],
+    [
+     1.0,
+     0.0,
+     0.0,
+     1570.0375
+    ],
+    [
+     0.0,
+     1.0,
+     0.0,
+     1550.9875
+    ],
+    [
+     0.0,
+     0.0,
+     0.0,
+     1.0
+    ]
+   ],
+   "local_bounds_mm": {
+    "min": [
+     -6.35,
+     -85.725,
+     0.0
+    ],
+    "max": [
+     6.35,
+     85.725,
+     41.275
+    ]
+   },
+   "obb": {
+    "width_mm": 12.699999999999818,
+    "height_mm": 171.44999999999982,
+    "depth_mm": 41.27499999999998,
+    "center_world_mm": [
+     341.9475,
+     1570.0375,
+     1550.9875
+    ],
+    "axes": [
+     [
+      0.0,
+      1.0,
+      0.0
+     ],
+     [
+      0.0,
+      0.0,
+      1.0
+     ],
+     [
+      1.0,
+      0.0,
+      0.0
+     ]
+    ],
+    "method": "local_aabb (trimesh OBB volume equal within 1e-6)",
+    "transform": [
+     [
+      0.0,
+      0.0,
+      1.0,
+      341.9475
+     ],
+     [
+      1.0,
+      0.0,
+      0.0,
+      1570.0375
+     ],
+     [
+      0.0,
+      1.0,
+      0.0,
+      1550.9875
+     ],
+     [
+      0.0,
+      0.0,
+      0.0,
+      1.0
+     ]
+    ]
+   },
+   "nominal_size_in": "0.5W x 6.75H x 1.625D",
+   "nominal_size_frac": "1/2W x 6-3/4H x 1-5/8D",
+   "uv": {
+    "charts": 14,
+    "uv_mm_per_unit": 185.475,
+    "margin_mm": 1.5
+   },
+   "mount": {
+    "post_status": [
+     "frame",
+     "frame"
+    ],
+    "bar_within_front": true,
+    "spec_mount_face_in": 12.65,
+    "contact_surface_in": 12.65,
+    "surface": "frame_face",
+    "offset_from_spec_mm": 0.0
+   },
+   "mesh": {
+    "vertices": 24,
+    "faces": 44,
+    "volume_mm3": 26500.9551,
+    "watertight": true
+   }
+  },
+  {
+   "id": "base_cabinet_03",
+   "label": "blind/dead corner base box (not visible in photos; assumed)",
+   "category": "base_cabinet",
+   "layer": "cabinets",
+   "run": "L",
+   "type": "carcass",
+   "parent": null,
+   "children": [],
+   "files": {
+    "obj": "components/base_cabinet_03.obj",
+    "stl": "components/base_cabinet_03.stl"
+   },
+   "material_slots": [
+    "mat_cabinet_primary"
+   ],
+   "material_default": "mat_cabinet_primary",
+   "pivot": {
+    "type": "rear_bottom_left_corner",
+    "world_position_mm": [
+     682.625,
+     -9.525,
+     0.0
+    ]
+   },
+   "transform_local_to_world": [
+    [
+     -1.0,
+     0.0,
+     0.0,
+     682.625
+    ],
+    [
+     0.0,
+     0.0,
+     1.0,
+     -9.525
+    ],
+    [
+     0.0,
+     1.0,
+     0.0,
+     0.0
+    ],
+    [
+     0.0,
+     0.0,
+     0.0,
+     1.0
+    ]
+   ],
+   "local_bounds_mm": {
+    "min": [
+     0.0,
+     0.0,
+     0.0
+    ],
+    "max": [
+     692.15,
+     901.7,
+     619.125
+    ]
+   },
+   "obb": {
+    "width_mm": 692.15,
+    "height_mm": 901.6999999999999,
+    "depth_mm": 619.1249999999999,
+    "center_world_mm": [
+     336.55,
+     300.0375,
+     450.85
+    ],
+    "axes": [
+     [
+      -1.0,
+      0.0,
+      0.0
+     ],
+     [
+      0.0,
+      0.0,
+      1.0
+     ],
+     [
+      0.0,
+      1.0,
+      0.0
+     ]
+    ],
+    "method": "local_aabb (trimesh OBB volume equal within 1e-6)",
+    "transform": [
+     [
+      -1.0,
+      0.0,
+      0.0,
+      336.55
+     ],
+     [
+      0.0,
+      0.0,
+      1.0,
+      300.0375
+     ],
+     [
+      0.0,
+      1.0,
+      0.0,
+      450.85
+     ],
+     [
+      0.0,
+      0.0,
+      0.0,
+      1.0
+     ]
+    ]
+   },
+   "nominal_size_in": "27.25W x 35.5H x 24.375D",
+   "nominal_size_frac": "27-1/4W x 35-1/2H x 24-3/8D",
+   "uv": {
+    "charts": 8,
+    "uv_mm_per_unit": 2146.031199,
+    "margin_mm": 10.7867
+   },
+   "mesh": {
+    "vertices": 12,
+    "faces": 20,
+    "volume_mm3": 380207281.9226,
+    "watertight": true
+   }
+  },
+  {
+   "id": "base_cabinet_04",
+   "label": "L-run 3-drawer base 15in (measured 14.90)",
+   "category": "base_cabinet",
+   "layer": "cabinets",
+   "run": "L",
+   "type": "carcass",
+   "parent": null,
+   "children": [
+    "drawer_front_06",
+    "drawer_front_07",
+    "drawer_front_08"
+   ],
+   "files": {
+    "obj": "components/base_cabinet_04.obj",
+    "stl": "components/base_cabinet_04.stl"
+   },
+   "material_slots": [
+    "mat_cabinet_primary"
+   ],
+   "material_default": "mat_cabinet_primary",
+   "pivot": {
+    "type": "rear_bottom_left_corner",
+    "world_position_mm": [
+     1063.625,
+     -9.525,
+     0.0
+    ]
+   },
+   "transform_local_to_world": [
+    [
+     -1.0,
+     0.0,
+     0.0,
+     1063.625
+    ],
+    [
+     0.0,
+     0.0,
+     1.0,
+     -9.525
+    ],
+    [
+     0.0,
+     1.0,
+     0.0,
+     0.0
+    ],
+    [
+     0.0,
+     0.0,
+     0.0,
+     1.0
+    ]
+   ],
+   "local_bounds_mm": {
+    "min": [
+     0.0,
+     0.0,
+     0.0
+    ],
+    "max": [
+     381.0,
+     901.7,
+     619.125
+    ]
+   },
+   "obb": {
+    "width_mm": 381.0,
+    "height_mm": 901.6999999999999,
+    "depth_mm": 619.1249999999999,
+    "center_world_mm": [
+     873.125,
+     300.0375,
+     450.85
+    ],
+    "axes": [
+     [
+      -1.0,
+      0.0,
+      0.0
+     ],
+     [
+      0.0,
+      0.0,
+      1.0
+     ],
+     [
+      0.0,
+      1.0,
+      0.0
+     ]
+    ],
+    "method": "local_aabb (trimesh OBB volume equal within 1e-6)",
+    "transform": [
+     [
+      -1.0,
+      0.0,
+      0.0,
+      873.125
+     ],
+     [
+      0.0,
+      0.0,
+      1.0,
+      300.0375
+     ],
+     [
+      0.0,
+      1.0,
+      0.0,
+      450.85
+     ],
+     [
+      0.0,
+      0.0,
+      0.0,
+      1.0
+     ]
+    ]
+   },
+   "nominal_size_in": "15W x 35.5H x 24.375D",
+   "nominal_size_frac": "15W x 35-1/2H x 24-3/8D",
+   "uv": {
+    "charts": 8,
+    "uv_mm_per_unit": 1798.394201,
+    "margin_mm": 9.0673
+   },
+   "mesh": {
+    "vertices": 12,
+    "faces": 20,
+    "volume_mm3": 209288412.0675,
+    "watertight": true
+   }
+  },
+  {
+   "id": "drawer_front_06",
+   "label": "drawer 1 of 3",
+   "category": "drawer_front",
+   "layer": "drawers",
+   "run": "L",
+   "type": "shaker_front",
+   "parent": "base_cabinet_04",
+   "children": [
+    "hardware_handle_11"
+   ],
+   "files": {
+    "obj": "components/drawer_front_06.obj",
+    "stl": "components/drawer_front_06.stl"
+   },
+   "material_slots": [
+    "mat_cabinet_primary"
+   ],
+   "material_default": "mat_cabinet_primary",
+   "pivot": {
+    "type": "slide_axis_center_of_back_face",
+    "world_position_mm": [
+     873.125,
+     609.6,
+     806.45
+    ]
+   },
+   "transform_local_to_world": [
+    [
+     -1.0,
+     0.0,
+     0.0,
+     873.125
+    ],
+    [
+     0.0,
+     0.0,
+     1.0,
+     609.6
+    ],
+    [
+     0.0,
+     1.0,
+     0.0,
+     806.45
+    ],
+    [
+     0.0,
+     0.0,
+     0.0,
+     1.0
+    ]
+   ],
+   "local_bounds_mm": {
+    "min": [
+     -188.9125,
+     -92.075,
+     0.0
+    ],
+    "max": [
+     188.9125,
+     92.075,
+     19.05
+    ]
+   },
+   "obb": {
+    "width_mm": 377.82499999999993,
+    "height_mm": 184.14999999999998,
+    "depth_mm": 19.050000000000068,
+    "center_world_mm": [
+     873.125,
+     619.125,
+     806.45
+    ],
+    "axes": [
+     [
+      -1.0,
+      0.0,
+      0.0
+     ],
+     [
+      0.0,
+      0.0,
+      1.0
+     ],
+     [
+      0.0,
+      1.0,
+      0.0
+     ]
+    ],
+    "method": "local_aabb (trimesh OBB volume equal within 1e-6)",
+    "transform": [
+     [
+      -1.0,
+      0.0,
+      0.0,
+      873.125
+     ],
+     [
+      0.0,
+      0.0,
+      1.0,
+      619.125
+     ],
+     [
+      0.0,
+      1.0,
+      0.0,
+      806.45
+     ],
+     [
+      0.0,
+      0.0,
+      0.0,
+      1.0
+     ]
+    ]
+   },
+   "nominal_size_in": "14.875W x 7.25H x 0.75D",
+   "nominal_size_frac": "14-7/8W x 7-1/4H x 3/4D",
+   "uv": {
+    "charts": 11,
+    "uv_mm_per_unit": 535.626313,
+    "margin_mm": 2.6595
+   },
+   "drawer_slide": {
+    "role": "drawer",
+    "axis_local": [
+     0,
+     0,
+     1
+    ],
+    "axis_world": [
+     0.0,
+     1.0,
+     0.0
+    ],
+    "parent_carcass_depth_in": 24.375,
+    "travel_in": 21.375,
+    "travel_mm": 542.925,
+    "rule": "travel = carcass depth - 3 in"
+   },
+   "mesh": {
+    "vertices": 16,
+    "faces": 28,
+    "volume_mm3": 1150679.1503,
+    "watertight": true
+   }
+  },
+  {
+   "id": "hardware_handle_11",
+   "label": "6.75in bar pull",
+   "category": "hardware_handle",
+   "layer": "hardware",
+   "run": "L",
+   "type": "bar_pull",
+   "parent": "drawer_front_06",
+   "children": [],
+   "files": {
+    "obj": "components/hardware_handle_11.obj",
+    "stl": "components/hardware_handle_11.stl"
+   },
+   "material_slots": [
+    "mat_hardware_finish"
+   ],
+   "material_default": "mat_hardware_finish",
+   "pivot": {
+    "type": "mounting_footprint_center_on_parent_front",
+    "world_position_mm": [
+     873.125,
+     622.3,
+     806.45
+    ]
+   },
+   "transform_local_to_world": [
+    [
+     -1.0,
+     0.0,
+     0.0,
+     873.125
+    ],
+    [
+     0.0,
+     0.0,
+     1.0,
+     622.3
+    ],
+    [
+     0.0,
+     1.0,
+     0.0,
+     806.45
+    ],
+    [
+     0.0,
+     0.0,
+     0.0,
+     1.0
+    ]
+   ],
+   "local_bounds_mm": {
+    "min": [
+     -85.725,
+     -6.35,
+     0.0
+    ],
+    "max": [
+     85.725,
+     6.35,
+     41.275
+    ]
+   },
+   "obb": {
+    "width_mm": 171.45000000000005,
+    "height_mm": 12.700000000000045,
+    "depth_mm": 41.27499999999998,
+    "center_world_mm": [
+     873.125,
+     642.9375,
+     806.45
+    ],
+    "axes": [
+     [
+      -1.0,
+      0.0,
+      0.0
+     ],
+     [
+      0.0,
+      0.0,
+      1.0
+     ],
+     [
+      0.0,
+      1.0,
+      0.0
+     ]
+    ],
+    "method": "local_aabb (trimesh OBB volume equal within 1e-6)",
+    "transform": [
+     [
+      -1.0,
+      0.0,
+      0.0,
+      873.125
+     ],
+     [
+      0.0,
+      0.0,
+      1.0,
+      642.9375
+     ],
+     [
+      0.0,
+      1.0,
+      0.0,
+      806.45
+     ],
+     [
+      0.0,
+      0.0,
+      0.0,
+      1.0
+     ]
+    ]
+   },
+   "nominal_size_in": "6.75W x 0.5H x 1.625D",
+   "nominal_size_frac": "6-3/4W x 1/2H x 1-5/8D",
+   "uv": {
+    "charts": 14,
+    "uv_mm_per_unit": 174.45,
+    "margin_mm": 1.5
+   },
+   "mount": {
+    "post_status": [
+     "panel",
+     "panel"
+    ],
+    "bar_within_front": true,
+    "spec_mount_face_in": 24.75,
+    "contact_surface_in": 24.5,
+    "surface": "recessed_panel",
+    "offset_from_spec_mm": -6.35
+   },
+   "mesh": {
+    "vertices": 28,
+    "faces": 52,
+    "volume_mm3": 26500.9551,
+    "watertight": true
+   }
+  },
+  {
+   "id": "drawer_front_07",
+   "label": "drawer 2 of 3",
+   "category": "drawer_front",
+   "layer": "drawers",
+   "run": "L",
+   "type": "shaker_front",
+   "parent": "base_cabinet_04",
+   "children": [
+    "hardware_handle_12"
+   ],
+   "files": {
+    "obj": "components/drawer_front_07.obj",
+    "stl": "components/drawer_front_07.stl"
+   },
+   "material_slots": [
+    "mat_cabinet_primary"
+   ],
+   "material_default": "mat_cabinet_primary",
+   "pivot": {
+    "type": "slide_axis_center_of_back_face",
+    "world_position_mm": [
+     873.125,
+     609.6,
+     593.725
+    ]
+   },
+   "transform_local_to_world": [
+    [
+     -1.0,
+     0.0,
+     0.0,
+     873.125
+    ],
+    [
+     0.0,
+     0.0,
+     1.0,
+     609.6
+    ],
+    [
+     0.0,
+     1.0,
+     0.0,
+     593.725
+    ],
+    [
+     0.0,
+     0.0,
+     0.0,
+     1.0
+    ]
+   ],
+   "local_bounds_mm": {
+    "min": [
+     -188.9125,
+     -117.475,
+     0.0
+    ],
+    "max": [
+     188.9125,
+     117.475,
+     19.05
+    ]
+   },
+   "obb": {
+    "width_mm": 377.82499999999993,
+    "height_mm": 234.94999999999993,
+    "depth_mm": 19.050000000000068,
+    "center_world_mm": [
+     873.125,
+     619.125,
+     593.725
+    ],
+    "axes": [
+     [
+      -1.0,
+      0.0,
+      0.0
+     ],
+     [
+      0.0,
+      0.0,
+      1.0
+     ],
+     [
+      0.0,
+      1.0,
+      0.0
+     ]
+    ],
+    "method": "local_aabb (trimesh OBB volume equal within 1e-6)",
+    "transform": [
+     [
+      -1.0,
+      0.0,
+      0.0,
+      873.125
+     ],
+     [
+      0.0,
+      0.0,
+      1.0,
+      619.125
+     ],
+     [
+      0.0,
+      1.0,
+      0.0,
+      593.725
+     ],
+     [
+      0.0,
+      0.0,
+      0.0,
+      1.0
+     ]
+    ]
+   },
+   "nominal_size_in": "14.875W x 9.25H x 0.75D",
+   "nominal_size_frac": "14-7/8W x 9-1/4H x 3/4D",
+   "uv": {
+    "charts": 11,
+    "uv_mm_per_unit": 655.630348,
+    "margin_mm": 2.9472
+   },
+   "drawer_slide": {
+    "role": "drawer",
+    "axis_local": [
+     0,
+     0,
+     1
+    ],
+    "axis_world": [
+     0.0,
+     1.0,
+     0.0
+    ],
+    "parent_carcass_depth_in": 24.375,
+    "travel_in": 21.375,
+    "travel_mm": 542.925,
+    "rule": "travel = carcass depth - 3 in"
+   },
+   "mesh": {
+    "vertices": 16,
+    "faces": 28,
+    "volume_mm3": 1489174.441,
+    "watertight": true
+   }
+  },
+  {
+   "id": "hardware_handle_12",
+   "label": "6.75in bar pull",
+   "category": "hardware_handle",
+   "layer": "hardware",
+   "run": "L",
+   "type": "bar_pull",
+   "parent": "drawer_front_07",
+   "children": [],
+   "files": {
+    "obj": "components/hardware_handle_12.obj",
+    "stl": "components/hardware_handle_12.stl"
+   },
+   "material_slots": [
+    "mat_hardware_finish"
+   ],
+   "material_default": "mat_hardware_finish",
+   "pivot": {
+    "type": "mounting_footprint_center_on_parent_front",
+    "world_position_mm": [
+     873.125,
+     622.3,
+     593.725
+    ]
+   },
+   "transform_local_to_world": [
+    [
+     -1.0,
+     0.0,
+     0.0,
+     873.125
+    ],
+    [
+     0.0,
+     0.0,
+     1.0,
+     622.3
+    ],
+    [
+     0.0,
+     1.0,
+     0.0,
+     593.725
+    ],
+    [
+     0.0,
+     0.0,
+     0.0,
+     1.0
+    ]
+   ],
+   "local_bounds_mm": {
+    "min": [
+     -85.725,
+     -6.35,
+     0.0
+    ],
+    "max": [
+     85.725,
+     6.35,
+     41.275
+    ]
+   },
+   "obb": {
+    "width_mm": 171.45000000000005,
+    "height_mm": 12.700000000000045,
+    "depth_mm": 41.27499999999998,
+    "center_world_mm": [
+     873.125,
+     642.9375,
+     593.725
+    ],
+    "axes": [
+     [
+      -1.0,
+      0.0,
+      0.0
+     ],
+     [
+      0.0,
+      0.0,
+      1.0
+     ],
+     [
+      0.0,
+      1.0,
+      0.0
+     ]
+    ],
+    "method": "local_aabb (trimesh OBB volume equal within 1e-6)",
+    "transform": [
+     [
+      -1.0,
+      0.0,
+      0.0,
+      873.125
+     ],
+     [
+      0.0,
+      0.0,
+      1.0,
+      642.9375
+     ],
+     [
+      0.0,
+      1.0,
+      0.0,
+      593.725
+     ],
+     [
+      0.0,
+      0.0,
+      0.0,
+      1.0
+     ]
+    ]
+   },
+   "nominal_size_in": "6.75W x 0.5H x 1.625D",
+   "nominal_size_frac": "6-3/4W x 1/2H x 1-5/8D",
+   "uv": {
+    "charts": 14,
+    "uv_mm_per_unit": 174.45,
+    "margin_mm": 1.5
+   },
+   "mount": {
+    "post_status": [
+     "panel",
+     "panel"
+    ],
+    "bar_within_front": true,
+    "spec_mount_face_in": 24.75,
+    "contact_surface_in": 24.5,
+    "surface": "recessed_panel",
+    "offset_from_spec_mm": -6.35
+   },
+   "mesh": {
+    "vertices": 28,
+    "faces": 52,
+    "volume_mm3": 26500.9551,
+    "watertight": true
+   }
+  },
+  {
+   "id": "drawer_front_08",
+   "label": "drawer 3 of 3",
+   "category": "drawer_front",
+   "layer": "drawers",
+   "run": "L",
+   "type": "shaker_front",
+   "parent": "base_cabinet_04",
+   "children": [
+    "hardware_handle_13"
+   ],
+   "files": {
+    "obj": "components/drawer_front_08.obj",
+    "stl": "components/drawer_front_08.stl"
+   },
+   "material_slots": [
+    "mat_cabinet_primary"
+   ],
+   "material_default": "mat_cabinet_primary",
+   "pivot": {
+    "type": "slide_axis_center_of_back_face",
+    "world_position_mm": [
+     873.125,
+     609.6,
+     295.275
+    ]
+   },
+   "transform_local_to_world": [
+    [
+     -1.0,
+     0.0,
+     0.0,
+     873.125
+    ],
+    [
+     0.0,
+     0.0,
+     1.0,
+     609.6
+    ],
+    [
+     0.0,
+     1.0,
+     0.0,
+     295.275
+    ],
+    [
+     0.0,
+     0.0,
+     0.0,
+     1.0
+    ]
+   ],
+   "local_bounds_mm": {
+    "min": [
+     -188.9125,
+     -177.8,
+     0.0
+    ],
+    "max": [
+     188.9125,
+     177.8,
+     19.05
+    ]
+   },
+   "obb": {
+    "width_mm": 377.82499999999993,
+    "height_mm": 355.6,
+    "depth_mm": 19.050000000000068,
+    "center_world_mm": [
+     873.125,
+     619.125,
+     295.275
+    ],
+    "axes": [
+     [
+      -1.0,
+      0.0,
+      0.0
+     ],
+     [
+      0.0,
+      0.0,
+      1.0
+     ],
+     [
+      0.0,
+      1.0,
+      0.0
+     ]
+    ],
+    "method": "local_aabb (trimesh OBB volume equal within 1e-6)",
+    "transform": [
+     [
+      -1.0,
+      0.0,
+      0.0,
+      873.125
+     ],
+     [
+      0.0,
+      0.0,
+      1.0,
+      619.125
+     ],
+     [
+      0.0,
+      1.0,
+      0.0,
+      295.275
+     ],
+     [
+      0.0,
+      0.0,
+      0.0,
+      1.0
+     ]
+    ]
+   },
+   "nominal_size_in": "14.875W x 14H x 0.75D",
+   "nominal_size_frac": "14-7/8W x 14H x 3/4D",
+   "uv": {
+    "charts": 11,
+    "uv_mm_per_unit": 772.821981,
+    "margin_mm": 3.6556
+   },
+   "drawer_slide": {
+    "role": "drawer",
+    "axis_local": [
+     0,
+     0,
+     1
+    ],
+    "axis_world": [
+     0.0,
+     1.0,
+     0.0
+    ],
+    "parent_carcass_depth_in": 24.375,
+    "travel_in": 21.375,
+    "travel_mm": 542.925,
+    "rule": "travel = carcass depth - 3 in"
+   },
+   "mesh": {
+    "vertices": 16,
+    "faces": 28,
+    "volume_mm3": 2155667.0596,
+    "watertight": true
+   }
+  },
+  {
+   "id": "hardware_handle_13",
+   "label": "6.75in bar pull",
+   "category": "hardware_handle",
+   "layer": "hardware",
+   "run": "L",
+   "type": "bar_pull",
+   "parent": "drawer_front_08",
+   "children": [],
+   "files": {
+    "obj": "components/hardware_handle_13.obj",
+    "stl": "components/hardware_handle_13.stl"
+   },
+   "material_slots": [
+    "mat_hardware_finish"
+   ],
+   "material_default": "mat_hardware_finish",
+   "pivot": {
+    "type": "mounting_footprint_center_on_parent_front",
+    "world_position_mm": [
+     873.125,
+     622.3,
+     295.275
+    ]
+   },
+   "transform_local_to_world": [
+    [
+     -1.0,
+     0.0,
+     0.0,
+     873.125
+    ],
+    [
+     0.0,
+     0.0,
+     1.0,
+     622.3
+    ],
+    [
+     0.0,
+     1.0,
+     0.0,
+     295.275
+    ],
+    [
+     0.0,
+     0.0,
+     0.0,
+     1.0
+    ]
+   ],
+   "local_bounds_mm": {
+    "min": [
+     -85.725,
+     -6.35,
+     0.0
+    ],
+    "max": [
+     85.725,
+     6.35,
+     41.275
+    ]
+   },
+   "obb": {
+    "width_mm": 171.45000000000005,
+    "height_mm": 12.700000000000045,
+    "depth_mm": 41.27499999999998,
+    "center_world_mm": [
+     873.125,
+     642.9375,
+     295.275
+    ],
+    "axes": [
+     [
+      -1.0,
+      0.0,
+      0.0
+     ],
+     [
+      0.0,
+      0.0,
+      1.0
+     ],
+     [
+      0.0,
+      1.0,
+      0.0
+     ]
+    ],
+    "method": "local_aabb (trimesh OBB volume equal within 1e-6)",
+    "transform": [
+     [
+      -1.0,
+      0.0,
+      0.0,
+      873.125
+     ],
+     [
+      0.0,
+      0.0,
+      1.0,
+      642.9375
+     ],
+     [
+      0.0,
+      1.0,
+      0.0,
+      295.275
+     ],
+     [
+      0.0,
+      0.0,
+      0.0,
+      1.0
+     ]
+    ]
+   },
+   "nominal_size_in": "6.75W x 0.5H x 1.625D",
+   "nominal_size_frac": "6-3/4W x 1/2H x 1-5/8D",
+   "uv": {
+    "charts": 14,
+    "uv_mm_per_unit": 174.45,
+    "margin_mm": 1.5
+   },
+   "mount": {
+    "post_status": [
+     "panel",
+     "panel"
+    ],
+    "bar_within_front": true,
+    "spec_mount_face_in": 24.75,
+    "contact_surface_in": 24.5,
+    "surface": "recessed_panel",
+    "offset_from_spec_mm": -6.35
+   },
+   "mesh": {
+    "vertices": 28,
+    "faces": 52,
+    "volume_mm3": 26500.9551,
+    "watertight": true
+   }
+  },
+  {
+   "id": "base_cabinet_05",
+   "label": "L-run farmhouse sink base 30-1/2in (measured 30.69)",
+   "category": "base_cabinet",
+   "layer": "cabinets",
+   "run": "L",
+   "type": "carcass",
+   "parent": null,
+   "children": [
+    "door_07",
+    "door_08"
+   ],
+   "files": {
+    "obj": "components/base_cabinet_05.obj",
+    "stl": "components/base_cabinet_05.stl"
+   },
+   "material_slots": [
+    "mat_cabinet_primary"
+   ],
+   "material_default": "mat_cabinet_primary",
+   "pivot": {
+    "type": "rear_bottom_left_corner",
+    "world_position_mm": [
+     1838.325,
+     -9.525,
+     0.0
+    ]
+   },
+   "transform_local_to_world": [
+    [
+     -1.0,
+     0.0,
+     0.0,
+     1838.325
+    ],
+    [
+     0.0,
+     0.0,
+     1.0,
+     -9.525
+    ],
+    [
+     0.0,
+     1.0,
+     0.0,
+     0.0
+    ],
+    [
+     0.0,
+     0.0,
+     0.0,
+     1.0
+    ]
+   ],
+   "local_bounds_mm": {
+    "min": [
+     0.0,
+     0.0,
+     0.0
+    ],
+    "max": [
+     774.7,
+     901.7,
+     619.125
+    ]
+   },
+   "obb": {
+    "width_mm": 774.6999999999998,
+    "height_mm": 901.6999999999999,
+    "depth_mm": 619.1249999999999,
+    "center_world_mm": [
+     1450.975,
+     300.0375,
+     450.85
+    ],
+    "axes": [
+     [
+      -1.0,
+      0.0,
+      0.0
+     ],
+     [
+      0.0,
+      0.0,
+      1.0
+     ],
+     [
+      0.0,
+      1.0,
+      0.0
+     ]
+    ],
+    "method": "local_aabb (trimesh OBB volume equal within 1e-6)",
+    "transform": [
+     [
+      -1.0,
+      0.0,
+      0.0,
+      1450.975
+     ],
+     [
+      0.0,
+      0.0,
+      1.0,
+      300.0375
+     ],
+     [
+      0.0,
+      1.0,
+      0.0,
+      450.85
+     ],
+     [
+      0.0,
+      0.0,
+      0.0,
+      1.0
+     ]
+    ]
+   },
+   "nominal_size_in": "30.5W x 35.5H x 24.375D",
+   "nominal_size_frac": "30-1/2W x 35-1/2H x 24-3/8D",
+   "uv": {
+    "charts": 12,
+    "uv_mm_per_unit": 2441.214469,
+    "margin_mm": 12.243
+   },
+   "mesh": {
+    "vertices": 20,
+    "faces": 36,
+    "volume_mm3": 352126255.4235,
+    "watertight": true
+   }
+  },
+  {
+   "id": "door_07",
+   "label": "sink door (viewer's right leaf)",
+   "category": "door",
+   "layer": "cabinets",
+   "run": "L",
+   "type": "shaker_front",
+   "parent": "base_cabinet_05",
+   "children": [
+    "hardware_handle_14"
+   ],
+   "files": {
+    "obj": "components/door_07.obj",
+    "stl": "components/door_07.stl"
+   },
+   "material_slots": [
+    "mat_cabinet_primary"
+   ],
+   "material_default": "mat_cabinet_primary",
+   "pivot": {
+    "type": "hinge_axis_front_face",
+    "world_position_mm": [
+     1065.2125,
+     628.65,
+     117.475
+    ]
+   },
+   "transform_local_to_world": [
+    [
+     -1.0,
+     0.0,
+     0.0,
+     1065.2125
+    ],
+    [
+     0.0,
+     0.0,
+     1.0,
+     628.65
+    ],
+    [
+     0.0,
+     1.0,
+     0.0,
+     117.475
+    ],
+    [
+     0.0,
+     0.0,
+     0.0,
+     1.0
+    ]
+   ],
+   "local_bounds_mm": {
+    "min": [
+     -384.175,
+     0.0,
+     -19.05
+    ],
+    "max": [
+     0.0,
+     530.225,
+     0.0
+    ]
+   },
+   "obb": {
+    "width_mm": 384.17499999999995,
+    "height_mm": 530.2249999999999,
+    "depth_mm": 19.050000000000068,
+    "center_world_mm": [
+     1257.3,
+     619.125,
+     382.5875
+    ],
+    "axes": [
+     [
+      -1.0,
+      0.0,
+      0.0
+     ],
+     [
+      0.0,
+      0.0,
+      1.0
+     ],
+     [
+      0.0,
+      1.0,
+      0.0
+     ]
+    ],
+    "method": "local_aabb (trimesh OBB volume equal within 1e-6)",
+    "transform": [
+     [
+      -1.0,
+      0.0,
+      0.0,
+      1257.3
+     ],
+     [
+      0.0,
+      0.0,
+      1.0,
+      619.125
+     ],
+     [
+      0.0,
+      1.0,
+      0.0,
+      382.5875
+     ],
+     [
+      0.0,
+      0.0,
+      0.0,
+      1.0
+     ]
+    ]
+   },
+   "nominal_size_in": "15.125W x 20.875H x 0.75D",
+   "nominal_size_frac": "15-1/8W x 20-7/8H x 3/4D",
+   "uv": {
+    "charts": 11,
+    "uv_mm_per_unit": 983.304052,
+    "margin_mm": 4.526
+   },
+   "door_swing": {
+    "hinge_side": "right",
+    "axis_local": [
+     0,
+     1,
+     0
+    ],
+    "axis_world": [
+     0.0,
+     0.0,
+     1.0
+    ],
+    "axis_point_world_mm": [
+     1065.2125,
+     628.65,
+     117.475
+    ],
+    "open_angle_deg": 110.0,
+    "convention": "right-hand rotation about local +Y through the pivot (hinge line on the front face)",
+    "max_open_deg": 110,
+    "first_collision": null,
+    "sweep": "door + pulls vs all other fabrication parts, 5 deg steps, cap 110, flag > 1.0 mm3",
+    "verified": {
+     "free_edge_mean_z_mm_at_open": 364.264,
+     "free_edge_mean_z_mm_opposite_sign": -357.749,
+     "opens_toward_plus_z": true
+    }
+   },
+   "mesh": {
+    "vertices": 16,
+    "faces": 28,
+    "volume_mm3": 3167696.2856,
+    "watertight": true
+   }
+  },
+  {
+   "id": "hardware_handle_14",
+   "label": "6.75in bar pull",
+   "category": "hardware_handle",
+   "layer": "hardware",
+   "run": "L",
+   "type": "bar_pull",
+   "parent": "door_07",
+   "children": [],
+   "files": {
+    "obj": "components/hardware_handle_14.obj",
+    "stl": "components/hardware_handle_14.stl"
+   },
+   "material_slots": [
+    "mat_hardware_finish"
+   ],
+   "material_default": "mat_hardware_finish",
+   "pivot": {
+    "type": "mounting_footprint_center_on_parent_front",
+    "world_position_mm": [
+     1404.9375,
+     628.65,
+     498.475
+    ]
+   },
+   "transform_local_to_world": [
+    [
+     -1.0,
+     0.0,
+     0.0,
+     1404.9375
+    ],
+    [
+     0.0,
+     0.0,
+     1.0,
+     628.65
+    ],
+    [
+     0.0,
+     1.0,
+     0.0,
+     498.475
+    ],
+    [
+     0.0,
+     0.0,
+     0.0,
+     1.0
+    ]
+   ],
+   "local_bounds_mm": {
+    "min": [
+     -6.35,
+     -85.725,
+     0.0
+    ],
+    "max": [
+     6.35,
+     85.725,
+     41.275
+    ]
+   },
+   "obb": {
+    "width_mm": 12.699999999999818,
+    "height_mm": 171.44999999999993,
+    "depth_mm": 41.27499999999998,
+    "center_world_mm": [
+     1404.9375,
+     649.2875,
+     498.475
+    ],
+    "axes": [
+     [
+      -1.0,
+      0.0,
+      0.0
+     ],
+     [
+      0.0,
+      0.0,
+      1.0
+     ],
+     [
+      0.0,
+      1.0,
+      0.0
+     ]
+    ],
+    "method": "local_aabb (trimesh OBB volume equal within 1e-6)",
+    "transform": [
+     [
+      -1.0,
+      0.0,
+      0.0,
+      1404.9375
+     ],
+     [
+      0.0,
+      0.0,
+      1.0,
+      649.2875
+     ],
+     [
+      0.0,
+      1.0,
+      0.0,
+      498.475
+     ],
+     [
+      0.0,
+      0.0,
+      0.0,
+      1.0
+     ]
+    ]
+   },
+   "nominal_size_in": "0.5W x 6.75H x 1.625D",
+   "nominal_size_frac": "1/2W x 6-3/4H x 1-5/8D",
+   "uv": {
+    "charts": 14,
+    "uv_mm_per_unit": 185.475,
+    "margin_mm": 1.5
+   },
+   "mount": {
+    "post_status": [
+     "frame",
+     "frame"
+    ],
+    "bar_within_front": true,
+    "spec_mount_face_in": 24.75,
+    "contact_surface_in": 24.75,
+    "surface": "frame_face",
+    "offset_from_spec_mm": 0.0
+   },
+   "mesh": {
+    "vertices": 24,
+    "faces": 44,
+    "volume_mm3": 26500.9551,
+    "watertight": true
+   }
+  },
+  {
+   "id": "door_08",
+   "label": "sink door (viewer's left leaf)",
+   "category": "door",
+   "layer": "cabinets",
+   "run": "L",
+   "type": "shaker_front",
+   "parent": "base_cabinet_05",
+   "children": [
+    "hardware_handle_15"
+   ],
+   "files": {
+    "obj": "components/door_08.obj",
+    "stl": "components/door_08.stl"
+   },
+   "material_slots": [
+    "mat_cabinet_primary"
+   ],
+   "material_default": "mat_cabinet_primary",
+   "pivot": {
+    "type": "hinge_axis_front_face",
+    "world_position_mm": [
+     1836.7375,
+     628.65,
+     117.475
+    ]
+   },
+   "transform_local_to_world": [
+    [
+     -1.0,
+     0.0,
+     0.0,
+     1836.7375
+    ],
+    [
+     0.0,
+     0.0,
+     1.0,
+     628.65
+    ],
+    [
+     0.0,
+     1.0,
+     0.0,
+     117.475
+    ],
+    [
+     0.0,
+     0.0,
+     0.0,
+     1.0
+    ]
+   ],
+   "local_bounds_mm": {
+    "min": [
+     0.0,
+     0.0,
+     -19.05
+    ],
+    "max": [
+     384.175,
+     530.225,
+     0.0
+    ]
+   },
+   "obb": {
+    "width_mm": 384.17499999999995,
+    "height_mm": 530.2249999999999,
+    "depth_mm": 19.050000000000068,
+    "center_world_mm": [
+     1644.65,
+     619.125,
+     382.5875
+    ],
+    "axes": [
+     [
+      -1.0,
+      0.0,
+      0.0
+     ],
+     [
+      0.0,
+      0.0,
+      1.0
+     ],
+     [
+      0.0,
+      1.0,
+      0.0
+     ]
+    ],
+    "method": "local_aabb (trimesh OBB volume equal within 1e-6)",
+    "transform": [
+     [
+      -1.0,
+      0.0,
+      0.0,
+      1644.65
+     ],
+     [
+      0.0,
+      0.0,
+      1.0,
+      619.125
+     ],
+     [
+      0.0,
+      1.0,
+      0.0,
+      382.5875
+     ],
+     [
+      0.0,
+      0.0,
+      0.0,
+      1.0
+     ]
+    ]
+   },
+   "nominal_size_in": "15.125W x 20.875H x 0.75D",
+   "nominal_size_frac": "15-1/8W x 20-7/8H x 3/4D",
+   "uv": {
+    "charts": 11,
+    "uv_mm_per_unit": 983.304052,
+    "margin_mm": 4.526
+   },
+   "door_swing": {
+    "hinge_side": "left",
+    "axis_local": [
+     0,
+     1,
+     0
+    ],
+    "axis_world": [
+     0.0,
+     0.0,
+     1.0
+    ],
+    "axis_point_world_mm": [
+     1836.7375,
+     628.65,
+     117.475
+    ],
+    "open_angle_deg": -110.0,
+    "convention": "right-hand rotation about local +Y through the pivot (hinge line on the front face)",
+    "max_open_deg": 110,
+    "first_collision": null,
+    "sweep": "door + pulls vs all other fabrication parts, 5 deg steps, cap 110, flag > 1.0 mm3",
+    "verified": {
+     "free_edge_mean_z_mm_at_open": 364.264,
+     "free_edge_mean_z_mm_opposite_sign": -357.749,
+     "opens_toward_plus_z": true
+    }
+   },
+   "mesh": {
+    "vertices": 16,
+    "faces": 28,
+    "volume_mm3": 3167696.2856,
+    "watertight": true
+   }
+  },
+  {
+   "id": "hardware_handle_15",
+   "label": "6.75in bar pull",
+   "category": "hardware_handle",
+   "layer": "hardware",
+   "run": "L",
+   "type": "bar_pull",
+   "parent": "door_08",
+   "children": [],
+   "files": {
+    "obj": "components/hardware_handle_15.obj",
+    "stl": "components/hardware_handle_15.stl"
+   },
+   "material_slots": [
+    "mat_hardware_finish"
+   ],
+   "material_default": "mat_hardware_finish",
+   "pivot": {
+    "type": "mounting_footprint_center_on_parent_front",
+    "world_position_mm": [
+     1497.0125,
+     628.65,
+     498.475
+    ]
+   },
+   "transform_local_to_world": [
+    [
+     -1.0,
+     0.0,
+     0.0,
+     1497.0125
+    ],
+    [
+     0.0,
+     0.0,
+     1.0,
+     628.65
+    ],
+    [
+     0.0,
+     1.0,
+     0.0,
+     498.475
+    ],
+    [
+     0.0,
+     0.0,
+     0.0,
+     1.0
+    ]
+   ],
+   "local_bounds_mm": {
+    "min": [
+     -6.35,
+     -85.725,
+     0.0
+    ],
+    "max": [
+     6.35,
+     85.725,
+     41.275
+    ]
+   },
+   "obb": {
+    "width_mm": 12.699999999999818,
+    "height_mm": 171.44999999999993,
+    "depth_mm": 41.27499999999998,
+    "center_world_mm": [
+     1497.0125,
+     649.2875,
+     498.475
+    ],
+    "axes": [
+     [
+      -1.0,
+      0.0,
+      0.0
+     ],
+     [
+      0.0,
+      0.0,
+      1.0
+     ],
+     [
+      0.0,
+      1.0,
+      0.0
+     ]
+    ],
+    "method": "local_aabb (trimesh OBB volume equal within 1e-6)",
+    "transform": [
+     [
+      -1.0,
+      0.0,
+      0.0,
+      1497.0125
+     ],
+     [
+      0.0,
+      0.0,
+      1.0,
+      649.2875
+     ],
+     [
+      0.0,
+      1.0,
+      0.0,
+      498.475
+     ],
+     [
+      0.0,
+      0.0,
+      0.0,
+      1.0
+     ]
+    ]
+   },
+   "nominal_size_in": "0.5W x 6.75H x 1.625D",
+   "nominal_size_frac": "1/2W x 6-3/4H x 1-5/8D",
+   "uv": {
+    "charts": 14,
+    "uv_mm_per_unit": 185.475,
+    "margin_mm": 1.5
+   },
+   "mount": {
+    "post_status": [
+     "frame",
+     "frame"
+    ],
+    "bar_within_front": true,
+    "spec_mount_face_in": 24.75,
+    "contact_surface_in": 24.75,
+    "surface": "frame_face",
+    "offset_from_spec_mm": 0.0
+   },
+   "mesh": {
+    "vertices": 24,
+    "faces": 44,
+    "volume_mm3": 26500.9551,
+    "watertight": true
+   }
+  },
+  {
+   "id": "base_cabinet_06",
+   "label": "L-run drawer + pull-out base 18in (measured 17.72)",
+   "category": "base_cabinet",
+   "layer": "cabinets",
+   "run": "L",
+   "type": "carcass",
+   "parent": null,
+   "children": [
+    "drawer_front_09",
+    "drawer_front_10"
+   ],
+   "files": {
+    "obj": "components/base_cabinet_06.obj",
+    "stl": "components/base_cabinet_06.stl"
+   },
+   "material_slots": [
+    "mat_cabinet_primary"
+   ],
+   "material_default": "mat_cabinet_primary",
+   "pivot": {
+    "type": "rear_bottom_left_corner",
+    "world_position_mm": [
+     2295.525,
+     -9.525,
+     0.0
+    ]
+   },
+   "transform_local_to_world": [
+    [
+     -1.0,
+     0.0,
+     0.0,
+     2295.525
+    ],
+    [
+     0.0,
+     0.0,
+     1.0,
+     -9.525
+    ],
+    [
+     0.0,
+     1.0,
+     0.0,
+     0.0
+    ],
+    [
+     0.0,
+     0.0,
+     0.0,
+     1.0
+    ]
+   ],
+   "local_bounds_mm": {
+    "min": [
+     0.0,
+     0.0,
+     0.0
+    ],
+    "max": [
+     457.2,
+     901.7,
+     619.125
+    ]
+   },
+   "obb": {
+    "width_mm": 457.2000000000003,
+    "height_mm": 901.6999999999999,
+    "depth_mm": 619.1249999999999,
+    "center_world_mm": [
+     2066.925,
+     300.0375,
+     450.85
+    ],
+    "axes": [
+     [
+      -1.0,
+      0.0,
+      0.0
+     ],
+     [
+      0.0,
+      0.0,
+      1.0
+     ],
+     [
+      0.0,
+      1.0,
+      0.0
+     ]
+    ],
+    "method": "local_aabb (trimesh OBB volume equal within 1e-6)",
+    "transform": [
+     [
+      -1.0,
+      0.0,
+      0.0,
+      2066.925
+     ],
+     [
+      0.0,
+      0.0,
+      1.0,
+      300.0375
+     ],
+     [
+      0.0,
+      1.0,
+      0.0,
+      450.85
+     ],
+     [
+      0.0,
+      0.0,
+      0.0,
+      1.0
+     ]
+    ]
+   },
+   "nominal_size_in": "18W x 35.5H x 24.375D",
+   "nominal_size_frac": "18W x 35-1/2H x 24-3/8D",
+   "uv": {
+    "charts": 8,
+    "uv_mm_per_unit": 1841.468622,
+    "margin_mm": 9.5172
+   },
+   "mesh": {
+    "vertices": 12,
+    "faces": 20,
+    "volume_mm3": 251146094.481,
+    "watertight": true
+   }
+  },
+  {
+   "id": "drawer_front_09",
+   "label": "top drawer",
+   "category": "drawer_front",
+   "layer": "drawers",
+   "run": "L",
+   "type": "shaker_front",
+   "parent": "base_cabinet_06",
+   "children": [
+    "hardware_handle_16"
+   ],
+   "files": {
+    "obj": "components/drawer_front_09.obj",
+    "stl": "components/drawer_front_09.stl"
+   },
+   "material_slots": [
+    "mat_cabinet_primary"
+   ],
+   "material_default": "mat_cabinet_primary",
+   "pivot": {
+    "type": "slide_axis_center_of_back_face",
+    "world_position_mm": [
+     2066.925,
+     609.6,
+     819.15
+    ]
+   },
+   "transform_local_to_world": [
+    [
+     -1.0,
+     0.0,
+     0.0,
+     2066.925
+    ],
+    [
+     0.0,
+     0.0,
+     1.0,
+     609.6
+    ],
+    [
+     0.0,
+     1.0,
+     0.0,
+     819.15
+    ],
+    [
+     0.0,
+     0.0,
+     0.0,
+     1.0
+    ]
+   ],
+   "local_bounds_mm": {
+    "min": [
+     -227.0125,
+     -79.375,
+     0.0
+    ],
+    "max": [
+     227.0125,
+     79.375,
+     19.05
+    ]
+   },
+   "obb": {
+    "width_mm": 454.0250000000001,
+    "height_mm": 158.75,
+    "depth_mm": 19.050000000000068,
+    "center_world_mm": [
+     2066.925,
+     619.125,
+     819.15
+    ],
+    "axes": [
+     [
+      -1.0,
+      0.0,
+      0.0
+     ],
+     [
+      0.0,
+      0.0,
+      1.0
+     ],
+     [
+      0.0,
+      1.0,
+      0.0
+     ]
+    ],
+    "method": "local_aabb (trimesh OBB volume equal within 1e-6)",
+    "transform": [
+     [
+      -1.0,
+      0.0,
+      0.0,
+      2066.925
+     ],
+     [
+      0.0,
+      0.0,
+      1.0,
+      619.125
+     ],
+     [
+      0.0,
+      1.0,
+      0.0,
+      819.15
+     ],
+     [
+      0.0,
+      0.0,
+      0.0,
+      1.0
+     ]
+    ]
+   },
+   "nominal_size_in": "17.875W x 6.25H x 0.75D",
+   "nominal_size_frac": "17-7/8W x 6-1/4H x 3/4D",
+   "uv": {
+    "charts": 11,
+    "uv_mm_per_unit": 517.492954,
+    "margin_mm": 2.6993
+   },
+   "drawer_slide": {
+    "role": "drawer",
+    "axis_local": [
+     0,
+     0,
+     1
+    ],
+    "axis_world": [
+     0.0,
+     1.0,
+     0.0
+    ],
+    "parent_carcass_depth_in": 24.375,
+    "travel_in": 21.375,
+    "travel_mm": 542.925,
+    "rule": "travel = carcass depth - 3 in"
+   },
+   "mesh": {
+    "vertices": 16,
+    "faces": 28,
+    "volume_mm3": 1211106.4488,
+    "watertight": true
+   }
+  },
+  {
+   "id": "hardware_handle_16",
+   "label": "6.75in bar pull",
+   "category": "hardware_handle",
+   "layer": "hardware",
+   "run": "L",
+   "type": "bar_pull",
+   "parent": "drawer_front_09",
+   "children": [],
+   "files": {
+    "obj": "components/hardware_handle_16.obj",
+    "stl": "components/hardware_handle_16.stl"
+   },
+   "material_slots": [
+    "mat_hardware_finish"
+   ],
+   "material_default": "mat_hardware_finish",
+   "pivot": {
+    "type": "mounting_footprint_center_on_parent_front",
+    "world_position_mm": [
+     2066.925,
+     622.3,
+     819.15
+    ]
+   },
+   "transform_local_to_world": [
+    [
+     -1.0,
+     0.0,
+     0.0,
+     2066.925
+    ],
+    [
+     0.0,
+     0.0,
+     1.0,
+     622.3
+    ],
+    [
+     0.0,
+     1.0,
+     0.0,
+     819.15
+    ],
+    [
+     0.0,
+     0.0,
+     0.0,
+     1.0
+    ]
+   ],
+   "local_bounds_mm": {
+    "min": [
+     -85.725,
+     -6.35,
+     0.0
+    ],
+    "max": [
+     85.725,
+     6.35,
+     41.275
+    ]
+   },
+   "obb": {
+    "width_mm": 171.44999999999982,
+    "height_mm": 12.700000000000045,
+    "depth_mm": 41.27499999999998,
+    "center_world_mm": [
+     2066.925,
+     642.9375,
+     819.15
+    ],
+    "axes": [
+     [
+      -1.0,
+      0.0,
+      0.0
+     ],
+     [
+      0.0,
+      0.0,
+      1.0
+     ],
+     [
+      0.0,
+      1.0,
+      0.0
+     ]
+    ],
+    "method": "local_aabb (trimesh OBB volume equal within 1e-6)",
+    "transform": [
+     [
+      -1.0,
+      0.0,
+      0.0,
+      2066.925
+     ],
+     [
+      0.0,
+      0.0,
+      1.0,
+      642.9375
+     ],
+     [
+      0.0,
+      1.0,
+      0.0,
+      819.15
+     ],
+     [
+      0.0,
+      0.0,
+      0.0,
+      1.0
+     ]
+    ]
+   },
+   "nominal_size_in": "6.75W x 0.5H x 1.625D",
+   "nominal_size_frac": "6-3/4W x 1/2H x 1-5/8D",
+   "uv": {
+    "charts": 14,
+    "uv_mm_per_unit": 174.45,
+    "margin_mm": 1.5
+   },
+   "mount": {
+    "post_status": [
+     "panel",
+     "panel"
+    ],
+    "bar_within_front": true,
+    "spec_mount_face_in": 24.75,
+    "contact_surface_in": 24.5,
+    "surface": "recessed_panel",
+    "offset_from_spec_mm": -6.35
+   },
+   "mesh": {
+    "vertices": 28,
+    "faces": 52,
+    "volume_mm3": 26500.9551,
+    "watertight": true
+   }
+  },
+  {
+   "id": "drawer_front_10",
+   "label": "pull-out front (horizontal pull => pull-out, likely waste bin)",
+   "category": "drawer_front",
+   "layer": "drawers",
+   "run": "L",
+   "type": "shaker_front",
+   "parent": "base_cabinet_06",
+   "children": [
+    "hardware_handle_17"
+   ],
+   "files": {
+    "obj": "components/drawer_front_10.obj",
+    "stl": "components/drawer_front_10.stl"
+   },
+   "material_slots": [
+    "mat_cabinet_primary"
+   ],
+   "material_default": "mat_cabinet_primary",
+   "pivot": {
+    "type": "slide_axis_center_of_back_face",
+    "world_position_mm": [
+     2066.925,
+     609.6,
+     427.0375
+    ]
+   },
+   "transform_local_to_world": [
+    [
+     -1.0,
+     0.0,
+     0.0,
+     2066.925
+    ],
+    [
+     0.0,
+     0.0,
+     1.0,
+     609.6
+    ],
+    [
+     0.0,
+     1.0,
+     0.0,
+     427.0375
+    ],
+    [
+     0.0,
+     0.0,
+     0.0,
+     1.0
+    ]
+   ],
+   "local_bounds_mm": {
+    "min": [
+     -227.0125,
+     -309.5625,
+     0.0
+    ],
+    "max": [
+     227.0125,
+     309.5625,
+     19.05
+    ]
+   },
+   "obb": {
+    "width_mm": 454.0250000000001,
+    "height_mm": 619.125,
+    "depth_mm": 19.050000000000068,
+    "center_world_mm": [
+     2066.925,
+     619.125,
+     427.0375
+    ],
+    "axes": [
+     [
+      -1.0,
+      0.0,
+      0.0
+     ],
+     [
+      0.0,
+      0.0,
+      1.0
+     ],
+     [
+      0.0,
+      1.0,
+      0.0
+     ]
+    ],
+    "method": "local_aabb (trimesh OBB volume equal within 1e-6)",
+    "transform": [
+     [
+      -1.0,
+      0.0,
+      0.0,
+      2066.925
+     ],
+     [
+      0.0,
+      0.0,
+      1.0,
+      619.125
+     ],
+     [
+      0.0,
+      1.0,
+      0.0,
+      427.0375
+     ],
+     [
+      0.0,
+      0.0,
+      0.0,
+      1.0
+     ]
+    ]
+   },
+   "nominal_size_in": "17.875W x 24.375H x 0.75D",
+   "nominal_size_frac": "17-7/8W x 24-3/8H x 3/4D",
+   "uv": {
+    "charts": 11,
+    "uv_mm_per_unit": 1176.052524,
+    "margin_mm": 5.3405
+   },
+   "drawer_slide": {
+    "role": "pullout",
+    "axis_local": [
+     0,
+     0,
+     1
+    ],
+    "axis_world": [
+     0.0,
+     1.0,
+     0.0
+    ],
+    "parent_carcass_depth_in": 24.375,
+    "travel_in": 21.375,
+    "travel_mm": 542.925,
+    "rule": "travel = carcass depth - 3 in"
+   },
+   "mesh": {
+    "vertices": 16,
+    "faces": 28,
+    "volume_mm3": 4265885.6214,
+    "watertight": true
+   }
+  },
+  {
+   "id": "hardware_handle_17",
+   "label": "6.75in bar pull",
+   "category": "hardware_handle",
+   "layer": "hardware",
+   "run": "L",
+   "type": "bar_pull",
+   "parent": "drawer_front_10",
+   "children": [],
+   "files": {
+    "obj": "components/hardware_handle_17.obj",
+    "stl": "components/hardware_handle_17.stl"
+   },
+   "material_slots": [
+    "mat_hardware_finish"
+   ],
+   "material_default": "mat_hardware_finish",
+   "pivot": {
+    "type": "mounting_footprint_center_on_parent_front",
+    "world_position_mm": [
+     2066.925,
+     622.3,
+     666.75
+    ]
+   },
+   "transform_local_to_world": [
+    [
+     -1.0,
+     0.0,
+     0.0,
+     2066.925
+    ],
+    [
+     0.0,
+     0.0,
+     1.0,
+     622.3
+    ],
+    [
+     0.0,
+     1.0,
+     0.0,
+     666.75
+    ],
+    [
+     0.0,
+     0.0,
+     0.0,
+     1.0
+    ]
+   ],
+   "local_bounds_mm": {
+    "min": [
+     -85.725,
+     -6.35,
+     0.0
+    ],
+    "max": [
+     85.725,
+     6.35,
+     41.275
+    ]
+   },
+   "obb": {
+    "width_mm": 171.44999999999982,
+    "height_mm": 12.700000000000045,
+    "depth_mm": 41.27499999999998,
+    "center_world_mm": [
+     2066.925,
+     642.9375,
+     666.75
+    ],
+    "axes": [
+     [
+      -1.0,
+      0.0,
+      0.0
+     ],
+     [
+      0.0,
+      0.0,
+      1.0
+     ],
+     [
+      0.0,
+      1.0,
+      0.0
+     ]
+    ],
+    "method": "local_aabb (trimesh OBB volume equal within 1e-6)",
+    "transform": [
+     [
+      -1.0,
+      0.0,
+      0.0,
+      2066.925
+     ],
+     [
+      0.0,
+      0.0,
+      1.0,
+      642.9375
+     ],
+     [
+      0.0,
+      1.0,
+      0.0,
+      666.75
+     ],
+     [
+      0.0,
+      0.0,
+      0.0,
+      1.0
+     ]
+    ]
+   },
+   "nominal_size_in": "6.75W x 0.5H x 1.625D",
+   "nominal_size_frac": "6-3/4W x 1/2H x 1-5/8D",
+   "uv": {
+    "charts": 14,
+    "uv_mm_per_unit": 174.45,
+    "margin_mm": 1.5
+   },
+   "mount": {
+    "post_status": [
+     "panel",
+     "panel"
+    ],
+    "bar_within_front": true,
+    "spec_mount_face_in": 24.75,
+    "contact_surface_in": 24.5,
+    "surface": "recessed_panel",
+    "offset_from_spec_mm": -6.35
+   },
+   "mesh": {
+    "vertices": 28,
+    "faces": 52,
+    "volume_mm3": 26500.9551,
+    "watertight": true
+   }
+  },
+  {
+   "id": "tall_cabinet_01",
+   "label": "L-run pantry 21in x 96-1/2in (measured 20.98 wide, 99.13 incl. cap)",
+   "category": "tall_cabinet",
+   "layer": "cabinets",
+   "run": "L",
+   "type": "carcass",
+   "parent": null,
+   "children": [
+    "door_09",
+    "door_10"
+   ],
+   "files": {
+    "obj": "components/tall_cabinet_01.obj",
+    "stl": "components/tall_cabinet_01.stl"
+   },
+   "material_slots": [
+    "mat_cabinet_primary"
+   ],
+   "material_default": "mat_cabinet_primary",
+   "pivot": {
+    "type": "rear_bottom_left_corner",
+    "world_position_mm": [
+     2828.925,
+     -9.525,
+     0.0
+    ]
+   },
+   "transform_local_to_world": [
+    [
+     -1.0,
+     0.0,
+     0.0,
+     2828.925
+    ],
+    [
+     0.0,
+     0.0,
+     1.0,
+     -9.525
+    ],
+    [
+     0.0,
+     1.0,
+     0.0,
+     0.0
+    ],
+    [
+     0.0,
+     0.0,
+     0.0,
+     1.0
+    ]
+   ],
+   "local_bounds_mm": {
+    "min": [
+     0.0,
+     0.0,
+     0.0
+    ],
+    "max": [
+     533.4,
+     2451.1,
+     612.775
+    ]
+   },
+   "obb": {
+    "width_mm": 533.3999999999996,
+    "height_mm": 2451.1,
+    "depth_mm": 612.775,
+    "center_world_mm": [
+     2562.225,
+     296.8625,
+     1225.55
+    ],
+    "axes": [
+     [
+      -1.0,
+      0.0,
+      0.0
+     ],
+     [
+      0.0,
+      0.0,
+      1.0
+     ],
+     [
+      0.0,
+      1.0,
+      0.0
+     ]
+    ],
+    "method": "local_aabb (trimesh OBB volume equal within 1e-6)",
+    "transform": [
+     [
+      -1.0,
+      0.0,
+      0.0,
+      2562.225
+     ],
+     [
+      0.0,
+      0.0,
+      1.0,
+      296.8625
+     ],
+     [
+      0.0,
+      1.0,
+      0.0,
+      1225.55
+     ],
+     [
+      0.0,
+      0.0,
+      0.0,
+      1.0
+     ]
+    ]
+   },
+   "nominal_size_in": "21W x 96.5H x 24.125D",
+   "nominal_size_frac": "21W x 96-1/2H x 24-1/8D",
+   "uv": {
+    "charts": 8,
+    "uv_mm_per_unit": 3032.811418,
+    "margin_mm": 15.0455
+   },
+   "mesh": {
+    "vertices": 12,
+    "faces": 20,
+    "volume_mm3": 796377512.0805,
+    "watertight": true
+   }
+  },
+  {
+   "id": "door_09",
+   "label": "pantry lower door",
+   "category": "door",
+   "layer": "cabinets",
+   "run": "L",
+   "type": "shaker_front",
+   "parent": "tall_cabinet_01",
+   "children": [
+    "hardware_handle_18"
+   ],
+   "files": {
+    "obj": "components/door_09.obj",
+    "stl": "components/door_09.stl"
+   },
+   "material_slots": [
+    "mat_cabinet_primary"
+   ],
+   "material_default": "mat_cabinet_primary",
+   "pivot": {
+    "type": "hinge_axis_front_face",
+    "world_position_mm": [
+     2827.3375,
+     622.3,
+     117.475
+    ]
+   },
+   "transform_local_to_world": [
+    [
+     -1.0,
+     0.0,
+     0.0,
+     2827.3375
+    ],
+    [
+     0.0,
+     0.0,
+     1.0,
+     622.3
+    ],
+    [
+     0.0,
+     1.0,
+     0.0,
+     117.475
+    ],
+    [
+     0.0,
+     0.0,
+     0.0,
+     1.0
+    ]
+   ],
+   "local_bounds_mm": {
+    "min": [
+     0.0,
+     0.0,
+     -19.05
+    ],
+    "max": [
+     530.225,
+     1524.0,
+     0.0
+    ]
+   },
+   "obb": {
+    "width_mm": 530.2249999999999,
+    "height_mm": 1524.0,
+    "depth_mm": 19.049999999999955,
+    "center_world_mm": [
+     2562.225,
+     612.775,
+     879.475
+    ],
+    "axes": [
+     [
+      -1.0,
+      0.0,
+      0.0
+     ],
+     [
+      0.0,
+      0.0,
+      1.0
+     ],
+     [
+      0.0,
+      1.0,
+      0.0
+     ]
+    ],
+    "method": "local_aabb (trimesh OBB volume equal within 1e-6)",
+    "transform": [
+     [
+      -1.0,
+      0.0,
+      0.0,
+      2562.225
+     ],
+     [
+      0.0,
+      0.0,
+      1.0,
+      612.775
+     ],
+     [
+      0.0,
+      1.0,
+      0.0,
+      879.475
+     ],
+     [
+      0.0,
+      0.0,
+      0.0,
+      1.0
+     ]
+    ]
+   },
+   "nominal_size_in": "20.875W x 60H x 0.75D",
+   "nominal_size_frac": "20-7/8W x 60H x 3/4D",
+   "uv": {
+    "charts": 11,
+    "uv_mm_per_unit": 1636.815209,
+    "margin_mm": 9.1344
+   },
+   "door_swing": {
+    "hinge_side": "left",
+    "axis_local": [
+     0,
+     1,
+     0
+    ],
+    "axis_world": [
+     0.0,
+     0.0,
+     1.0
+    ],
+    "axis_point_world_mm": [
+     2827.3375,
+     622.3,
+     117.475
+    ],
+    "open_angle_deg": -110.0,
+    "convention": "right-hand rotation about local +Y through the pivot (hinge line on the front face)",
+    "max_open_deg": 110,
+    "first_collision": null,
+    "sweep": "door + pulls vs all other fabrication parts, 5 deg steps, cap 110, flag > 1.0 mm3",
+    "verified": {
+     "free_edge_mean_z_mm_at_open": 501.506,
+     "free_edge_mean_z_mm_opposite_sign": -494.991,
+     "opens_toward_plus_z": true
+    }
+   },
+   "mesh": {
+    "vertices": 16,
+    "faces": 28,
+    "volume_mm3": 11670406.0946,
+    "watertight": true
+   }
+  },
+  {
+   "id": "hardware_handle_18",
+   "label": "10.00in bar pull",
+   "category": "hardware_handle",
+   "layer": "hardware",
+   "run": "L",
+   "type": "bar_pull",
+   "parent": "door_09",
+   "children": [],
+   "files": {
+    "obj": "components/hardware_handle_18.obj",
+    "stl": "components/hardware_handle_18.stl"
+   },
+   "material_slots": [
+    "mat_hardware_finish"
+   ],
+   "material_default": "mat_hardware_finish",
+   "pivot": {
+    "type": "mounting_footprint_center_on_parent_front",
+    "world_position_mm": [
+     2341.5625,
+     622.3,
+     1225.55
+    ]
+   },
+   "transform_local_to_world": [
+    [
+     -1.0,
+     0.0,
+     0.0,
+     2341.5625
+    ],
+    [
+     0.0,
+     0.0,
+     1.0,
+     622.3
+    ],
+    [
+     0.0,
+     1.0,
+     0.0,
+     1225.55
+    ],
+    [
+     0.0,
+     0.0,
+     0.0,
+     1.0
+    ]
+   ],
+   "local_bounds_mm": {
+    "min": [
+     -6.35,
+     -127.0,
+     0.0
+    ],
+    "max": [
+     6.35,
+     127.0,
+     41.275
+    ]
+   },
+   "obb": {
+    "width_mm": 12.699999999999818,
+    "height_mm": 254.0,
+    "depth_mm": 41.27499999999998,
+    "center_world_mm": [
+     2341.5625,
+     642.9375,
+     1225.55
+    ],
+    "axes": [
+     [
+      -1.0,
+      0.0,
+      0.0
+     ],
+     [
+      0.0,
+      0.0,
+      1.0
+     ],
+     [
+      0.0,
+      1.0,
+      0.0
+     ]
+    ],
+    "method": "local_aabb (trimesh OBB volume equal within 1e-6)",
+    "transform": [
+     [
+      -1.0,
+      0.0,
+      0.0,
+      2341.5625
+     ],
+     [
+      0.0,
+      0.0,
+      1.0,
+      642.9375
+     ],
+     [
+      0.0,
+      1.0,
+      0.0,
+      1225.55
+     ],
+     [
+      0.0,
+      0.0,
+      0.0,
+      1.0
+     ]
+    ]
+   },
+   "nominal_size_in": "0.5W x 10H x 1.625D",
+   "nominal_size_frac": "1/2W x 10H x 1-5/8D",
+   "uv": {
+    "charts": 14,
+    "uv_mm_per_unit": 257.45,
+    "margin_mm": 1.5
+   },
+   "mount": {
+    "post_status": [
+     "frame",
+     "frame"
+    ],
+    "bar_within_front": true,
+    "spec_mount_face_in": 24.5,
+    "contact_surface_in": 24.5,
+    "surface": "frame_face",
+    "offset_from_spec_mm": 0.0
+   },
+   "mesh": {
+    "vertices": 24,
+    "faces": 44,
+    "volume_mm3": 36486.8222,
+    "watertight": true
+   }
+  },
+  {
+   "id": "door_10",
+   "label": "pantry upper door",
+   "category": "door",
+   "layer": "cabinets",
+   "run": "L",
+   "type": "shaker_front",
+   "parent": "tall_cabinet_01",
+   "children": [
+    "hardware_handle_19"
+   ],
+   "files": {
+    "obj": "components/door_10.obj",
+    "stl": "components/door_10.stl"
+   },
+   "material_slots": [
+    "mat_cabinet_primary"
+   ],
+   "material_default": "mat_cabinet_primary",
+   "pivot": {
+    "type": "hinge_axis_front_face",
+    "world_position_mm": [
+     2827.3375,
+     622.3,
+     1644.65
+    ]
+   },
+   "transform_local_to_world": [
+    [
+     -1.0,
+     0.0,
+     0.0,
+     2827.3375
+    ],
+    [
+     0.0,
+     0.0,
+     1.0,
+     622.3
+    ],
+    [
+     0.0,
+     1.0,
+     0.0,
+     1644.65
+    ],
+    [
+     0.0,
+     0.0,
+     0.0,
+     1.0
+    ]
+   ],
+   "local_bounds_mm": {
+    "min": [
+     0.0,
+     0.0,
+     -19.05
+    ],
+    "max": [
+     530.225,
+     804.8625,
+     0.0
+    ]
+   },
+   "obb": {
+    "width_mm": 530.2249999999999,
+    "height_mm": 804.8625,
+    "depth_mm": 19.049999999999955,
+    "center_world_mm": [
+     2562.225,
+     612.775,
+     2047.08125
+    ],
+    "axes": [
+     [
+      -1.0,
+      0.0,
+      0.0
+     ],
+     [
+      0.0,
+      0.0,
+      1.0
+     ],
+     [
+      0.0,
+      1.0,
+      0.0
+     ]
+    ],
+    "method": "local_aabb (trimesh OBB volume equal within 1e-6)",
+    "transform": [
+     [
+      -1.0,
+      0.0,
+      0.0,
+      2562.225
+     ],
+     [
+      0.0,
+      0.0,
+      1.0,
+      612.775
+     ],
+     [
+      0.0,
+      1.0,
+      0.0,
+      2047.08125
+     ],
+     [
+      0.0,
+      0.0,
+      0.0,
+      1.0
+     ]
+    ]
+   },
+   "nominal_size_in": "20.875W x 31.6875H x 0.75D",
+   "nominal_size_frac": "20-7/8W x 31-11/16H x 3/4D",
+   "uv": {
+    "charts": 11,
+    "uv_mm_per_unit": 1529.225408,
+    "margin_mm": 6.6121
+   },
+   "door_swing": {
+    "hinge_side": "left",
+    "axis_local": [
+     0,
+     1,
+     0
+    ],
+    "axis_world": [
+     0.0,
+     0.0,
+     1.0
+    ],
+    "axis_point_world_mm": [
+     2827.3375,
+     622.3,
+     1644.65
+    ],
+    "open_angle_deg": -110.0,
+    "convention": "right-hand rotation about local +Y through the pivot (hinge line on the front face)",
+    "max_open_deg": 110,
+    "first_collision": null,
+    "sweep": "door + pulls vs all other fabrication parts, 5 deg steps, cap 110, flag > 1.0 mm3",
+    "verified": {
+     "free_edge_mean_z_mm_at_open": 501.506,
+     "free_edge_mean_z_mm_opposite_sign": -494.991,
+     "opens_toward_plus_z": true
+    }
+   },
+   "mesh": {
+    "vertices": 16,
+    "faces": 28,
+    "volume_mm3": 6305883.0535,
+    "watertight": true
+   }
+  },
+  {
+   "id": "hardware_handle_19",
+   "label": "6.75in bar pull",
+   "category": "hardware_handle",
+   "layer": "hardware",
+   "run": "L",
+   "type": "bar_pull",
+   "parent": "door_10",
+   "children": [],
+   "files": {
+    "obj": "components/hardware_handle_19.obj",
+    "stl": "components/hardware_handle_19.stl"
+   },
+   "material_slots": [
+    "mat_hardware_finish"
+   ],
+   "material_default": "mat_hardware_finish",
+   "pivot": {
+    "type": "mounting_footprint_center_on_parent_front",
+    "world_position_mm": [
+     2341.5625,
+     622.3,
+     1793.875
+    ]
+   },
+   "transform_local_to_world": [
+    [
+     -1.0,
+     0.0,
+     0.0,
+     2341.5625
+    ],
+    [
+     0.0,
+     0.0,
+     1.0,
+     622.3
+    ],
+    [
+     0.0,
+     1.0,
+     0.0,
+     1793.875
+    ],
+    [
+     0.0,
+     0.0,
+     0.0,
+     1.0
+    ]
+   ],
+   "local_bounds_mm": {
+    "min": [
+     -6.35,
+     -85.725,
+     0.0
+    ],
+    "max": [
+     6.35,
+     85.725,
+     41.275
+    ]
+   },
+   "obb": {
+    "width_mm": 12.699999999999818,
+    "height_mm": 171.44999999999982,
+    "depth_mm": 41.27499999999998,
+    "center_world_mm": [
+     2341.5625,
+     642.9375,
+     1793.875
+    ],
+    "axes": [
+     [
+      -1.0,
+      0.0,
+      0.0
+     ],
+     [
+      0.0,
+      0.0,
+      1.0
+     ],
+     [
+      0.0,
+      1.0,
+      0.0
+     ]
+    ],
+    "method": "local_aabb (trimesh OBB volume equal within 1e-6)",
+    "transform": [
+     [
+      -1.0,
+      0.0,
+      0.0,
+      2341.5625
+     ],
+     [
+      0.0,
+      0.0,
+      1.0,
+      642.9375
+     ],
+     [
+      0.0,
+      1.0,
+      0.0,
+      1793.875
+     ],
+     [
+      0.0,
+      0.0,
+      0.0,
+      1.0
+     ]
+    ]
+   },
+   "nominal_size_in": "0.5W x 6.75H x 1.625D",
+   "nominal_size_frac": "1/2W x 6-3/4H x 1-5/8D",
+   "uv": {
+    "charts": 14,
+    "uv_mm_per_unit": 185.475,
+    "margin_mm": 1.5
+   },
+   "mount": {
+    "post_status": [
+     "frame",
+     "frame"
+    ],
+    "bar_within_front": true,
+    "spec_mount_face_in": 24.5,
+    "contact_surface_in": 24.5,
+    "surface": "frame_face",
+    "offset_from_spec_mm": 0.0
+   },
+   "mesh": {
+    "vertices": 24,
+    "faces": 44,
+    "volume_mm3": 26500.9551,
+    "watertight": true
+   }
+  },
+  {
+   "id": "upper_cabinet_04",
+   "label": "L-run 24in blind-corner upper x 42in (+3/8in scribe to W2 drywall)",
+   "category": "upper_cabinet",
+   "layer": "cabinets",
+   "run": "L",
+   "type": "carcass",
+   "parent": null,
+   "children": [
+    "door_11"
+   ],
+   "files": {
+    "obj": "components/upper_cabinet_04.obj",
+    "stl": "components/upper_cabinet_04.stl"
+   },
+   "material_slots": [
+    "mat_cabinet_primary"
+   ],
+   "material_default": "mat_cabinet_primary",
+   "pivot": {
+    "type": "rear_bottom_left_corner",
+    "world_position_mm": [
+     609.6,
+     -9.525,
+     1400.175
+    ]
+   },
+   "transform_local_to_world": [
+    [
+     -1.0,
+     0.0,
+     0.0,
+     609.6
+    ],
+    [
+     0.0,
+     0.0,
+     1.0,
+     -9.525
+    ],
+    [
+     0.0,
+     1.0,
+     0.0,
+     1400.175
+    ],
+    [
+     0.0,
+     0.0,
+     0.0,
+     1.0
+    ]
+   ],
+   "local_bounds_mm": {
+    "min": [
+     0.0,
+     0.0,
+     0.0
+    ],
+    "max": [
+     619.125,
+     1066.8,
+     305.435
+    ]
+   },
+   "obb": {
+    "width_mm": 619.1249999999999,
+    "height_mm": 1066.8,
+    "depth_mm": 305.43499999999995,
+    "center_world_mm": [
+     300.0375,
+     143.1925,
+     1933.575
+    ],
+    "axes": [
+     [
+      -1.0,
+      0.0,
+      0.0
+     ],
+     [
+      0.0,
+      0.0,
+      1.0
+     ],
+     [
+      0.0,
+      1.0,
+      0.0
+     ]
+    ],
+    "method": "local_aabb (trimesh OBB volume equal within 1e-6)",
+    "transform": [
+     [
+      -1.0,
+      0.0,
+      0.0,
+      300.0375
+     ],
+     [
+      0.0,
+      0.0,
+      1.0,
+      143.1925
+     ],
+     [
+      0.0,
+      1.0,
+      0.0,
+      1933.575
+     ],
+     [
+      0.0,
+      0.0,
+      0.0,
+      1.0
+     ]
+    ]
+   },
+   "nominal_size_in": "24.375W x 42H x 12.025D",
+   "nominal_size_frac": "24-3/8W x 42H x 12.025D",
+   "uv": {
+    "charts": 6,
+    "uv_mm_per_unit": 1897.733838,
+    "margin_mm": 9.2151
+   },
+   "mesh": {
+    "vertices": 8,
+    "faces": 12,
+    "volume_mm3": 201734487.6592,
+    "watertight": true
+   }
+  },
+  {
+   "id": "door_11",
+   "label": "blind-corner door (visible portion)",
+   "category": "door",
+   "layer": "cabinets",
+   "run": "L",
+   "type": "shaker_front",
+   "parent": "upper_cabinet_04",
+   "children": [
+    "hardware_handle_20"
+   ],
+   "files": {
+    "obj": "components/door_11.obj",
+    "stl": "components/door_11.stl"
+   },
+   "material_slots": [
+    "mat_cabinet_primary"
+   ],
+   "material_default": "mat_cabinet_primary",
+   "pivot": {
+    "type": "hinge_axis_front_face",
+    "world_position_mm": [
+     327.025,
+     314.96,
+     1401.7625
+    ]
+   },
+   "transform_local_to_world": [
+    [
+     -1.0,
+     0.0,
+     0.0,
+     327.025
+    ],
+    [
+     0.0,
+     0.0,
+     1.0,
+     314.96
+    ],
+    [
+     0.0,
+     1.0,
+     0.0,
+     1401.7625
+    ],
+    [
+     0.0,
+     0.0,
+     0.0,
+     1.0
+    ]
+   ],
+   "local_bounds_mm": {
+    "min": [
+     -280.9875,
+     0.0,
+     -19.05
+    ],
+    "max": [
+     0.0,
+     1063.625,
+     0.0
+    ]
+   },
+   "obb": {
+    "width_mm": 280.98749999999995,
+    "height_mm": 1063.625,
+    "depth_mm": 19.05000000000001,
+    "center_world_mm": [
+     467.51875,
+     305.435,
+     1933.575
+    ],
+    "axes": [
+     [
+      -1.0,
+      0.0,
+      0.0
+     ],
+     [
+      0.0,
+      0.0,
+      1.0
+     ],
+     [
+      0.0,
+      1.0,
+      0.0
+     ]
+    ],
+    "method": "local_aabb (trimesh OBB volume equal within 1e-6)",
+    "transform": [
+     [
+      -1.0,
+      0.0,
+      0.0,
+      467.51875
+     ],
+     [
+      0.0,
+      0.0,
+      1.0,
+      305.435
+     ],
+     [
+      0.0,
+      1.0,
+      0.0,
+      1933.575
+     ],
+     [
+      0.0,
+      0.0,
+      0.0,
+      1.0
+     ]
+    ]
+   },
+   "nominal_size_in": "11.0625W x 41.875H x 0.75D",
+   "nominal_size_frac": "11-1/16W x 41-7/8H x 3/4D",
+   "uv": {
+    "charts": 11,
+    "uv_mm_per_unit": 1099.075889,
+    "margin_mm": 5.467
+   },
+   "door_swing": {
+    "hinge_side": "right",
+    "axis_local": [
+     0,
+     1,
+     0
+    ],
+    "axis_world": [
+     0.0,
+     0.0,
+     1.0
+    ],
+    "axis_point_world_mm": [
+     327.025,
+     314.96,
+     1401.7625
+    ],
+    "open_angle_deg": 110.0,
+    "convention": "right-hand rotation about local +Y through the pivot (hinge line on the front face)",
+    "max_open_deg": 80,
+    "first_collision": {
+     "angle_deg": 85,
+     "parts": [
+      "door_02"
+     ],
+     "intersection_mm3": {
+      "door_02": 21003.645
+     }
+    },
+    "sweep": "door + pulls vs all other fabrication parts, 5 deg steps, cap 110, flag > 1.0 mm3",
+    "verified": {
+     "free_edge_mean_z_mm_at_open": 267.3,
+     "free_edge_mean_z_mm_opposite_sign": -260.784,
+     "opens_toward_plus_z": true
+    }
+   },
+   "mesh": {
+    "vertices": 16,
+    "faces": 28,
+    "volume_mm3": 4688556.6511,
+    "watertight": true
+   }
+  },
+  {
+   "id": "hardware_handle_20",
+   "label": "6.75in bar pull",
+   "category": "hardware_handle",
+   "layer": "hardware",
+   "run": "L",
+   "type": "bar_pull",
+   "parent": "door_11",
+   "children": [],
+   "files": {
+    "obj": "components/hardware_handle_20.obj",
+    "stl": "components/hardware_handle_20.stl"
+   },
+   "material_slots": [
+    "mat_hardware_finish"
+   ],
+   "material_default": "mat_hardware_finish",
+   "pivot": {
+    "type": "mounting_footprint_center_on_parent_front",
+    "world_position_mm": [
+     563.5625,
+     314.96,
+     1550.9875
+    ]
+   },
+   "transform_local_to_world": [
+    [
+     -1.0,
+     0.0,
+     0.0,
+     563.5625
+    ],
+    [
+     0.0,
+     0.0,
+     1.0,
+     314.96
+    ],
+    [
+     0.0,
+     1.0,
+     0.0,
+     1550.9875
+    ],
+    [
+     0.0,
+     0.0,
+     0.0,
+     1.0
+    ]
+   ],
+   "local_bounds_mm": {
+    "min": [
+     -6.35,
+     -85.725,
+     0.0
+    ],
+    "max": [
+     6.35,
+     85.725,
+     41.275
+    ]
+   },
+   "obb": {
+    "width_mm": 12.700000000000045,
+    "height_mm": 171.44999999999982,
+    "depth_mm": 41.27499999999998,
+    "center_world_mm": [
+     563.5625,
+     335.5975,
+     1550.9875
+    ],
+    "axes": [
+     [
+      -1.0,
+      0.0,
+      0.0
+     ],
+     [
+      0.0,
+      0.0,
+      1.0
+     ],
+     [
+      0.0,
+      1.0,
+      0.0
+     ]
+    ],
+    "method": "local_aabb (trimesh OBB volume equal within 1e-6)",
+    "transform": [
+     [
+      -1.0,
+      0.0,
+      0.0,
+      563.5625
+     ],
+     [
+      0.0,
+      0.0,
+      1.0,
+      335.5975
+     ],
+     [
+      0.0,
+      1.0,
+      0.0,
+      1550.9875
+     ],
+     [
+      0.0,
+      0.0,
+      0.0,
+      1.0
+     ]
+    ]
+   },
+   "nominal_size_in": "0.5W x 6.75H x 1.625D",
+   "nominal_size_frac": "1/2W x 6-3/4H x 1-5/8D",
+   "uv": {
+    "charts": 14,
+    "uv_mm_per_unit": 185.475,
+    "margin_mm": 1.5
+   },
+   "mount": {
+    "post_status": [
+     "frame",
+     "frame"
+    ],
+    "bar_within_front": true,
+    "spec_mount_face_in": 12.4,
+    "contact_surface_in": 12.4,
+    "surface": "frame_face",
+    "offset_from_spec_mm": 0.0
+   },
+   "mesh": {
+    "vertices": 24,
+    "faces": 44,
+    "volume_mm3": 26500.9551,
+    "watertight": true
+   }
+  },
+  {
+   "id": "upper_cabinet_05",
+   "label": "L-run 18in x 42in upper",
+   "category": "upper_cabinet",
+   "layer": "cabinets",
+   "run": "L",
+   "type": "carcass",
+   "parent": null,
+   "children": [
+    "door_12"
+   ],
+   "files": {
+    "obj": "components/upper_cabinet_05.obj",
+    "stl": "components/upper_cabinet_05.stl"
+   },
+   "material_slots": [
+    "mat_cabinet_primary"
+   ],
+   "material_default": "mat_cabinet_primary",
+   "pivot": {
+    "type": "rear_bottom_left_corner",
+    "world_position_mm": [
+     1066.8,
+     -9.525,
+     1400.175
+    ]
+   },
+   "transform_local_to_world": [
+    [
+     -1.0,
+     0.0,
+     0.0,
+     1066.8
+    ],
+    [
+     0.0,
+     0.0,
+     1.0,
+     -9.525
+    ],
+    [
+     0.0,
+     1.0,
+     0.0,
+     1400.175
+    ],
+    [
+     0.0,
+     0.0,
+     0.0,
+     1.0
+    ]
+   ],
+   "local_bounds_mm": {
+    "min": [
+     0.0,
+     0.0,
+     0.0
+    ],
+    "max": [
+     457.2,
+     1066.8,
+     305.435
+    ]
+   },
+   "obb": {
+    "width_mm": 457.20000000000005,
+    "height_mm": 1066.8,
+    "depth_mm": 305.43499999999995,
+    "center_world_mm": [
+     838.2,
+     143.1925,
+     1933.575
+    ],
+    "axes": [
+     [
+      -1.0,
+      0.0,
+      0.0
+     ],
+     [
+      0.0,
+      0.0,
+      1.0
+     ],
+     [
+      0.0,
+      1.0,
+      0.0
+     ]
+    ],
+    "method": "local_aabb (trimesh OBB volume equal within 1e-6)",
+    "transform": [
+     [
+      -1.0,
+      0.0,
+      0.0,
+      838.2
+     ],
+     [
+      0.0,
+      0.0,
+      1.0,
+      143.1925
+     ],
+     [
+      0.0,
+      1.0,
+      0.0,
+      1933.575
+     ],
+     [
+      0.0,
+      0.0,
+      0.0,
+      1.0
+     ]
+    ]
+   },
+   "nominal_size_in": "18W x 42H x 12.025D",
+   "nominal_size_frac": "18W x 42H x 12.025D",
+   "uv": {
+    "charts": 6,
+    "uv_mm_per_unit": 1594.920455,
+    "margin_mm": 8.3003
+   },
+   "mesh": {
+    "vertices": 8,
+    "faces": 12,
+    "volume_mm3": 148973160.1176,
+    "watertight": true
+   }
+  },
+  {
+   "id": "door_12",
+   "label": "single door",
+   "category": "door",
+   "layer": "cabinets",
+   "run": "L",
+   "type": "shaker_front",
+   "parent": "upper_cabinet_05",
+   "children": [
+    "hardware_handle_21"
+   ],
+   "files": {
+    "obj": "components/door_12.obj",
+    "stl": "components/door_12.stl"
+   },
+   "material_slots": [
+    "mat_cabinet_primary"
+   ],
+   "material_default": "mat_cabinet_primary",
+   "pivot": {
+    "type": "hinge_axis_front_face",
+    "world_position_mm": [
+     611.1875,
+     314.96,
+     1401.7625
+    ]
+   },
+   "transform_local_to_world": [
+    [
+     -1.0,
+     0.0,
+     0.0,
+     611.1875
+    ],
+    [
+     0.0,
+     0.0,
+     1.0,
+     314.96
+    ],
+    [
+     0.0,
+     1.0,
+     0.0,
+     1401.7625
+    ],
+    [
+     0.0,
+     0.0,
+     0.0,
+     1.0
+    ]
+   ],
+   "local_bounds_mm": {
+    "min": [
+     -454.025,
+     0.0,
+     -19.05
+    ],
+    "max": [
+     0.0,
+     1063.625,
+     0.0
+    ]
+   },
+   "obb": {
+    "width_mm": 454.02499999999986,
+    "height_mm": 1063.625,
+    "depth_mm": 19.05000000000001,
+    "center_world_mm": [
+     838.2,
+     305.435,
+     1933.575
+    ],
+    "axes": [
+     [
+      -1.0,
+      0.0,
+      0.0
+     ],
+     [
+      0.0,
+      0.0,
+      1.0
+     ],
+     [
+      0.0,
+      1.0,
+      0.0
+     ]
+    ],
+    "method": "local_aabb (trimesh OBB volume equal within 1e-6)",
+    "transform": [
+     [
+      -1.0,
+      0.0,
+      0.0,
+      838.2
+     ],
+     [
+      0.0,
+      0.0,
+      1.0,
+      305.435
+     ],
+     [
+      0.0,
+      1.0,
+      0.0,
+      1933.575
+     ],
+     [
+      0.0,
+      0.0,
+      0.0,
+      1.0
+     ]
+    ]
+   },
+   "nominal_size_in": "17.875W x 41.875H x 0.75D",
+   "nominal_size_frac": "17-7/8W x 41-7/8H x 3/4D",
+   "uv": {
+    "charts": 11,
+    "uv_mm_per_unit": 1385.576377,
+    "margin_mm": 7.0294
+   },
+   "door_swing": {
+    "hinge_side": "right",
+    "axis_local": [
+     0,
+     1,
+     0
+    ],
+    "axis_world": [
+     0.0,
+     0.0,
+     1.0
+    ],
+    "axis_point_world_mm": [
+     611.1875,
+     314.96,
+     1401.7625
+    ],
+    "open_angle_deg": 110.0,
+    "convention": "right-hand rotation about local +Y through the pivot (hinge line on the front face)",
+    "max_open_deg": 110,
+    "first_collision": null,
+    "sweep": "door + pulls vs all other fabrication parts, 5 deg steps, cap 110, flag > 1.0 mm3",
+    "verified": {
+     "free_edge_mean_z_mm_at_open": 429.902,
+     "free_edge_mean_z_mm_opposite_sign": -423.386,
+     "opens_toward_plus_z": true
+    }
+   },
+   "mesh": {
+    "vertices": 16,
+    "faces": 28,
+    "volume_mm3": 7151545.1727,
+    "watertight": true
+   }
+  },
+  {
+   "id": "hardware_handle_21",
+   "label": "6.75in bar pull",
+   "category": "hardware_handle",
+   "layer": "hardware",
+   "run": "L",
+   "type": "bar_pull",
+   "parent": "door_12",
+   "children": [],
+   "files": {
+    "obj": "components/hardware_handle_21.obj",
+    "stl": "components/hardware_handle_21.stl"
+   },
+   "material_slots": [
+    "mat_hardware_finish"
+   ],
+   "material_default": "mat_hardware_finish",
+   "pivot": {
+    "type": "mounting_footprint_center_on_parent_front",
+    "world_position_mm": [
+     1020.7625,
+     314.96,
+     1550.9875
+    ]
+   },
+   "transform_local_to_world": [
+    [
+     -1.0,
+     0.0,
+     0.0,
+     1020.7625
+    ],
+    [
+     0.0,
+     0.0,
+     1.0,
+     314.96
+    ],
+    [
+     0.0,
+     1.0,
+     0.0,
+     1550.9875
+    ],
+    [
+     0.0,
+     0.0,
+     0.0,
+     1.0
+    ]
+   ],
+   "local_bounds_mm": {
+    "min": [
+     -6.35,
+     -85.725,
+     0.0
+    ],
+    "max": [
+     6.35,
+     85.725,
+     41.275
+    ]
+   },
+   "obb": {
+    "width_mm": 12.700000000000045,
+    "height_mm": 171.44999999999982,
+    "depth_mm": 41.27499999999998,
+    "center_world_mm": [
+     1020.7625,
+     335.5975,
+     1550.9875
+    ],
+    "axes": [
+     [
+      -1.0,
+      0.0,
+      0.0
+     ],
+     [
+      0.0,
+      0.0,
+      1.0
+     ],
+     [
+      0.0,
+      1.0,
+      0.0
+     ]
+    ],
+    "method": "local_aabb (trimesh OBB volume equal within 1e-6)",
+    "transform": [
+     [
+      -1.0,
+      0.0,
+      0.0,
+      1020.7625
+     ],
+     [
+      0.0,
+      0.0,
+      1.0,
+      335.5975
+     ],
+     [
+      0.0,
+      1.0,
+      0.0,
+      1550.9875
+     ],
+     [
+      0.0,
+      0.0,
+      0.0,
+      1.0
+     ]
+    ]
+   },
+   "nominal_size_in": "0.5W x 6.75H x 1.625D",
+   "nominal_size_frac": "1/2W x 6-3/4H x 1-5/8D",
+   "uv": {
+    "charts": 14,
+    "uv_mm_per_unit": 185.475,
+    "margin_mm": 1.5
+   },
+   "mount": {
+    "post_status": [
+     "frame",
+     "frame"
+    ],
+    "bar_within_front": true,
+    "spec_mount_face_in": 12.4,
+    "contact_surface_in": 12.4,
+    "surface": "frame_face",
+    "offset_from_spec_mm": 0.0
+   },
+   "mesh": {
+    "vertices": 24,
+    "faces": 44,
+    "volume_mm3": 26500.9551,
+    "watertight": true
+   }
+  },
+  {
+   "id": "upper_cabinet_06",
+   "label": "L-run 30in x 30in double-door upper over sink",
+   "category": "upper_cabinet",
+   "layer": "cabinets",
+   "run": "L",
+   "type": "carcass",
+   "parent": null,
+   "children": [
+    "door_13",
+    "door_14"
+   ],
+   "files": {
+    "obj": "components/upper_cabinet_06.obj",
+    "stl": "components/upper_cabinet_06.stl"
+   },
+   "material_slots": [
+    "mat_cabinet_primary"
+   ],
+   "material_default": "mat_cabinet_primary",
+   "pivot": {
+    "type": "rear_bottom_left_corner",
+    "world_position_mm": [
+     1828.8,
+     -9.525,
+     1704.975
+    ]
+   },
+   "transform_local_to_world": [
+    [
+     -1.0,
+     0.0,
+     0.0,
+     1828.8
+    ],
+    [
+     0.0,
+     0.0,
+     1.0,
+     -9.525
+    ],
+    [
+     0.0,
+     1.0,
+     0.0,
+     1704.975
+    ],
+    [
+     0.0,
+     0.0,
+     0.0,
+     1.0
+    ]
+   ],
+   "local_bounds_mm": {
+    "min": [
+     0.0,
+     0.0,
+     0.0
+    ],
+    "max": [
+     762.0,
+     762.0,
+     305.435
+    ]
+   },
+   "obb": {
+    "width_mm": 762.0,
+    "height_mm": 762.0,
+    "depth_mm": 305.43499999999995,
+    "center_world_mm": [
+     1447.8,
+     143.1925,
+     2085.975
+    ],
+    "axes": [
+     [
+      -1.0,
+      0.0,
+      0.0
+     ],
+     [
+      0.0,
+      0.0,
+      1.0
+     ],
+     [
+      0.0,
+      1.0,
+      0.0
+     ]
+    ],
+    "method": "local_aabb (trimesh OBB volume equal within 1e-6)",
+    "transform": [
+     [
+      -1.0,
+      0.0,
+      0.0,
+      1447.8
+     ],
+     [
+      0.0,
+      0.0,
+      1.0,
+      143.1925
+     ],
+     [
+      0.0,
+      1.0,
+      0.0,
+      2085.975
+     ],
+     [
+      0.0,
+      0.0,
+      0.0,
+      1.0
+     ]
+    ]
+   },
+   "nominal_size_in": "30W x 30H x 12.025D",
+   "nominal_size_frac": "30W x 30H x 12.025D",
+   "uv": {
+    "charts": 6,
+    "uv_mm_per_unit": 1864.210806,
+    "margin_mm": 8.694
+   },
+   "mesh": {
+    "vertices": 8,
+    "faces": 12,
+    "volume_mm3": 177349000.14,
+    "watertight": true
+   }
+  },
+  {
+   "id": "door_13",
+   "label": "leaf (viewer's right)",
+   "category": "door",
+   "layer": "cabinets",
+   "run": "L",
+   "type": "shaker_front",
+   "parent": "upper_cabinet_06",
+   "children": [
+    "hardware_handle_22"
+   ],
+   "files": {
+    "obj": "components/door_13.obj",
+    "stl": "components/door_13.stl"
+   },
+   "material_slots": [
+    "mat_cabinet_primary"
+   ],
+   "material_default": "mat_cabinet_primary",
+   "pivot": {
+    "type": "hinge_axis_front_face",
+    "world_position_mm": [
+     1068.3875,
+     314.96,
+     1706.5625
+    ]
+   },
+   "transform_local_to_world": [
+    [
+     -1.0,
+     0.0,
+     0.0,
+     1068.3875
+    ],
+    [
+     0.0,
+     0.0,
+     1.0,
+     314.96
+    ],
+    [
+     0.0,
+     1.0,
+     0.0,
+     1706.5625
+    ],
+    [
+     0.0,
+     0.0,
+     0.0,
+     1.0
+    ]
+   ],
+   "local_bounds_mm": {
+    "min": [
+     -377.825,
+     0.0,
+     -19.05
+    ],
+    "max": [
+     0.0,
+     758.825,
+     0.0
+    ]
+   },
+   "obb": {
+    "width_mm": 377.8249999999998,
+    "height_mm": 758.8249999999998,
+    "depth_mm": 19.05000000000001,
+    "center_world_mm": [
+     1257.3,
+     305.435,
+     2085.975
+    ],
+    "axes": [
+     [
+      -1.0,
+      0.0,
+      0.0
+     ],
+     [
+      0.0,
+      0.0,
+      1.0
+     ],
+     [
+      0.0,
+      1.0,
+      0.0
+     ]
+    ],
+    "method": "local_aabb (trimesh OBB volume equal within 1e-6)",
+    "transform": [
+     [
+      -1.0,
+      0.0,
+      0.0,
+      1257.3
+     ],
+     [
+      0.0,
+      0.0,
+      1.0,
+      305.435
+     ],
+     [
+      0.0,
+      1.0,
+      0.0,
+      2085.975
+     ],
+     [
+      0.0,
+      0.0,
+      0.0,
+      1.0
+     ]
+    ]
+   },
+   "nominal_size_in": "14.875W x 29.875H x 0.75D",
+   "nominal_size_frac": "14-7/8W x 29-7/8H x 3/4D",
+   "uv": {
+    "charts": 11,
+    "uv_mm_per_unit": 1136.883716,
+    "margin_mm": 5.3849
+   },
+   "door_swing": {
+    "hinge_side": "right",
+    "axis_local": [
+     0,
+     1,
+     0
+    ],
+    "axis_world": [
+     0.0,
+     0.0,
+     1.0
+    ],
+    "axis_point_world_mm": [
+     1068.3875,
+     314.96,
+     1706.5625
+    ],
+    "open_angle_deg": 110.0,
+    "convention": "right-hand rotation about local +Y through the pivot (hinge line on the front face)",
+    "max_open_deg": 110,
+    "first_collision": null,
+    "sweep": "door + pulls vs all other fabrication parts, 5 deg steps, cap 110, flag > 1.0 mm3",
+    "verified": {
+     "free_edge_mean_z_mm_at_open": 358.297,
+     "free_edge_mean_z_mm_opposite_sign": -351.782,
+     "opens_toward_plus_z": true
+    }
+   },
+   "mesh": {
+    "vertices": 16,
+    "faces": 28,
+    "volume_mm3": 4383155.5482,
+    "watertight": true
+   }
+  },
+  {
+   "id": "hardware_handle_22",
+   "label": "6.75in bar pull",
+   "category": "hardware_handle",
+   "layer": "hardware",
+   "run": "L",
+   "type": "bar_pull",
+   "parent": "door_13",
+   "children": [],
+   "files": {
+    "obj": "components/hardware_handle_22.obj",
+    "stl": "components/hardware_handle_22.stl"
+   },
+   "material_slots": [
+    "mat_hardware_finish"
+   ],
+   "material_default": "mat_hardware_finish",
+   "pivot": {
+    "type": "mounting_footprint_center_on_parent_front",
+    "world_position_mm": [
+     1401.7625,
+     314.96,
+     1855.7875
+    ]
+   },
+   "transform_local_to_world": [
+    [
+     -1.0,
+     0.0,
+     0.0,
+     1401.7625
+    ],
+    [
+     0.0,
+     0.0,
+     1.0,
+     314.96
+    ],
+    [
+     0.0,
+     1.0,
+     0.0,
+     1855.7875
+    ],
+    [
+     0.0,
+     0.0,
+     0.0,
+     1.0
+    ]
+   ],
+   "local_bounds_mm": {
+    "min": [
+     -6.35,
+     -85.725,
+     0.0
+    ],
+    "max": [
+     6.35,
+     85.725,
+     41.275
+    ]
+   },
+   "obb": {
+    "width_mm": 12.699999999999818,
+    "height_mm": 171.44999999999982,
+    "depth_mm": 41.27499999999998,
+    "center_world_mm": [
+     1401.7625,
+     335.5975,
+     1855.7875
+    ],
+    "axes": [
+     [
+      -1.0,
+      0.0,
+      0.0
+     ],
+     [
+      0.0,
+      0.0,
+      1.0
+     ],
+     [
+      0.0,
+      1.0,
+      0.0
+     ]
+    ],
+    "method": "local_aabb (trimesh OBB volume equal within 1e-6)",
+    "transform": [
+     [
+      -1.0,
+      0.0,
+      0.0,
+      1401.7625
+     ],
+     [
+      0.0,
+      0.0,
+      1.0,
+      335.5975
+     ],
+     [
+      0.0,
+      1.0,
+      0.0,
+      1855.7875
+     ],
+     [
+      0.0,
+      0.0,
+      0.0,
+      1.0
+     ]
+    ]
+   },
+   "nominal_size_in": "0.5W x 6.75H x 1.625D",
+   "nominal_size_frac": "1/2W x 6-3/4H x 1-5/8D",
+   "uv": {
+    "charts": 14,
+    "uv_mm_per_unit": 185.475,
+    "margin_mm": 1.5
+   },
+   "mount": {
+    "post_status": [
+     "frame",
+     "frame"
+    ],
+    "bar_within_front": true,
+    "spec_mount_face_in": 12.4,
+    "contact_surface_in": 12.4,
+    "surface": "frame_face",
+    "offset_from_spec_mm": 0.0
+   },
+   "mesh": {
+    "vertices": 24,
+    "faces": 44,
+    "volume_mm3": 26500.9551,
+    "watertight": true
+   }
+  },
+  {
+   "id": "door_14",
+   "label": "leaf (viewer's left)",
+   "category": "door",
+   "layer": "cabinets",
+   "run": "L",
+   "type": "shaker_front",
+   "parent": "upper_cabinet_06",
+   "children": [
+    "hardware_handle_23"
+   ],
+   "files": {
+    "obj": "components/door_14.obj",
+    "stl": "components/door_14.stl"
+   },
+   "material_slots": [
+    "mat_cabinet_primary"
+   ],
+   "material_default": "mat_cabinet_primary",
+   "pivot": {
+    "type": "hinge_axis_front_face",
+    "world_position_mm": [
+     1827.2125,
+     314.96,
+     1706.5625
+    ]
+   },
+   "transform_local_to_world": [
+    [
+     -1.0,
+     0.0,
+     0.0,
+     1827.2125
+    ],
+    [
+     0.0,
+     0.0,
+     1.0,
+     314.96
+    ],
+    [
+     0.0,
+     1.0,
+     0.0,
+     1706.5625
+    ],
+    [
+     0.0,
+     0.0,
+     0.0,
+     1.0
+    ]
+   ],
+   "local_bounds_mm": {
+    "min": [
+     0.0,
+     0.0,
+     -19.05
+    ],
+    "max": [
+     377.825,
+     758.825,
+     0.0
+    ]
+   },
+   "obb": {
+    "width_mm": 377.82500000000005,
+    "height_mm": 758.8249999999998,
+    "depth_mm": 19.05000000000001,
+    "center_world_mm": [
+     1638.3,
+     305.435,
+     2085.975
+    ],
+    "axes": [
+     [
+      -1.0,
+      0.0,
+      0.0
+     ],
+     [
+      0.0,
+      0.0,
+      1.0
+     ],
+     [
+      0.0,
+      1.0,
+      0.0
+     ]
+    ],
+    "method": "local_aabb (trimesh OBB volume equal within 1e-6)",
+    "transform": [
+     [
+      -1.0,
+      0.0,
+      0.0,
+      1638.3
+     ],
+     [
+      0.0,
+      0.0,
+      1.0,
+      305.435
+     ],
+     [
+      0.0,
+      1.0,
+      0.0,
+      2085.975
+     ],
+     [
+      0.0,
+      0.0,
+      0.0,
+      1.0
+     ]
+    ]
+   },
+   "nominal_size_in": "14.875W x 29.875H x 0.75D",
+   "nominal_size_frac": "14-7/8W x 29-7/8H x 3/4D",
+   "uv": {
+    "charts": 11,
+    "uv_mm_per_unit": 1136.883716,
+    "margin_mm": 5.3849
+   },
+   "door_swing": {
+    "hinge_side": "left",
+    "axis_local": [
+     0,
+     1,
+     0
+    ],
+    "axis_world": [
+     0.0,
+     0.0,
+     1.0
+    ],
+    "axis_point_world_mm": [
+     1827.2125,
+     314.96,
+     1706.5625
+    ],
+    "open_angle_deg": -110.0,
+    "convention": "right-hand rotation about local +Y through the pivot (hinge line on the front face)",
+    "max_open_deg": 110,
+    "first_collision": null,
+    "sweep": "door + pulls vs all other fabrication parts, 5 deg steps, cap 110, flag > 1.0 mm3",
+    "verified": {
+     "free_edge_mean_z_mm_at_open": 358.297,
+     "free_edge_mean_z_mm_opposite_sign": -351.782,
+     "opens_toward_plus_z": true
+    }
+   },
+   "mesh": {
+    "vertices": 16,
+    "faces": 28,
+    "volume_mm3": 4383155.5482,
+    "watertight": true
+   }
+  },
+  {
+   "id": "hardware_handle_23",
+   "label": "6.75in bar pull",
+   "category": "hardware_handle",
+   "layer": "hardware",
+   "run": "L",
+   "type": "bar_pull",
+   "parent": "door_14",
+   "children": [],
+   "files": {
+    "obj": "components/hardware_handle_23.obj",
+    "stl": "components/hardware_handle_23.stl"
+   },
+   "material_slots": [
+    "mat_hardware_finish"
+   ],
+   "material_default": "mat_hardware_finish",
+   "pivot": {
+    "type": "mounting_footprint_center_on_parent_front",
+    "world_position_mm": [
+     1493.8375,
+     314.96,
+     1855.7875
+    ]
+   },
+   "transform_local_to_world": [
+    [
+     -1.0,
+     0.0,
+     0.0,
+     1493.8375
+    ],
+    [
+     0.0,
+     0.0,
+     1.0,
+     314.96
+    ],
+    [
+     0.0,
+     1.0,
+     0.0,
+     1855.7875
+    ],
+    [
+     0.0,
+     0.0,
+     0.0,
+     1.0
+    ]
+   ],
+   "local_bounds_mm": {
+    "min": [
+     -6.35,
+     -85.725,
+     0.0
+    ],
+    "max": [
+     6.35,
+     85.725,
+     41.275
+    ]
+   },
+   "obb": {
+    "width_mm": 12.699999999999818,
+    "height_mm": 171.44999999999982,
+    "depth_mm": 41.27499999999998,
+    "center_world_mm": [
+     1493.8375,
+     335.5975,
+     1855.7875
+    ],
+    "axes": [
+     [
+      -1.0,
+      0.0,
+      0.0
+     ],
+     [
+      0.0,
+      0.0,
+      1.0
+     ],
+     [
+      0.0,
+      1.0,
+      0.0
+     ]
+    ],
+    "method": "local_aabb (trimesh OBB volume equal within 1e-6)",
+    "transform": [
+     [
+      -1.0,
+      0.0,
+      0.0,
+      1493.8375
+     ],
+     [
+      0.0,
+      0.0,
+      1.0,
+      335.5975
+     ],
+     [
+      0.0,
+      1.0,
+      0.0,
+      1855.7875
+     ],
+     [
+      0.0,
+      0.0,
+      0.0,
+      1.0
+     ]
+    ]
+   },
+   "nominal_size_in": "0.5W x 6.75H x 1.625D",
+   "nominal_size_frac": "1/2W x 6-3/4H x 1-5/8D",
+   "uv": {
+    "charts": 14,
+    "uv_mm_per_unit": 185.475,
+    "margin_mm": 1.5
+   },
+   "mount": {
+    "post_status": [
+     "frame",
+     "frame"
+    ],
+    "bar_within_front": true,
+    "spec_mount_face_in": 12.4,
+    "contact_surface_in": 12.4,
+    "surface": "frame_face",
+    "offset_from_spec_mm": 0.0
+   },
+   "mesh": {
+    "vertices": 24,
+    "faces": 44,
+    "volume_mm3": 26500.9551,
+    "watertight": true
+   }
+  },
+  {
+   "id": "upper_cabinet_07",
+   "label": "L-run 18in x 42in upper beside pantry",
+   "category": "upper_cabinet",
+   "layer": "cabinets",
+   "run": "L",
+   "type": "carcass",
+   "parent": null,
+   "children": [
+    "door_15"
+   ],
+   "files": {
+    "obj": "components/upper_cabinet_07.obj",
+    "stl": "components/upper_cabinet_07.stl"
+   },
+   "material_slots": [
+    "mat_cabinet_primary"
+   ],
+   "material_default": "mat_cabinet_primary",
+   "pivot": {
+    "type": "rear_bottom_left_corner",
+    "world_position_mm": [
+     2286.0,
+     -9.525,
+     1400.175
+    ]
+   },
+   "transform_local_to_world": [
+    [
+     -1.0,
+     0.0,
+     0.0,
+     2286.0
+    ],
+    [
+     0.0,
+     0.0,
+     1.0,
+     -9.525
+    ],
+    [
+     0.0,
+     1.0,
+     0.0,
+     1400.175
+    ],
+    [
+     0.0,
+     0.0,
+     0.0,
+     1.0
+    ]
+   ],
+   "local_bounds_mm": {
+    "min": [
+     0.0,
+     0.0,
+     0.0
+    ],
+    "max": [
+     457.2,
+     1066.8,
+     305.435
+    ]
+   },
+   "obb": {
+    "width_mm": 457.20000000000005,
+    "height_mm": 1066.8,
+    "depth_mm": 305.43499999999995,
+    "center_world_mm": [
+     2057.4,
+     143.1925,
+     1933.575
+    ],
+    "axes": [
+     [
+      -1.0,
+      0.0,
+      0.0
+     ],
+     [
+      0.0,
+      0.0,
+      1.0
+     ],
+     [
+      0.0,
+      1.0,
+      0.0
+     ]
+    ],
+    "method": "local_aabb (trimesh OBB volume equal within 1e-6)",
+    "transform": [
+     [
+      -1.0,
+      0.0,
+      0.0,
+      2057.4
+     ],
+     [
+      0.0,
+      0.0,
+      1.0,
+      143.1925
+     ],
+     [
+      0.0,
+      1.0,
+      0.0,
+      1933.575
+     ],
+     [
+      0.0,
+      0.0,
+      0.0,
+      1.0
+     ]
+    ]
+   },
+   "nominal_size_in": "18W x 42H x 12.025D",
+   "nominal_size_frac": "18W x 42H x 12.025D",
+   "uv": {
+    "charts": 6,
+    "uv_mm_per_unit": 1594.920455,
+    "margin_mm": 8.3003
+   },
+   "mesh": {
+    "vertices": 8,
+    "faces": 12,
+    "volume_mm3": 148973160.1176,
+    "watertight": true
+   }
+  },
+  {
+   "id": "door_15",
+   "label": "single door",
+   "category": "door",
+   "layer": "cabinets",
+   "run": "L",
+   "type": "shaker_front",
+   "parent": "upper_cabinet_07",
+   "children": [
+    "hardware_handle_24"
+   ],
+   "files": {
+    "obj": "components/door_15.obj",
+    "stl": "components/door_15.stl"
+   },
+   "material_slots": [
+    "mat_cabinet_primary"
+   ],
+   "material_default": "mat_cabinet_primary",
+   "pivot": {
+    "type": "hinge_axis_front_face",
+    "world_position_mm": [
+     2284.4125,
+     314.96,
+     1401.7625
+    ]
+   },
+   "transform_local_to_world": [
+    [
+     -1.0,
+     0.0,
+     0.0,
+     2284.4125
+    ],
+    [
+     0.0,
+     0.0,
+     1.0,
+     314.96
+    ],
+    [
+     0.0,
+     1.0,
+     0.0,
+     1401.7625
+    ],
+    [
+     0.0,
+     0.0,
+     0.0,
+     1.0
+    ]
+   ],
+   "local_bounds_mm": {
+    "min": [
+     0.0,
+     0.0,
+     -19.05
+    ],
+    "max": [
+     454.025,
+     1063.625,
+     0.0
+    ]
+   },
+   "obb": {
+    "width_mm": 454.0250000000001,
+    "height_mm": 1063.625,
+    "depth_mm": 19.05000000000001,
+    "center_world_mm": [
+     2057.4,
+     305.435,
+     1933.575
+    ],
+    "axes": [
+     [
+      -1.0,
+      0.0,
+      0.0
+     ],
+     [
+      0.0,
+      0.0,
+      1.0
+     ],
+     [
+      0.0,
+      1.0,
+      0.0
+     ]
+    ],
+    "method": "local_aabb (trimesh OBB volume equal within 1e-6)",
+    "transform": [
+     [
+      -1.0,
+      0.0,
+      0.0,
+      2057.4
+     ],
+     [
+      0.0,
+      0.0,
+      1.0,
+      305.435
+     ],
+     [
+      0.0,
+      1.0,
+      0.0,
+      1933.575
+     ],
+     [
+      0.0,
+      0.0,
+      0.0,
+      1.0
+     ]
+    ]
+   },
+   "nominal_size_in": "17.875W x 41.875H x 0.75D",
+   "nominal_size_frac": "17-7/8W x 41-7/8H x 3/4D",
+   "uv": {
+    "charts": 11,
+    "uv_mm_per_unit": 1385.576377,
+    "margin_mm": 7.0294
+   },
+   "door_swing": {
+    "hinge_side": "left",
+    "axis_local": [
+     0,
+     1,
+     0
+    ],
+    "axis_world": [
+     0.0,
+     0.0,
+     1.0
+    ],
+    "axis_point_world_mm": [
+     2284.4125,
+     314.96,
+     1401.7625
+    ],
+    "open_angle_deg": -110.0,
+    "convention": "right-hand rotation about local +Y through the pivot (hinge line on the front face)",
+    "max_open_deg": 90,
+    "first_collision": {
+     "angle_deg": 95,
+     "parts": [
+      "door_09",
+      "door_10",
+      "tall_cabinet_01",
+      "trim_cap_01"
+     ],
+     "intersection_mm3": {
+      "tall_cabinet_01": 438422.915,
+      "door_09": 38819.422,
+      "door_10": 112051.866,
+      "trim_cap_01": 24843.518
+     }
+    },
+    "sweep": "door + pulls vs all other fabrication parts, 5 deg steps, cap 110, flag > 1.0 mm3",
+    "verified": {
+     "free_edge_mean_z_mm_at_open": 429.902,
+     "free_edge_mean_z_mm_opposite_sign": -423.386,
+     "opens_toward_plus_z": true
+    }
+   },
+   "mesh": {
+    "vertices": 16,
+    "faces": 28,
+    "volume_mm3": 7151545.1727,
+    "watertight": true
+   }
+  },
+  {
+   "id": "hardware_handle_24",
+   "label": "6.75in bar pull",
+   "category": "hardware_handle",
+   "layer": "hardware",
+   "run": "L",
+   "type": "bar_pull",
+   "parent": "door_15",
+   "children": [],
+   "files": {
+    "obj": "components/hardware_handle_24.obj",
+    "stl": "components/hardware_handle_24.stl"
+   },
+   "material_slots": [
+    "mat_hardware_finish"
+   ],
+   "material_default": "mat_hardware_finish",
+   "pivot": {
+    "type": "mounting_footprint_center_on_parent_front",
+    "world_position_mm": [
+     1874.8375,
+     314.96,
+     1550.9875
+    ]
+   },
+   "transform_local_to_world": [
+    [
+     -1.0,
+     0.0,
+     0.0,
+     1874.8375
+    ],
+    [
+     0.0,
+     0.0,
+     1.0,
+     314.96
+    ],
+    [
+     0.0,
+     1.0,
+     0.0,
+     1550.9875
+    ],
+    [
+     0.0,
+     0.0,
+     0.0,
+     1.0
+    ]
+   ],
+   "local_bounds_mm": {
+    "min": [
+     -6.35,
+     -85.725,
+     0.0
+    ],
+    "max": [
+     6.35,
+     85.725,
+     41.275
+    ]
+   },
+   "obb": {
+    "width_mm": 12.699999999999818,
+    "height_mm": 171.44999999999982,
+    "depth_mm": 41.27499999999998,
+    "center_world_mm": [
+     1874.8375,
+     335.5975,
+     1550.9875
+    ],
+    "axes": [
+     [
+      -1.0,
+      0.0,
+      0.0
+     ],
+     [
+      0.0,
+      0.0,
+      1.0
+     ],
+     [
+      0.0,
+      1.0,
+      0.0
+     ]
+    ],
+    "method": "local_aabb (trimesh OBB volume equal within 1e-6)",
+    "transform": [
+     [
+      -1.0,
+      0.0,
+      0.0,
+      1874.8375
+     ],
+     [
+      0.0,
+      0.0,
+      1.0,
+      335.5975
+     ],
+     [
+      0.0,
+      1.0,
+      0.0,
+      1550.9875
+     ],
+     [
+      0.0,
+      0.0,
+      0.0,
+      1.0
+     ]
+    ]
+   },
+   "nominal_size_in": "0.5W x 6.75H x 1.625D",
+   "nominal_size_frac": "1/2W x 6-3/4H x 1-5/8D",
+   "uv": {
+    "charts": 14,
+    "uv_mm_per_unit": 185.475,
+    "margin_mm": 1.5
+   },
+   "mount": {
+    "post_status": [
+     "frame",
+     "frame"
+    ],
+    "bar_within_front": true,
+    "spec_mount_face_in": 12.4,
+    "contact_surface_in": 12.4,
+    "surface": "frame_face",
+    "offset_from_spec_mm": 0.0
+   },
+   "mesh": {
+    "vertices": 24,
+    "faces": 44,
+    "volume_mm3": 26500.9551,
+    "watertight": true
+   }
+  },
+  {
+   "id": "trim_filler_01",
+   "label": "L-run corner filler 2-1/8in (measured 2.17)",
+   "category": "trim",
+   "layer": "cabinets",
+   "run": "L",
+   "type": "box",
+   "parent": null,
+   "children": [],
+   "files": {
+    "obj": "components/trim_filler_01.obj",
+    "stl": "components/trim_filler_01.stl"
+   },
+   "material_slots": [
+    "mat_cabinet_primary"
+   ],
+   "material_default": "mat_cabinet_primary",
+   "pivot": {
+    "type": "rear_bottom_left_corner",
+    "world_position_mm": [
+     682.625,
+     609.6,
+     117.475
+    ]
+   },
+   "transform_local_to_world": [
+    [
+     -1.0,
+     0.0,
+     0.0,
+     682.625
+    ],
+    [
+     0.0,
+     0.0,
+     1.0,
+     609.6
+    ],
+    [
+     0.0,
+     1.0,
+     0.0,
+     117.475
+    ],
+    [
+     0.0,
+     0.0,
+     0.0,
+     1.0
+    ]
+   ],
+   "local_bounds_mm": {
+    "min": [
+     0.0,
+     0.0,
+     0.0
+    ],
+    "max": [
+     73.025,
+     784.225,
+     19.05
+    ]
+   },
+   "obb": {
+    "width_mm": 73.02500000000009,
+    "height_mm": 784.2249999999999,
+    "depth_mm": 19.050000000000068,
+    "center_world_mm": [
+     646.1125,
+     619.125,
+     509.5875
+    ],
+    "axes": [
+     [
+      -1.0,
+      0.0,
+      0.0
+     ],
+     [
+      0.0,
+      0.0,
+      1.0
+     ],
+     [
+      0.0,
+      1.0,
+      0.0
+     ]
+    ],
+    "method": "local_aabb (trimesh OBB volume equal within 1e-6)",
+    "transform": [
+     [
+      -1.0,
+      0.0,
+      0.0,
+      646.1125
+     ],
+     [
+      0.0,
+      0.0,
+      1.0,
+      619.125
+     ],
+     [
+      0.0,
+      1.0,
+      0.0,
+      509.5875
+     ],
+     [
+      0.0,
+      0.0,
+      0.0,
+      1.0
+     ]
+    ]
+   },
+   "nominal_size_in": "2.875W x 30.875H x 0.75D",
+   "nominal_size_frac": "2-7/8W x 30-7/8H x 3/4D",
+   "uv": {
+    "charts": 6,
+    "uv_mm_per_unit": 790.707103,
+    "margin_mm": 3.2411
+   },
+   "mesh": {
+    "vertices": 8,
+    "faces": 12,
+    "volume_mm3": 1090955.9834,
+    "watertight": true
+   }
+  },
+  {
+   "id": "trim_filler_02",
+   "label": "R-run corner filler 3-1/2in (measured 3.53)",
+   "category": "trim",
+   "layer": "cabinets",
+   "run": "R",
+   "type": "box",
+   "parent": null,
+   "children": [],
+   "files": {
+    "obj": "components/trim_filler_02.obj",
+    "stl": "components/trim_filler_02.stl"
+   },
+   "material_slots": [
+    "mat_cabinet_primary"
+   ],
+   "material_default": "mat_cabinet_primary",
+   "pivot": {
+    "type": "rear_bottom_left_corner",
+    "world_position_mm": [
+     609.6,
+     628.65,
+     117.475
+    ]
+   },
+   "transform_local_to_world": [
+    [
+     0.0,
+     0.0,
+     1.0,
+     609.6
+    ],
+    [
+     1.0,
+     0.0,
+     0.0,
+     628.65
+    ],
+    [
+     0.0,
+     1.0,
+     0.0,
+     117.475
+    ],
+    [
+     0.0,
+     0.0,
+     0.0,
+     1.0
+    ]
+   ],
+   "local_bounds_mm": {
+    "min": [
+     0.0,
+     0.0,
+     0.0
+    ],
+    "max": [
+     88.9,
+     784.225,
+     19.05
+    ]
+   },
+   "obb": {
+    "width_mm": 88.89999999999998,
+    "height_mm": 784.2249999999999,
+    "depth_mm": 19.050000000000068,
+    "center_world_mm": [
+     619.125,
+     673.1,
+     509.5875
+    ],
+    "axes": [
+     [
+      0.0,
+      1.0,
+      0.0
+     ],
+     [
+      0.0,
+      0.0,
+      1.0
+     ],
+     [
+      1.0,
+      0.0,
+      0.0
+     ]
+    ],
+    "method": "local_aabb (trimesh OBB volume equal within 1e-6)",
+    "transform": [
+     [
+      0.0,
+      0.0,
+      1.0,
+      619.125
+     ],
+     [
+      1.0,
+      0.0,
+      0.0,
+      673.1
+     ],
+     [
+      0.0,
+      1.0,
+      0.0,
+      509.5875
+     ],
+     [
+      0.0,
+      0.0,
+      0.0,
+      1.0
+     ]
+    ]
+   },
+   "nominal_size_in": "3.5W x 30.875H x 0.75D",
+   "nominal_size_frac": "3-1/2W x 30-7/8H x 3/4D",
+   "uv": {
+    "charts": 6,
+    "uv_mm_per_unit": 790.711659,
+    "margin_mm": 3.2433
+   },
+   "mesh": {
+    "vertices": 8,
+    "faces": 12,
+    "volume_mm3": 1328120.3276,
+    "watertight": true
+   }
+  },
+  {
+   "id": "trim_filler_03",
+   "label": "hidden filler backer block (attaches filler_02 to base_cabinet_01 side)",
+   "category": "trim",
+   "layer": "cabinets",
+   "run": "R",
+   "type": "box",
+   "parent": null,
+   "children": [],
+   "files": {
+    "obj": "components/trim_filler_03.obj",
+    "stl": "components/trim_filler_03.stl"
+   },
+   "material_slots": [
+    "mat_cabinet_primary"
+   ],
+   "material_default": "mat_cabinet_primary",
+   "pivot": {
+    "type": "rear_bottom_left_corner",
+    "world_position_mm": [
+     533.4,
+     628.65,
+     117.475
+    ]
+   },
+   "transform_local_to_world": [
+    [
+     0.0,
+     0.0,
+     1.0,
+     533.4
+    ],
+    [
+     1.0,
+     0.0,
+     0.0,
+     628.65
+    ],
+    [
+     0.0,
+     1.0,
+     0.0,
+     117.475
+    ],
+    [
+     0.0,
+     0.0,
+     0.0,
+     1.0
+    ]
+   ],
+   "local_bounds_mm": {
+    "min": [
+     0.0,
+     0.0,
+     0.0
+    ],
+    "max": [
+     88.9,
+     784.225,
+     76.2
+    ]
+   },
+   "obb": {
+    "width_mm": 88.89999999999998,
+    "height_mm": 784.2249999999999,
+    "depth_mm": 76.19999999999993,
+    "center_world_mm": [
+     571.5,
+     673.1,
+     509.5875
+    ],
+    "axes": [
+     [
+      0.0,
+      1.0,
+      0.0
+     ],
+     [
+      0.0,
+      0.0,
+      1.0
+     ],
+     [
+      1.0,
+      0.0,
+      0.0
+     ]
+    ],
+    "method": "local_aabb (trimesh OBB volume equal within 1e-6)",
+    "transform": [
+     [
+      0.0,
+      0.0,
+      1.0,
+      571.5
+     ],
+     [
+      1.0,
+      0.0,
+      0.0,
+      673.1
+     ],
+     [
+      0.0,
+      1.0,
+      0.0,
+      509.5875
+     ],
+     [
+      0.0,
+      0.0,
+      0.0,
+      1.0
+     ]
+    ]
+   },
+   "nominal_size_in": "3.5W x 30.875H x 3D",
+   "nominal_size_frac": "3-1/2W x 30-7/8H x 3D",
+   "uv": {
+    "charts": 6,
+    "uv_mm_per_unit": 790.549262,
+    "margin_mm": 3.1621
+   },
+   "mesh": {
+    "vertices": 8,
+    "faces": 12,
+    "volume_mm3": 5312481.3105,
+    "watertight": true
+   }
+  },
+  {
+   "id": "trim_toekick_01",
+   "label": "L-run toe kick board",
+   "category": "trim",
+   "layer": "cabinets",
+   "run": "L",
+   "type": "box",
+   "parent": null,
+   "children": [],
+   "files": {
+    "obj": "components/trim_toekick_01.obj",
+    "stl": "components/trim_toekick_01.stl"
+   },
+   "material_slots": [
+    "mat_cabinet_primary"
+   ],
+   "material_default": "mat_cabinet_primary",
+   "pivot": {
+    "type": "rear_bottom_left_corner",
+    "world_position_mm": [
+     2295.525,
+     533.4,
+     0.0
+    ]
+   },
+   "transform_local_to_world": [
+    [
+     -1.0,
+     0.0,
+     0.0,
+     2295.525
+    ],
+    [
+     0.0,
+     0.0,
+     1.0,
+     533.4
+    ],
+    [
+     0.0,
+     1.0,
+     0.0,
+     0.0
+    ],
+    [
+     0.0,
+     0.0,
+     0.0,
+     1.0
+    ]
+   ],
+   "local_bounds_mm": {
+    "min": [
+     0.0,
+     0.0,
+     0.0
+    ],
+    "max": [
+     1762.125,
+     117.475,
+     12.7
+    ]
+   },
+   "obb": {
+    "width_mm": 1762.125,
+    "height_mm": 117.475,
+    "depth_mm": 12.700000000000045,
+    "center_world_mm": [
+     1414.4625,
+     539.75,
+     58.7375
+    ],
+    "axes": [
+     [
+      -1.0,
+      0.0,
+      0.0
+     ],
+     [
+      0.0,
+      0.0,
+      1.0
+     ],
+     [
+      0.0,
+      1.0,
+      0.0
+     ]
+    ],
+    "method": "local_aabb (trimesh OBB volume equal within 1e-6)",
+    "transform": [
+     [
+      -1.0,
+      0.0,
+      0.0,
+      1414.4625
+     ],
+     [
+      0.0,
+      0.0,
+      1.0,
+      539.75
+     ],
+     [
+      0.0,
+      1.0,
+      0.0,
+      58.7375
+     ],
+     [
+      0.0,
+      0.0,
+      0.0,
+      1.0
+     ]
+    ]
+   },
+   "nominal_size_in": "69.375W x 4.625H x 0.5D",
+   "nominal_size_frac": "69-3/8W x 4-5/8H x 1/2D",
+   "uv": {
+    "charts": 6,
+    "uv_mm_per_unit": 1776.287767,
+    "margin_mm": 7.0814
+   },
+   "mesh": {
+    "vertices": 8,
+    "faces": 12,
+    "volume_mm3": 2628971.5566,
+    "watertight": true
+   }
+  },
+  {
+   "id": "trim_toekick_02",
+   "label": "pantry toe kick board",
+   "category": "trim",
+   "layer": "cabinets",
+   "run": "L",
+   "type": "box",
+   "parent": null,
+   "children": [],
+   "files": {
+    "obj": "components/trim_toekick_02.obj",
+    "stl": "components/trim_toekick_02.stl"
+   },
+   "material_slots": [
+    "mat_cabinet_primary"
+   ],
+   "material_default": "mat_cabinet_primary",
+   "pivot": {
+    "type": "rear_bottom_left_corner",
+    "world_position_mm": [
+     2828.925,
+     527.05,
+     0.0
+    ]
+   },
+   "transform_local_to_world": [
+    [
+     -1.0,
+     0.0,
+     0.0,
+     2828.925
+    ],
+    [
+     0.0,
+     0.0,
+     1.0,
+     527.05
+    ],
+    [
+     0.0,
+     1.0,
+     0.0,
+     0.0
+    ],
+    [
+     0.0,
+     0.0,
+     0.0,
+     1.0
+    ]
+   ],
+   "local_bounds_mm": {
+    "min": [
+     0.0,
+     0.0,
+     0.0
+    ],
+    "max": [
+     533.4,
+     117.475,
+     12.7
+    ]
+   },
+   "obb": {
+    "width_mm": 533.3999999999996,
+    "height_mm": 117.475,
+    "depth_mm": 12.700000000000045,
+    "center_world_mm": [
+     2562.225,
+     533.4,
+     58.7375
+    ],
+    "axes": [
+     [
+      -1.0,
+      0.0,
+      0.0
+     ],
+     [
+      0.0,
+      0.0,
+      1.0
+     ],
+     [
+      0.0,
+      1.0,
+      0.0
+     ]
+    ],
+    "method": "local_aabb (trimesh OBB volume equal within 1e-6)",
+    "transform": [
+     [
+      -1.0,
+      0.0,
+      0.0,
+      2562.225
+     ],
+     [
+      0.0,
+      0.0,
+      1.0,
+      533.4
+     ],
+     [
+      0.0,
+      1.0,
+      0.0,
+      58.7375
+     ],
+     [
+      0.0,
+      0.0,
+      0.0,
+      1.0
+     ]
+    ]
+   },
+   "nominal_size_in": "21W x 4.625H x 0.5D",
+   "nominal_size_frac": "21W x 4-5/8H x 1/2D",
+   "uv": {
+    "charts": 6,
+    "uv_mm_per_unit": 537.961813,
+    "margin_mm": 2.2809
+   },
+   "mesh": {
+    "vertices": 8,
+    "faces": 12,
+    "volume_mm3": 795796.7955,
+    "watertight": true
+   }
+  },
+  {
+   "id": "trim_toekick_03",
+   "label": "R-run toe kick board",
+   "category": "trim",
+   "layer": "cabinets",
+   "run": "R",
+   "type": "box",
+   "parent": null,
+   "children": [],
+   "files": {
+    "obj": "components/trim_toekick_03.obj",
+    "stl": "components/trim_toekick_03.stl"
+   },
+   "material_slots": [
+    "mat_cabinet_primary"
+   ],
+   "material_default": "mat_cabinet_primary",
+   "pivot": {
+    "type": "rear_bottom_left_corner",
+    "world_position_mm": [
+     533.4,
+     546.1,
+     0.0
+    ]
+   },
+   "transform_local_to_world": [
+    [
+     0.0,
+     0.0,
+     1.0,
+     533.4
+    ],
+    [
+     1.0,
+     0.0,
+     0.0,
+     546.1
+    ],
+    [
+     0.0,
+     1.0,
+     0.0,
+     0.0
+    ],
+    [
+     0.0,
+     0.0,
+     0.0,
+     1.0
+    ]
+   ],
+   "local_bounds_mm": {
+    "min": [
+     0.0,
+     0.0,
+     0.0
+    ],
+    "max": [
+     1282.7,
+     117.475,
+     12.7
+    ]
+   },
+   "obb": {
+    "width_mm": 1282.6999999999998,
+    "height_mm": 117.475,
+    "depth_mm": 12.700000000000045,
+    "center_world_mm": [
+     539.75,
+     1187.45,
+     58.7375
+    ],
+    "axes": [
+     [
+      0.0,
+      1.0,
+      0.0
+     ],
+     [
+      0.0,
+      0.0,
+      1.0
+     ],
+     [
+      1.0,
+      0.0,
+      0.0
+     ]
+    ],
+    "method": "local_aabb (trimesh OBB volume equal within 1e-6)",
+    "transform": [
+     [
+      0.0,
+      0.0,
+      1.0,
+      539.75
+     ],
+     [
+      1.0,
+      0.0,
+      0.0,
+      1187.45
+     ],
+     [
+      0.0,
+      1.0,
+      0.0,
+      58.7375
+     ],
+     [
+      0.0,
+      0.0,
+      0.0,
+      1.0
+     ]
+    ]
+   },
+   "nominal_size_in": "50.5W x 4.625H x 0.5D",
+   "nominal_size_frac": "50-1/2W x 4-5/8H x 1/2D",
+   "uv": {
+    "charts": 6,
+    "uv_mm_per_unit": 1293.01779,
+    "margin_mm": 5.1589
+   },
+   "mesh": {
+    "vertices": 8,
+    "faces": 12,
+    "volume_mm3": 1913701.8178,
+    "watertight": true
+   }
+  },
+  {
+   "id": "trim_crown_01",
+   "label": "L-run flat crown 3-1/2in (measured 97.14-100.60)",
+   "category": "trim",
+   "layer": "cabinets",
+   "run": "L",
+   "type": "box",
+   "parent": null,
+   "children": [],
+   "files": {
+    "obj": "components/trim_crown_01.obj",
+    "stl": "components/trim_crown_01.stl"
+   },
+   "material_slots": [
+    "mat_cabinet_primary"
+   ],
+   "material_default": "mat_cabinet_primary",
+   "pivot": {
+    "type": "rear_bottom_left_corner",
+    "world_position_mm": [
+     2295.525,
+     -9.525,
+     2466.975
+    ]
+   },
+   "transform_local_to_world": [
+    [
+     -1.0,
+     0.0,
+     0.0,
+     2295.525
+    ],
+    [
+     0.0,
+     0.0,
+     1.0,
+     -9.525
+    ],
+    [
+     0.0,
+     1.0,
+     0.0,
+     2466.975
+    ],
+    [
+     0.0,
+     0.0,
+     0.0,
+     1.0
+    ]
+   ],
+   "local_bounds_mm": {
+    "min": [
+     0.0,
+     0.0,
+     0.0
+    ],
+    "max": [
+     2305.05,
+     88.9,
+     343.535
+    ]
+   },
+   "obb": {
+    "width_mm": 2305.05,
+    "height_mm": 88.90000000000009,
+    "depth_mm": 343.53499999999997,
+    "center_world_mm": [
+     1143.0,
+     162.2425,
+     2511.425
+    ],
+    "axes": [
+     [
+      -1.0,
+      0.0,
+      0.0
+     ],
+     [
+      0.0,
+      0.0,
+      1.0
+     ],
+     [
+      0.0,
+      1.0,
+      0.0
+     ]
+    ],
+    "method": "local_aabb (trimesh OBB volume equal within 1e-6)",
+    "transform": [
+     [
+      -1.0,
+      0.0,
+      0.0,
+      1143.0
+     ],
+     [
+      0.0,
+      0.0,
+      1.0,
+      162.2425
+     ],
+     [
+      0.0,
+      1.0,
+      0.0,
+      2511.425
+     ],
+     [
+      0.0,
+      0.0,
+      0.0,
+      1.0
+     ]
+    ]
+   },
+   "nominal_size_in": "90.75W x 3.5H x 13.525D",
+   "nominal_size_frac": "90-3/4W x 3-1/2H x 13.525D",
+   "uv": {
+    "charts": 6,
+    "uv_mm_per_unit": 2323.628373,
+    "margin_mm": 9.2892
+   },
+   "mesh": {
+    "vertices": 8,
+    "faces": 12,
+    "volume_mm3": 70396829.7706,
+    "watertight": true
+   }
+  },
+  {
+   "id": "trim_crown_02",
+   "label": "R-run flat crown 1-5/8in (measured 97.05-98.77)",
+   "category": "trim",
+   "layer": "cabinets",
+   "run": "R",
+   "type": "box",
+   "parent": null,
+   "children": [],
+   "files": {
+    "obj": "components/trim_crown_02.obj",
+    "stl": "components/trim_crown_02.stl"
+   },
+   "material_slots": [
+    "mat_cabinet_primary"
+   ],
+   "material_default": "mat_cabinet_primary",
+   "pivot": {
+    "type": "rear_bottom_left_corner",
+    "world_position_mm": [
+     -9.525,
+     334.01,
+     2466.975
+    ]
+   },
+   "transform_local_to_world": [
+    [
+     0.0,
+     0.0,
+     1.0,
+     -9.525
+    ],
+    [
+     1.0,
+     0.0,
+     0.0,
+     334.01
+    ],
+    [
+     0.0,
+     1.0,
+     0.0,
+     2466.975
+    ],
+    [
+     0.0,
+     0.0,
+     0.0,
+     1.0
+    ]
+   ],
+   "local_bounds_mm": {
+    "min": [
+     0.0,
+     0.0,
+     0.0
+    ],
+    "max": [
+     1513.84,
+     41.275,
+     349.885
+    ]
+   },
+   "obb": {
+    "width_mm": 1513.84,
+    "height_mm": 41.27500000000009,
+    "depth_mm": 349.885,
+    "center_world_mm": [
+     165.4175,
+     1090.93,
+     2487.6125
+    ],
+    "axes": [
+     [
+      0.0,
+      1.0,
+      0.0
+     ],
+     [
+      0.0,
+      0.0,
+      1.0
+     ],
+     [
+      1.0,
+      0.0,
+      0.0
+     ]
+    ],
+    "method": "local_aabb (trimesh OBB volume equal within 1e-6)",
+    "transform": [
+     [
+      0.0,
+      0.0,
+      1.0,
+      165.4175
+     ],
+     [
+      1.0,
+      0.0,
+      0.0,
+      1090.93
+     ],
+     [
+      0.0,
+      1.0,
+      0.0,
+      2487.6125
+     ],
+     [
+      0.0,
+      0.0,
+      0.0,
+      1.0
+     ]
+    ]
+   },
+   "nominal_size_in": "59.6W x 1.625H x 13.775D",
+   "nominal_size_frac": "59.6W x 1-5/8H x 13.775D",
+   "uv": {
+    "charts": 6,
+    "uv_mm_per_unit": 1527.098867,
+    "margin_mm": 6.6294
+   },
+   "mesh": {
+    "vertices": 8,
+    "faces": 12,
+    "volume_mm3": 21862125.4692,
+    "watertight": true
+   }
+  },
+  {
+   "id": "trim_cap_01",
+   "label": "pantry cap (measured 96.58-99.13)",
+   "category": "trim",
+   "layer": "cabinets",
+   "run": "L",
+   "type": "box",
+   "parent": null,
+   "children": [],
+   "files": {
+    "obj": "components/trim_cap_01.obj",
+    "stl": "components/trim_cap_01.stl"
+   },
+   "material_slots": [
+    "mat_cabinet_primary"
+   ],
+   "material_default": "mat_cabinet_primary",
+   "pivot": {
+    "type": "rear_bottom_left_corner",
+    "world_position_mm": [
+     2847.975,
+     -9.525,
+     2451.1
+    ]
+   },
+   "transform_local_to_world": [
+    [
+     -1.0,
+     0.0,
+     0.0,
+     2847.975
+    ],
+    [
+     0.0,
+     0.0,
+     1.0,
+     -9.525
+    ],
+    [
+     0.0,
+     1.0,
+     0.0,
+     2451.1
+    ],
+    [
+     0.0,
+     0.0,
+     0.0,
+     1.0
+    ]
+   ],
+   "local_bounds_mm": {
+    "min": [
+     0.0,
+     0.0,
+     0.0
+    ],
+    "max": [
+     552.45,
+     66.675,
+     650.875
+    ]
+   },
+   "obb": {
+    "width_mm": 552.4499999999998,
+    "height_mm": 66.67499999999973,
+    "depth_mm": 650.8749999999999,
+    "center_world_mm": [
+     2571.75,
+     315.9125,
+     2484.4375
+    ],
+    "axes": [
+     [
+      -1.0,
+      0.0,
+      0.0
+     ],
+     [
+      0.0,
+      0.0,
+      1.0
+     ],
+     [
+      0.0,
+      1.0,
+      0.0
+     ]
+    ],
+    "method": "local_aabb (trimesh OBB volume equal within 1e-6)",
+    "transform": [
+     [
+      -1.0,
+      0.0,
+      0.0,
+      2571.75
+     ],
+     [
+      0.0,
+      0.0,
+      1.0,
+      315.9125
+     ],
+     [
+      0.0,
+      1.0,
+      0.0,
+      2484.4375
+     ],
+     [
+      0.0,
+      0.0,
+      0.0,
+      1.0
+     ]
+    ]
+   },
+   "nominal_size_in": "21.75W x 2.625H x 25.625D",
+   "nominal_size_frac": "21-3/4W x 2-5/8H x 25-5/8D",
+   "uv": {
+    "charts": 6,
+    "uv_mm_per_unit": 1128.541748,
+    "margin_mm": 5.6435
+   },
+   "mesh": {
+    "vertices": 8,
+    "faces": 12,
+    "volume_mm3": 23974722.7158,
+    "watertight": true
+   }
+  },
+  {
+   "id": "countertop_slab_01",
+   "label": "R-run + corner slab, 3cm quartz (Vadara), front x=25.25 (measured 25.29), end y=73.125 (measured 73.14)",
+   "category": "countertop_slab",
+   "layer": "countertops",
+   "run": "R",
+   "type": "slab",
+   "parent": null,
+   "children": [],
+   "files": {
+    "obj": "components/countertop_slab_01.obj",
+    "stl": "components/countertop_slab_01.stl"
+   },
+   "material_slots": [
+    "mat_countertop_surface"
+   ],
+   "material_default": "mat_countertop_surface",
+   "pivot": {
+    "type": "rear_bottom_left_corner",
+    "world_position_mm": [
+     -9.525,
+     -9.525,
+     901.7
+    ]
+   },
+   "transform_local_to_world": [
+    [
+     0.0,
+     0.0,
+     1.0,
+     -9.525
+    ],
+    [
+     1.0,
+     0.0,
+     0.0,
+     -9.525
+    ],
+    [
+     0.0,
+     1.0,
+     0.0,
+     901.7
+    ],
+    [
+     0.0,
+     0.0,
+     0.0,
+     1.0
+    ]
+   ],
+   "local_bounds_mm": {
+    "min": [
+     0.0,
+     0.0,
+     0.0
+    ],
+    "max": [
+     1866.9,
+     31.75,
+     650.875
+    ]
+   },
+   "obb": {
+    "width_mm": 1866.9,
+    "height_mm": 31.75,
+    "depth_mm": 650.8749999999999,
+    "center_world_mm": [
+     315.9125,
+     923.925,
+     917.575
+    ],
+    "axes": [
+     [
+      0.0,
+      1.0,
+      0.0
+     ],
+     [
+      0.0,
+      0.0,
+      1.0
+     ],
+     [
+      1.0,
+      0.0,
+      0.0
+     ]
+    ],
+    "method": "local_aabb (trimesh OBB volume equal within 1e-6)",
+    "transform": [
+     [
+      0.0,
+      0.0,
+      1.0,
+      315.9125
+     ],
+     [
+      1.0,
+      0.0,
+      0.0,
+      923.925
+     ],
+     [
+      0.0,
+      1.0,
+      0.0,
+      917.575
+     ],
+     [
+      0.0,
+      0.0,
+      0.0,
+      1.0
+     ]
+    ]
+   },
+   "nominal_size_in": "73.5W x 1.25H x 25.625D",
+   "nominal_size_frac": "73-1/2W x 1-1/4H x 25-5/8D",
+   "uv": {
+    "charts": 6,
+    "uv_mm_per_unit": 1886.250609,
+    "margin_mm": 9.6753
+   },
+   "mesh": {
+    "vertices": 8,
+    "faces": 12,
+    "volume_mm3": 38580013.5656,
+    "watertight": true
+   }
+  },
+  {
+   "id": "countertop_slab_02",
+   "label": "L-run slab with farmhouse sink notch, front y=26.5 (measured 26.54), 1/4in overhang over sink back wall",
+   "category": "countertop_slab",
+   "layer": "countertops",
+   "run": "L",
+   "type": "slab",
+   "parent": null,
+   "children": [],
+   "files": {
+    "obj": "components/countertop_slab_02.obj",
+    "stl": "components/countertop_slab_02.stl"
+   },
+   "material_slots": [
+    "mat_countertop_surface"
+   ],
+   "material_default": "mat_countertop_surface",
+   "pivot": {
+    "type": "rear_bottom_left_corner",
+    "world_position_mm": [
+     2295.525,
+     -9.525,
+     901.7
+    ]
+   },
+   "transform_local_to_world": [
+    [
+     -1.0,
+     0.0,
+     0.0,
+     2295.525
+    ],
+    [
+     0.0,
+     0.0,
+     1.0,
+     -9.525
+    ],
+    [
+     0.0,
+     1.0,
+     0.0,
+     901.7
+    ],
+    [
+     0.0,
+     0.0,
+     0.0,
+     1.0
+    ]
+   ],
+   "local_bounds_mm": {
+    "min": [
+     0.0,
+     0.0,
+     0.0
+    ],
+    "max": [
+     1654.175,
+     31.75,
+     682.625
+    ]
+   },
+   "obb": {
+    "width_mm": 1654.1750000000002,
+    "height_mm": 31.75,
+    "depth_mm": 682.6249999999999,
+    "center_world_mm": [
+     1468.4375,
+     331.7875,
+     917.575
+    ],
+    "axes": [
+     [
+      -1.0,
+      0.0,
+      0.0
+     ],
+     [
+      0.0,
+      0.0,
+      1.0
+     ],
+     [
+      0.0,
+      1.0,
+      0.0
+     ]
+    ],
+    "method": "local_aabb (trimesh OBB volume equal within 1e-6)",
+    "transform": [
+     [
+      -1.0,
+      0.0,
+      0.0,
+      1468.4375
+     ],
+     [
+      0.0,
+      0.0,
+      1.0,
+      331.7875
+     ],
+     [
+      0.0,
+      1.0,
+      0.0,
+      917.575
+     ],
+     [
+      0.0,
+      0.0,
+      0.0,
+      1.0
+     ]
+    ]
+   },
+   "nominal_size_in": "65.125W x 1.25H x 26.875D",
+   "nominal_size_frac": "65-1/8W x 1-1/4H x 26-7/8D",
+   "uv": {
+    "charts": 10,
+    "uv_mm_per_unit": 1672.933436,
+    "margin_mm": 9.3792
+   },
+   "mesh": {
+    "vertices": 16,
+    "faces": 28,
+    "volume_mm3": 26459667.3427,
+    "watertight": true
+   }
+  },
+  {
+   "id": "fixture_sink_01",
+   "label": "Nantucket Sinks FCFS3018W-OSD 30x18x9-7/8 fireclay apron sink (read from price tag); apron 2.1in proud of doors (measured 2.06)",
+   "category": "fixture",
+   "layer": "fixtures",
+   "run": "L",
+   "type": "farmhouse_sink",
+   "parent": null,
+   "children": [],
+   "files": {
+    "obj": "components/fixture_sink_01.obj",
+    "stl": "components/fixture_sink_01.stl"
+   },
+   "material_slots": [
+    "mat_fixture_fireclay"
+   ],
+   "material_default": "mat_fixture_fireclay",
+   "pivot": {
+    "type": "rear_bottom_left_corner",
+    "world_position_mm": [
+     1831.975,
+     225.425,
+     650.875
+    ]
+   },
+   "transform_local_to_world": [
+    [
+     -1.0,
+     0.0,
+     0.0,
+     1831.975
+    ],
+    [
+     0.0,
+     0.0,
+     1.0,
+     225.425
+    ],
+    [
+     0.0,
+     1.0,
+     0.0,
+     650.875
+    ],
+    [
+     0.0,
+     0.0,
+     0.0,
+     1.0
+    ]
+   ],
+   "local_bounds_mm": {
+    "min": [
+     0.0,
+     0.0,
+     0.0
+    ],
+    "max": [
+     762.0,
+     250.825,
+     457.2
+    ]
+   },
+   "obb": {
+    "width_mm": 762.0,
+    "height_mm": 250.82499999999993,
+    "depth_mm": 457.20000000000005,
+    "center_world_mm": [
+     1450.975,
+     454.025,
+     776.2875
+    ],
+    "axes": [
+     [
+      -1.0,
+      0.0,
+      0.0
+     ],
+     [
+      0.0,
+      0.0,
+      1.0
+     ],
+     [
+      0.0,
+      1.0,
+      0.0
+     ]
+    ],
+    "method": "local_aabb (trimesh OBB volume equal within 1e-6)",
+    "transform": [
+     [
+      -1.0,
+      0.0,
+      0.0,
+      1450.975
+     ],
+     [
+      0.0,
+      0.0,
+      1.0,
+      454.025
+     ],
+     [
+      0.0,
+      1.0,
+      0.0,
+      776.2875
+     ],
+     [
+      0.0,
+      0.0,
+      0.0,
+      1.0
+     ]
+    ]
+   },
+   "nominal_size_in": "30W x 9.875H x 18D",
+   "nominal_size_frac": "30W x 9-7/8H x 18D",
+   "uv": {
+    "charts": 15,
+    "uv_mm_per_unit": 1677.201603,
+    "margin_mm": 8.7324
+   },
+   "mesh": {
+    "vertices": 112,
+    "faces": 224,
+    "volume_mm3": 22071840.1477,
+    "watertight": true
+   }
+  },
+  {
+   "id": "fixture_faucet_01",
+   "label": "pull-down faucet, brushed nickel body with black hose (base triangulated at x57.3 y6.6, z36.6 vs counter 36.75)",
+   "category": "fixture",
+   "layer": "fixtures",
+   "run": "L",
+   "type": "faucet",
+   "parent": null,
+   "children": [],
+   "files": {
+    "obj": "components/fixture_faucet_01.obj",
+    "stl": "components/fixture_faucet_01.stl"
+   },
+   "material_slots": [
+    "mat_faucet_finish",
+    "mat_faucet_hose"
+   ],
+   "material_default": "mat_faucet_finish",
+   "pivot": {
+    "type": "base_center_at_counter_surface",
+    "world_position_mm": [
+     1455.42,
+     167.64,
+     933.45
+    ]
+   },
+   "transform_local_to_world": [
+    [
+     -1.0,
+     0.0,
+     0.0,
+     1455.42
+    ],
+    [
+     0.0,
+     0.0,
+     1.0,
+     167.64
+    ],
+    [
+     0.0,
+     1.0,
+     0.0,
+     933.45
+    ],
+    [
+     0.0,
+     0.0,
+     0.0,
+     1.0
+    ]
+   ],
+   "local_bounds_mm": {
+    "min": [
+     -25.4,
+     0.0,
+     -25.4
+    ],
+    "max": [
+     68.399879,
+     534.657402,
+     258.662768
+    ]
+   },
+   "obb": {
+    "width_mm": 50.674693733423055,
+    "height_mm": 539.0083091941372,
+    "depth_mm": 283.8741987825795,
+    "center_world_mm": [
+     1423.999037,
+     287.847591,
+     1198.512528
+    ],
+    "axes": [
+     [
+      -0.980267,
+      -0.195766,
+      -0.027421
+     ],
+     [
+      -0.032334,
+      0.02194,
+      0.999236
+     ],
+     [
+      -0.195015,
+      0.980405,
+      -0.027836
+     ]
+    ],
+    "method": "trimesh_bounding_box_oriented",
+    "transform": [
+     [
+      -0.980267,
+      -0.032334,
+      -0.195015,
+      1423.999037
+     ],
+     [
+      -0.195766,
+      0.02194,
+      0.980405,
+      287.847591
+     ],
+     [
+      -0.027421,
+      0.999236,
+      -0.027836,
+      1198.512528
+     ],
+     [
+      0.0,
+      0.0,
+      0.0,
+      1.0
+     ]
+    ]
+   },
+   "nominal_size_in": "3.6929W x 21.0495H x 11.1836D",
+   "nominal_size_frac": "3.6929W x 21.0495H x 11.1836D",
+   "uv": {
+    "charts": 22,
+    "uv_mm_per_unit": 658.836674,
+    "margin_mm": 3.4988
+   },
+   "material_by_feature": {
+    "body/arm/head": "mat_faucet_finish",
+    "hose": "mat_faucet_hose"
+   },
+   "mesh": {
+    "vertices": 2568,
+    "faces": 5136,
+    "volume_mm3": 871734.1959,
+    "watertight": true
+   }
+  },
+  {
+   "id": "backsplash_01",
+   "label": "W1 glazed subway tile field (vertical stack behind sink)",
+   "category": "backsplash",
+   "layer": "backsplash",
+   "run": "L",
+   "type": "union_boxes",
+   "parent": null,
+   "children": [],
+   "files": {
+    "obj": "components/backsplash_01.obj",
+    "stl": "components/backsplash_01.stl"
+   },
+   "material_slots": [
+    "mat_backsplash_tile"
+   ],
+   "material_default": "mat_backsplash_tile",
+   "pivot": {
+    "type": "rear_bottom_left_corner",
+    "world_position_mm": [
+     2295.525,
+     -9.525,
+     933.45
+    ]
+   },
+   "transform_local_to_world": [
+    [
+     -1.0,
+     0.0,
+     0.0,
+     2295.525
+    ],
+    [
+     0.0,
+     0.0,
+     1.0,
+     -9.525
+    ],
+    [
+     0.0,
+     1.0,
+     0.0,
+     933.45
+    ],
+    [
+     0.0,
+     0.0,
+     0.0,
+     1.0
+    ]
+   ],
+   "local_bounds_mm": {
+    "min": [
+     0.0,
+     0.0,
+     0.0
+    ],
+    "max": [
+     2295.525,
+     771.525,
+     9.525
+    ]
+   },
+   "obb": {
+    "width_mm": 2295.525,
+    "height_mm": 771.525,
+    "depth_mm": 9.524999999999999,
+    "center_world_mm": [
+     1147.7625,
+     -4.7625,
+     1319.2125
+    ],
+    "axes": [
+     [
+      -1.0,
+      0.0,
+      0.0
+     ],
+     [
+      0.0,
+      0.0,
+      1.0
+     ],
+     [
+      0.0,
+      1.0,
+      0.0
+     ]
+    ],
+    "method": "local_aabb (trimesh OBB volume equal within 1e-6)",
+    "transform": [
+     [
+      -1.0,
+      0.0,
+      0.0,
+      1147.7625
+     ],
+     [
+      0.0,
+      0.0,
+      1.0,
+      -4.7625
+     ],
+     [
+      0.0,
+      1.0,
+      0.0,
+      1319.2125
+     ],
+     [
+      0.0,
+      0.0,
+      0.0,
+      1.0
+     ]
+    ]
+   },
+   "nominal_size_in": "90.375W x 30.375H x 0.375D",
+   "nominal_size_frac": "90-3/8W x 30-3/8H x 3/8D",
+   "uv": {
+    "charts": 10,
+    "uv_mm_per_unit": 2318.334129,
+    "margin_mm": 11.4046
+   },
+   "mesh": {
+    "vertices": 16,
+    "faces": 28,
+    "volume_mm3": 12417137.7161,
+    "watertight": true
+   }
+  },
+  {
+   "id": "backsplash_02",
+   "label": "W2 glazed subway tile field",
+   "category": "backsplash",
+   "layer": "backsplash",
+   "run": "R",
+   "type": "union_boxes",
+   "parent": null,
+   "children": [],
+   "files": {
+    "obj": "components/backsplash_02.obj",
+    "stl": "components/backsplash_02.stl"
+   },
+   "material_slots": [
+    "mat_backsplash_tile"
+   ],
+   "material_default": "mat_backsplash_tile",
+   "pivot": {
+    "type": "rear_bottom_left_corner",
+    "world_position_mm": [
+     -9.525,
+     -9.525,
+     933.45
+    ]
+   },
+   "transform_local_to_world": [
+    [
+     0.0,
+     0.0,
+     1.0,
+     -9.525
+    ],
+    [
+     1.0,
+     0.0,
+     0.0,
+     -9.525
+    ],
+    [
+     0.0,
+     1.0,
+     0.0,
+     933.45
+    ],
+    [
+     0.0,
+     0.0,
+     0.0,
+     1.0
+    ]
+   ],
+   "local_bounds_mm": {
+    "min": [
+     0.0,
+     0.0,
+     0.0
+    ],
+    "max": [
+     1838.325,
+     466.725,
+     9.525
+    ]
+   },
+   "obb": {
+    "width_mm": 1838.325,
+    "height_mm": 466.725,
+    "depth_mm": 9.524999999999999,
+    "center_world_mm": [
+     -4.7625,
+     909.6375,
+     1166.8125
+    ],
+    "axes": [
+     [
+      0.0,
+      1.0,
+      0.0
+     ],
+     [
+      0.0,
+      0.0,
+      1.0
+     ],
+     [
+      1.0,
+      0.0,
+      0.0
+     ]
+    ],
+    "method": "local_aabb (trimesh OBB volume equal within 1e-6)",
+    "transform": [
+     [
+      0.0,
+      0.0,
+      1.0,
+      -4.7625
+     ],
+     [
+      1.0,
+      0.0,
+      0.0,
+      909.6375
+     ],
+     [
+      0.0,
+      1.0,
+      0.0,
+      1166.8125
+     ],
+     [
+      0.0,
+      0.0,
+      0.0,
+      1.0
+     ]
+    ]
+   },
+   "nominal_size_in": "72.375W x 18.375H x 0.375D",
+   "nominal_size_frac": "72-3/8W x 18-3/8H x 3/8D",
+   "uv": {
+    "charts": 6,
+    "uv_mm_per_unit": 1854.286173,
+    "margin_mm": 7.9806
+   },
+   "mesh": {
+    "vertices": 8,
+    "faces": 12,
+    "volume_mm3": 8172376.0443,
+    "watertight": true
+   }
+  },
+  {
+   "id": "reference_wall_01",
+   "label": "W1 wall (drywall face at y=-0.375)",
+   "category": "reference",
+   "layer": "reference",
+   "run": "L",
+   "type": "box",
+   "parent": null,
+   "children": [],
+   "files": {
+    "obj": "components/reference/reference_wall_01.obj",
+    "stl": "components/reference/reference_wall_01.stl"
+   },
+   "material_slots": [
+    "mat_reference"
+   ],
+   "material_default": "mat_reference",
+   "pivot": {
+    "type": "rear_bottom_left_corner",
+    "world_position_mm": [
+     3048.0,
+     -111.125,
+     0.0
+    ]
+   },
+   "transform_local_to_world": [
+    [
+     -1.0,
+     0.0,
+     0.0,
+     3048.0
+    ],
+    [
+     0.0,
+     0.0,
+     1.0,
+     -111.125
+    ],
+    [
+     0.0,
+     1.0,
+     0.0,
+     0.0
+    ],
+    [
+     0.0,
+     0.0,
+     0.0,
+     1.0
+    ]
+   ],
+   "local_bounds_mm": {
+    "min": [
+     0.0,
+     0.0,
+     0.0
+    ],
+    "max": [
+     3159.125,
+     3048.0,
+     101.6
+    ]
+   },
+   "obb": {
+    "width_mm": 3159.125,
+    "height_mm": 3048.0,
+    "depth_mm": 101.6,
+    "center_world_mm": [
+     1468.4375,
+     -60.325,
+     1524.0
+    ],
+    "axes": [
+     [
+      -1.0,
+      0.0,
+      0.0
+     ],
+     [
+      0.0,
+      0.0,
+      1.0
+     ],
+     [
+      0.0,
+      1.0,
+      0.0
+     ]
+    ],
+    "method": "local_aabb (trimesh OBB volume equal within 1e-6)",
+    "transform": [
+     [
+      -1.0,
+      0.0,
+      0.0,
+      1468.4375
+     ],
+     [
+      0.0,
+      0.0,
+      1.0,
+      -60.325
+     ],
+     [
+      0.0,
+      1.0,
+      0.0,
+      1524.0
+     ],
+     [
+      0.0,
+      0.0,
+      0.0,
+      1.0
+     ]
+    ]
+   },
+   "nominal_size_in": "124.375W x 120H x 4D",
+   "nominal_size_frac": "124-3/8W x 120H x 4D",
+   "uv": {
+    "charts": 6,
+    "uv_mm_per_unit": 6435.178304,
+    "margin_mm": 27.1957
+   },
+   "mesh": {
+    "vertices": 8,
+    "faces": 12,
+    "volume_mm3": 978307720.8,
+    "watertight": true
+   }
+  },
+  {
+   "id": "reference_wall_02",
+   "label": "W2 wall (drywall face at x=-0.375)",
+   "category": "reference",
+   "layer": "reference",
+   "run": "R",
+   "type": "box",
+   "parent": null,
+   "children": [],
+   "files": {
+    "obj": "components/reference/reference_wall_02.obj",
+    "stl": "components/reference/reference_wall_02.stl"
+   },
+   "material_slots": [
+    "mat_reference"
+   ],
+   "material_default": "mat_reference",
+   "pivot": {
+    "type": "rear_bottom_left_corner",
+    "world_position_mm": [
+     -111.125,
+     -9.525,
+     0.0
+    ]
+   },
+   "transform_local_to_world": [
+    [
+     0.0,
+     0.0,
+     1.0,
+     -111.125
+    ],
+    [
+     1.0,
+     0.0,
+     0.0,
+     -9.525
+    ],
+    [
+     0.0,
+     1.0,
+     0.0,
+     0.0
+    ],
+    [
+     0.0,
+     0.0,
+     0.0,
+     1.0
+    ]
+   ],
+   "local_bounds_mm": {
+    "min": [
+     0.0,
+     0.0,
+     0.0
+    ],
+    "max": [
+     2143.125,
+     3048.0,
+     101.6
+    ]
+   },
+   "obb": {
+    "width_mm": 2143.125,
+    "height_mm": 3048.0,
+    "depth_mm": 101.6,
+    "center_world_mm": [
+     -60.325,
+     1062.0375,
+     1524.0
+    ],
+    "axes": [
+     [
+      0.0,
+      1.0,
+      0.0
+     ],
+     [
+      0.0,
+      0.0,
+      1.0
+     ],
+     [
+      1.0,
+      0.0,
+      0.0
+     ]
+    ],
+    "method": "local_aabb (trimesh OBB volume equal within 1e-6)",
+    "transform": [
+     [
+      0.0,
+      0.0,
+      1.0,
+      -60.325
+     ],
+     [
+      1.0,
+      0.0,
+      0.0,
+      1062.0375
+     ],
+     [
+      0.0,
+      1.0,
+      0.0,
+      1524.0
+     ],
+     [
+      0.0,
+      0.0,
+      0.0,
+      1.0
+     ]
+    ]
+   },
+   "nominal_size_in": "84.375W x 120H x 4D",
+   "nominal_size_frac": "84-3/8W x 120H x 4D",
+   "uv": {
+    "charts": 6,
+    "uv_mm_per_unit": 4675.261138,
+    "margin_mm": 22.5623
+   },
+   "mesh": {
+    "vertices": 8,
+    "faces": 12,
+    "volume_mm3": 663676092.0,
+    "watertight": true
+   }
+  },
+  {
+   "id": "reference_floor_01",
+   "label": "floor",
+   "category": "reference",
+   "layer": "reference",
+   "run": null,
+   "type": "box",
+   "parent": null,
+   "children": [],
+   "files": {
+    "obj": "components/reference/reference_floor_01.obj",
+    "stl": "components/reference/reference_floor_01.stl"
+   },
+   "material_slots": [
+    "mat_reference"
+   ],
+   "material_default": "mat_reference",
+   "pivot": {
+    "type": "rear_bottom_left_corner",
+    "world_position_mm": [
+     -111.125,
+     2133.6,
+     -25.4
+    ]
+   },
+   "transform_local_to_world": [
+    [
+     1.0,
+     0.0,
+     0.0,
+     -111.125
+    ],
+    [
+     0.0,
+     0.0,
+     -1.0,
+     2133.6
+    ],
+    [
+     0.0,
+     1.0,
+     0.0,
+     -25.4
+    ],
+    [
+     0.0,
+     0.0,
+     0.0,
+     1.0
+    ]
+   ],
+   "local_bounds_mm": {
+    "min": [
+     0.0,
+     0.0,
+     0.0
+    ],
+    "max": [
+     3159.125,
+     25.4,
+     2244.725
+    ]
+   },
+   "obb": {
+    "width_mm": 3159.125,
+    "height_mm": 25.4,
+    "depth_mm": 2244.725,
+    "center_world_mm": [
+     1468.4375,
+     1011.2375,
+     -12.7
+    ],
+    "axes": [
+     [
+      1.0,
+      0.0,
+      0.0
+     ],
+     [
+      0.0,
+      0.0,
+      1.0
+     ],
+     [
+      0.0,
+      -1.0,
+      0.0
+     ]
+    ],
+    "method": "local_aabb (trimesh OBB volume equal within 1e-6)",
+    "transform": [
+     [
+      1.0,
+      0.0,
+      0.0,
+      1468.4375
+     ],
+     [
+      0.0,
+      0.0,
+      -1.0,
+      1011.2375
+     ],
+     [
+      0.0,
+      1.0,
+      0.0,
+      -12.7
+     ],
+     [
+      0.0,
+      0.0,
+      0.0,
+      1.0
+     ]
+    ]
+   },
+   "nominal_size_in": "124.375W x 1H x 88.375D",
+   "nominal_size_frac": "124-3/8W x 1H x 88-3/8D",
+   "uv": {
+    "charts": 6,
+    "uv_mm_per_unit": 4702.634481,
+    "margin_mm": 22.8307
+   },
+   "mesh": {
+    "vertices": 8,
+    "faces": 12,
+    "volume_mm3": 180120718.3869,
+    "watertight": true
+   }
+  }
+ ]
+}

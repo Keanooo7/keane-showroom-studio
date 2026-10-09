@@ -1,0 +1,3737 @@
+{
+ "schema": "keane-kitchens/validation/v1",
+ "units": "mm",
+ "summary": {
+  "parts": 81,
+  "fabrication_parts": 78,
+  "reference_parts": 3,
+  "part_failures": [],
+  "all_watertight": true,
+  "all_winding_consistent": true,
+  "all_volume_positive": true,
+  "all_manifold3d_ok": true,
+  "degenerate_faces_total": 0,
+  "duplicate_faces_total": 0,
+  "pairs_checked": 158,
+  "pairs_flagged_gt_1mm3": 0,
+  "max_intersection_mm3": 0.0,
+  "front_front_edge_adjacent_pairs": 26,
+  "front_front_edge_min_gap_mm": 3.175,
+  "front_front_edge_max_gap_mm": 3.175,
+  "front_front_edge_non_3_175": [],
+  "front_front_diagonal": [
+   [
+    "drawer_front_01",
+    "drawer_front_03",
+    4.4901
+   ],
+   [
+    "door_01",
+    "drawer_front_02",
+    4.4901
+   ],
+   [
+    "door_02",
+    "door_11",
+    7.0496
+   ]
+  ],
+  "front_filler_gaps_mm": [
+   1.5875
+  ],
+  "coincident_vertex_pairs_across_fronts": 0,
+  "uv_overlap_px_total": 0,
+  "uv_parts_with_overlap": [],
+  "uv_out_of_bounds_vt": 0,
+  "assembly_roundtrip_max_err_mm": {
+   "obj": 4.999665179639123e-07,
+   "stl": 0.0001035800949700434,
+   "glb": 0.0001035800949700434
+  },
+  "obb_vs_local_aabb_max_dev_mm": 4.547473508864641e-13,
+  "union": {
+   "sum_part_volumes_mm3": 4118427865.251,
+   "watertight_weld_mm": 0.01,
+   "welded": {
+    "file": "artifacts/export/kitchen_union_watertight.stl",
+    "status": "NoError",
+    "volume_mm3": 4118756615.137,
+    "genus": 28,
+    "components": 1,
+    "triangles": 8026,
+    "stl_reload_watertight": true,
+    "stl_reload_nonmanifold_edges": 0,
+    "nonmanifold_edges_in": []
+   },
+   "exact": {
+    "file": "artifacts/export/kitchen_union_exact.stl",
+    "status": "NoError",
+    "volume_mm3": 4118427865.251,
+    "genus": 28,
+    "components": 1,
+    "triangles": 7906,
+    "stl_reload_watertight": false,
+    "stl_reload_nonmanifold_edges": 1,
+    "nonmanifold_edges_in": [
+     [
+      [
+       25.25,
+       -0.375,
+       35.5
+      ],
+      [
+       25.25,
+       -0.375,
+       36.75
+      ]
+     ]
+    ]
+   },
+   "weld_volume_delta_pct": 0.00798
+  },
+  "step": {
+   "status": "ok",
+   "file": "artifacts/export/kitchen.step",
+   "solids": 81,
+   "skipped": {},
+   "reimport": {
+    "solids": 81,
+    "total_volume_mm3": 5940537920.0,
+    "all_valid": true
+   },
+   "brep_total_volume_mm3": 5940537919.6,
+   "max_rel_volume_diff_vs_mesh_box_parts": 2.0381808277712258e-05,
+   "faucet_rel_volume_diff_vs_mesh": 0.00685
+  },
+  "door_max_open_deg": {
+   "door_01": 85,
+   "door_02": 110,
+   "door_03": 110,
+   "door_04": 110,
+   "door_05": 110,
+   "door_06": 110,
+   "door_07": 110,
+   "door_08": 110,
+   "door_09": 110,
+   "door_10": 110,
+   "door_11": 80,
+   "door_12": 110,
+   "door_13": 110,
+   "door_14": 110,
+   "door_15": 90
+  },
+  "doors_limited_below_open_angle": {
+   "door_01": {
+    "max_open_deg": 85,
+    "first_collision_parts": [
+     "fixture_sink_01"
+    ]
+   },
+   "door_11": {
+    "max_open_deg": 80,
+    "first_collision_parts": [
+     "door_02"
+    ]
+   },
+   "door_15": {
+    "max_open_deg": 90,
+    "first_collision_parts": [
+     "door_09",
+     "door_10",
+     "tall_cabinet_01",
+     "trim_cap_01"
+    ]
+   }
+  },
+  "spec_notes": [
+   "fixture_faucet_01: hose apex z = 57.3000 in (spec 57.3)",
+   "10 pulls have mount_face = frame face but both posts land on the 0.25in-recessed panel -> seated on the panel surface (PULL_MOUNT='contact_surface'): hardware_handle_01, hardware_handle_03, hardware_handle_04, hardware_handle_05, hardware_handle_06, hardware_handle_11, hardware_handle_12, hardware_handle_13, hardware_handle_16, hardware_handle_17"
+  ],
+  "timings_s": {
+   "geometry_s": 0.05,
+   "components_s": 0.22,
+   "assembly_s": 0.33,
+   "world_exports_s": 0.05,
+   "validation_s": 2.62,
+   "step_s": 3.82,
+   "preview_s": 4.22
+  },
+  "total_runtime_s": 11.32
+ },
+ "parts": [
+  {
+   "id": "base_cabinet_01",
+   "watertight": true,
+   "winding_consistent": true,
+   "volume_mm3": 315676688.2018,
+   "volume_positive": true,
+   "euler_number": 2,
+   "shells": 1,
+   "genus": 0,
+   "degenerate_faces": 0,
+   "min_face_area_mm2": 21895.11750000001,
+   "duplicate_faces": 0,
+   "manifold3d_status": "NoError",
+   "manifold3d_tri_count_matches": true,
+   "stl_watertight_after_reload": true,
+   "uv": {
+    "charts": 8,
+    "overlap_px": 0,
+    "covered_px": 831744,
+    "out_of_bounds_vt": 0,
+    "raster": "1024x1024",
+    "axis_aligned_planar": true
+   }
+  },
+  {
+   "id": "drawer_front_01",
+   "watertight": true,
+   "winding_consistent": true,
+   "volume_mm3": 1514267.1327,
+   "volume_positive": true,
+   "euler_number": 2,
+   "shells": 1,
+   "genus": 0,
+   "degenerate_faces": 0,
+   "min_face_area_mm2": 221.77374999999654,
+   "duplicate_faces": 0,
+   "manifold3d_status": "NoError",
+   "manifold3d_tri_count_matches": true,
+   "stl_watertight_after_reload": true,
+   "uv": {
+    "charts": 11,
+    "overlap_px": 0,
+    "covered_px": 681235,
+    "out_of_bounds_vt": 0,
+    "raster": "1024x1024",
+    "axis_aligned_planar": true
+   }
+  },
+  {
+   "id": "hardware_handle_01",
+   "watertight": true,
+   "winding_consistent": true,
+   "volume_mm3": 26500.9551,
+   "volume_positive": true,
+   "euler_number": 2,
+   "shells": 1,
+   "genus": 0,
+   "degenerate_faces": 0,
+   "min_face_area_mm2": 0.9450585937499504,
+   "duplicate_faces": 0,
+   "manifold3d_status": "NoError",
+   "manifold3d_tri_count_matches": true,
+   "stl_watertight_after_reload": true,
+   "uv": {
+    "charts": 14,
+    "overlap_px": 0,
+    "covered_px": 355058,
+    "out_of_bounds_vt": 0,
+    "raster": "1024x1024",
+    "axis_aligned_planar": true
+   }
+  },
+  {
+   "id": "door_01",
+   "watertight": true,
+   "winding_consistent": true,
+   "volume_mm3": 5274842.2729,
+   "volume_positive": true,
+   "euler_number": 2,
+   "shells": 1,
+   "genus": 0,
+   "degenerate_faces": 0,
+   "min_face_area_mm2": 1451.6100000000058,
+   "duplicate_faces": 0,
+   "manifold3d_status": "NoError",
+   "manifold3d_tri_count_matches": true,
+   "stl_watertight_after_reload": true,
+   "uv": {
+    "charts": 11,
+    "overlap_px": 0,
+    "covered_px": 535542,
+    "out_of_bounds_vt": 0,
+    "raster": "1024x1024",
+    "axis_aligned_planar": true
+   }
+  },
+  {
+   "id": "hardware_handle_02",
+   "watertight": true,
+   "winding_consistent": true,
+   "volume_mm3": 26500.9551,
+   "volume_positive": true,
+   "euler_number": 2,
+   "shells": 1,
+   "genus": 0,
+   "degenerate_faces": 0,
+   "min_face_area_mm2": 7.560468749999332,
+   "duplicate_faces": 0,
+   "manifold3d_status": "NoError",
+   "manifold3d_tri_count_matches": true,
+   "stl_watertight_after_reload": true,
+   "uv": {
+    "charts": 14,
+    "overlap_px": 0,
+    "covered_px": 314372,
+    "out_of_bounds_vt": 0,
+    "raster": "1024x1024",
+    "axis_aligned_planar": true
+   }
+  },
+  {
+   "id": "base_cabinet_02",
+   "watertight": true,
+   "winding_consistent": true,
+   "volume_mm3": 294747846.9951,
+   "volume_positive": true,
+   "euler_number": 2,
+   "shells": 1,
+   "genus": 0,
+   "degenerate_faces": 0,
+   "min_face_area_mm2": 20443.507500000014,
+   "duplicate_faces": 0,
+   "manifold3d_status": "NoError",
+   "manifold3d_tri_count_matches": true,
+   "stl_watertight_after_reload": true,
+   "uv": {
+    "charts": 8,
+    "overlap_px": 0,
+    "covered_px": 841660,
+    "out_of_bounds_vt": 0,
+    "raster": "1024x1024",
+    "axis_aligned_planar": true
+   }
+  },
+  {
+   "id": "drawer_front_02",
+   "watertight": true,
+   "winding_consistent": true,
+   "volume_mm3": 1415944.7487,
+   "volume_positive": true,
+   "euler_number": 2,
+   "shells": 1,
+   "genus": 0,
+   "degenerate_faces": 0,
+   "min_face_area_mm2": 221.77374999999654,
+   "duplicate_faces": 0,
+   "manifold3d_status": "NoError",
+   "manifold3d_tri_count_matches": true,
+   "stl_watertight_after_reload": true,
+   "uv": {
+    "charts": 11,
+    "overlap_px": 0,
+    "covered_px": 701444,
+    "out_of_bounds_vt": 0,
+    "raster": "1024x1024",
+    "axis_aligned_planar": true
+   }
+  },
+  {
+   "id": "hardware_handle_03",
+   "watertight": true,
+   "winding_consistent": true,
+   "volume_mm3": 26500.9551,
+   "volume_positive": true,
+   "euler_number": 2,
+   "shells": 1,
+   "genus": 0,
+   "degenerate_faces": 0,
+   "min_face_area_mm2": 0.9450585937499504,
+   "duplicate_faces": 0,
+   "manifold3d_status": "NoError",
+   "manifold3d_tri_count_matches": true,
+   "stl_watertight_after_reload": true,
+   "uv": {
+    "charts": 14,
+    "overlap_px": 0,
+    "covered_px": 355058,
+    "out_of_bounds_vt": 0,
+    "raster": "1024x1024",
+    "axis_aligned_planar": true
+   }
+  },
+  {
+   "id": "drawer_front_03",
+   "watertight": true,
+   "winding_consistent": true,
+   "volume_mm3": 1415944.7487,
+   "volume_positive": true,
+   "euler_number": 2,
+   "shells": 1,
+   "genus": 0,
+   "degenerate_faces": 0,
+   "min_face_area_mm2": 221.77374999999654,
+   "duplicate_faces": 0,
+   "manifold3d_status": "NoError",
+   "manifold3d_tri_count_matches": true,
+   "stl_watertight_after_reload": true,
+   "uv": {
+    "charts": 11,
+    "overlap_px": 0,
+    "covered_px": 701444,
+    "out_of_bounds_vt": 0,
+    "raster": "1024x1024",
+    "axis_aligned_planar": true
+   }
+  },
+  {
+   "id": "hardware_handle_04",
+   "watertight": true,
+   "winding_consistent": true,
+   "volume_mm3": 26500.9551,
+   "volume_positive": true,
+   "euler_number": 2,
+   "shells": 1,
+   "genus": 0,
+   "degenerate_faces": 0,
+   "min_face_area_mm2": 0.9450585937499504,
+   "duplicate_faces": 0,
+   "manifold3d_status": "NoError",
+   "manifold3d_tri_count_matches": true,
+   "stl_watertight_after_reload": true,
+   "uv": {
+    "charts": 14,
+    "overlap_px": 0,
+    "covered_px": 355058,
+    "out_of_bounds_vt": 0,
+    "raster": "1024x1024",
+    "axis_aligned_planar": true
+   }
+  },
+  {
+   "id": "drawer_front_04",
+   "watertight": true,
+   "winding_consistent": true,
+   "volume_mm3": 1415944.7487,
+   "volume_positive": true,
+   "euler_number": 2,
+   "shells": 1,
+   "genus": 0,
+   "degenerate_faces": 0,
+   "min_face_area_mm2": 221.7737499999969,
+   "duplicate_faces": 0,
+   "manifold3d_status": "NoError",
+   "manifold3d_tri_count_matches": true,
+   "stl_watertight_after_reload": true,
+   "uv": {
+    "charts": 11,
+    "overlap_px": 0,
+    "covered_px": 701444,
+    "out_of_bounds_vt": 0,
+    "raster": "1024x1024",
+    "axis_aligned_planar": true
+   }
+  },
+  {
+   "id": "hardware_handle_05",
+   "watertight": true,
+   "winding_consistent": true,
+   "volume_mm3": 26500.9551,
+   "volume_positive": true,
+   "euler_number": 2,
+   "shells": 1,
+   "genus": 0,
+   "degenerate_faces": 0,
+   "min_face_area_mm2": 0.9450585937499842,
+   "duplicate_faces": 0,
+   "manifold3d_status": "NoError",
+   "manifold3d_tri_count_matches": true,
+   "stl_watertight_after_reload": true,
+   "uv": {
+    "charts": 14,
+    "overlap_px": 0,
+    "covered_px": 355002,
+    "out_of_bounds_vt": 0,
+    "raster": "1024x1024",
+    "axis_aligned_planar": true
+   }
+  },
+  {
+   "id": "drawer_front_05",
+   "watertight": true,
+   "winding_consistent": true,
+   "volume_mm3": 2518742.9464,
+   "volume_positive": true,
+   "euler_number": 2,
+   "shells": 1,
+   "genus": 0,
+   "degenerate_faces": 0,
+   "min_face_area_mm2": 574.5956249999919,
+   "duplicate_faces": 0,
+   "manifold3d_status": "NoError",
+   "manifold3d_tri_count_matches": true,
+   "stl_watertight_after_reload": true,
+   "uv": {
+    "charts": 11,
+    "overlap_px": 0,
+    "covered_px": 508875,
+    "out_of_bounds_vt": 0,
+    "raster": "1024x1024",
+    "axis_aligned_planar": true
+   }
+  },
+  {
+   "id": "hardware_handle_06",
+   "watertight": true,
+   "winding_consistent": true,
+   "volume_mm3": 26500.9551,
+   "volume_positive": true,
+   "euler_number": 2,
+   "shells": 1,
+   "genus": 0,
+   "degenerate_faces": 0,
+   "min_face_area_mm2": 0.9450585937499842,
+   "duplicate_faces": 0,
+   "manifold3d_status": "NoError",
+   "manifold3d_tri_count_matches": true,
+   "stl_watertight_after_reload": true,
+   "uv": {
+    "charts": 14,
+    "overlap_px": 0,
+    "covered_px": 355002,
+    "out_of_bounds_vt": 0,
+    "raster": "1024x1024",
+    "axis_aligned_planar": true
+   }
+  },
+  {
+   "id": "upper_cabinet_01",
+   "watertight": true,
+   "winding_consistent": true,
+   "volume_mm3": 97156034.7198,
+   "volume_positive": true,
+   "euler_number": 2,
+   "shells": 1,
+   "genus": 0,
+   "degenerate_faces": 0,
+   "min_face_area_mm2": 45536.199250000005,
+   "duplicate_faces": 0,
+   "manifold3d_status": "NoError",
+   "manifold3d_tri_count_matches": true,
+   "stl_watertight_after_reload": true,
+   "uv": {
+    "charts": 6,
+    "overlap_px": 0,
+    "covered_px": 786324,
+    "out_of_bounds_vt": 0,
+    "raster": "1024x1024",
+    "axis_aligned_planar": true
+   }
+  },
+  {
+   "id": "door_02",
+   "watertight": true,
+   "winding_consistent": true,
+   "volume_mm3": 4801537.7759,
+   "volume_positive": true,
+   "euler_number": 2,
+   "shells": 1,
+   "genus": 0,
+   "degenerate_faces": 0,
+   "min_face_area_mm2": 554.434375000002,
+   "duplicate_faces": 0,
+   "manifold3d_status": "NoError",
+   "manifold3d_tri_count_matches": true,
+   "stl_watertight_after_reload": true,
+   "uv": {
+    "charts": 11,
+    "overlap_px": 0,
+    "covered_px": 590042,
+    "out_of_bounds_vt": 0,
+    "raster": "1024x1024",
+    "axis_aligned_planar": true
+   }
+  },
+  {
+   "id": "upper_cabinet_02",
+   "watertight": true,
+   "winding_consistent": true,
+   "volume_mm3": 202760420.2848,
+   "volume_positive": true,
+   "euler_number": 2,
+   "shells": 1,
+   "genus": 0,
+   "degenerate_faces": 0,
+   "min_face_area_mm2": 95032.06800000001,
+   "duplicate_faces": 0,
+   "manifold3d_status": "NoError",
+   "manifold3d_tri_count_matches": true,
+   "stl_watertight_after_reload": true,
+   "uv": {
+    "charts": 6,
+    "overlap_px": 0,
+    "covered_px": 662013,
+    "out_of_bounds_vt": 0,
+    "raster": "1024x1024",
+    "axis_aligned_planar": true
+   }
+  },
+  {
+   "id": "door_03",
+   "watertight": true,
+   "winding_consistent": true,
+   "volume_mm3": 4982307.5757,
+   "volume_positive": true,
+   "euler_number": 2,
+   "shells": 1,
+   "genus": 0,
+   "degenerate_faces": 0,
+   "min_face_area_mm2": 594.7568750000023,
+   "duplicate_faces": 0,
+   "manifold3d_status": "NoError",
+   "manifold3d_tri_count_matches": true,
+   "stl_watertight_after_reload": true,
+   "uv": {
+    "charts": 11,
+    "overlap_px": 0,
+    "covered_px": 612744,
+    "out_of_bounds_vt": 0,
+    "raster": "1024x1024",
+    "axis_aligned_planar": true
+   }
+  },
+  {
+   "id": "hardware_handle_07",
+   "watertight": true,
+   "winding_consistent": true,
+   "volume_mm3": 26500.9551,
+   "volume_positive": true,
+   "euler_number": 2,
+   "shells": 1,
+   "genus": 0,
+   "degenerate_faces": 0,
+   "min_face_area_mm2": 7.560468749999783,
+   "duplicate_faces": 0,
+   "manifold3d_status": "NoError",
+   "manifold3d_tri_count_matches": true,
+   "stl_watertight_after_reload": true,
+   "uv": {
+    "charts": 14,
+    "overlap_px": 0,
+    "covered_px": 314425,
+    "out_of_bounds_vt": 0,
+    "raster": "1024x1024",
+    "axis_aligned_planar": true
+   }
+  },
+  {
+   "id": "door_04",
+   "watertight": true,
+   "winding_consistent": true,
+   "volume_mm3": 4982307.5757,
+   "volume_positive": true,
+   "euler_number": 2,
+   "shells": 1,
+   "genus": 0,
+   "degenerate_faces": 0,
+   "min_face_area_mm2": 594.756875000002,
+   "duplicate_faces": 0,
+   "manifold3d_status": "NoError",
+   "manifold3d_tri_count_matches": true,
+   "stl_watertight_after_reload": true,
+   "uv": {
+    "charts": 11,
+    "overlap_px": 0,
+    "covered_px": 612744,
+    "out_of_bounds_vt": 0,
+    "raster": "1024x1024",
+    "axis_aligned_planar": true
+   }
+  },
+  {
+   "id": "hardware_handle_08",
+   "watertight": true,
+   "winding_consistent": true,
+   "volume_mm3": 26500.9551,
+   "volume_positive": true,
+   "euler_number": 2,
+   "shells": 1,
+   "genus": 0,
+   "degenerate_faces": 0,
+   "min_face_area_mm2": 7.560468749999783,
+   "duplicate_faces": 0,
+   "manifold3d_status": "NoError",
+   "manifold3d_tri_count_matches": true,
+   "stl_watertight_after_reload": true,
+   "uv": {
+    "charts": 14,
+    "overlap_px": 0,
+    "covered_px": 314425,
+    "out_of_bounds_vt": 0,
+    "raster": "1024x1024",
+    "axis_aligned_planar": true
+   }
+  },
+  {
+   "id": "upper_cabinet_03",
+   "watertight": true,
+   "winding_consistent": true,
+   "volume_mm3": 202760420.2848,
+   "volume_positive": true,
+   "euler_number": 2,
+   "shells": 1,
+   "genus": 0,
+   "degenerate_faces": 0,
+   "min_face_area_mm2": 95032.06800000003,
+   "duplicate_faces": 0,
+   "manifold3d_status": "NoError",
+   "manifold3d_tri_count_matches": true,
+   "stl_watertight_after_reload": true,
+   "uv": {
+    "charts": 6,
+    "overlap_px": 0,
+    "covered_px": 662013,
+    "out_of_bounds_vt": 0,
+    "raster": "1024x1024",
+    "axis_aligned_planar": true
+   }
+  },
+  {
+   "id": "door_05",
+   "watertight": true,
+   "winding_consistent": true,
+   "volume_mm3": 4982307.5757,
+   "volume_positive": true,
+   "euler_number": 2,
+   "shells": 1,
+   "genus": 0,
+   "degenerate_faces": 0,
+   "min_face_area_mm2": 594.7568750000015,
+   "duplicate_faces": 0,
+   "manifold3d_status": "NoError",
+   "manifold3d_tri_count_matches": true,
+   "stl_watertight_after_reload": true,
+   "uv": {
+    "charts": 11,
+    "overlap_px": 0,
+    "covered_px": 612744,
+    "out_of_bounds_vt": 0,
+    "raster": "1024x1024",
+    "axis_aligned_planar": true
+   }
+  },
+  {
+   "id": "hardware_handle_09",
+   "watertight": true,
+   "winding_consistent": true,
+   "volume_mm3": 26500.9551,
+   "volume_positive": true,
+   "euler_number": 2,
+   "shells": 1,
+   "genus": 0,
+   "degenerate_faces": 0,
+   "min_face_area_mm2": 7.560468749999242,
+   "duplicate_faces": 0,
+   "manifold3d_status": "NoError",
+   "manifold3d_tri_count_matches": true,
+   "stl_watertight_after_reload": true,
+   "uv": {
+    "charts": 14,
+    "overlap_px": 0,
+    "covered_px": 314425,
+    "out_of_bounds_vt": 0,
+    "raster": "1024x1024",
+    "axis_aligned_planar": true
+   }
+  },
+  {
+   "id": "door_06",
+   "watertight": true,
+   "winding_consistent": true,
+   "volume_mm3": 4982307.5757,
+   "volume_positive": true,
+   "euler_number": 2,
+   "shells": 1,
+   "genus": 0,
+   "degenerate_faces": 0,
+   "min_face_area_mm2": 594.7568750000015,
+   "duplicate_faces": 0,
+   "manifold3d_status": "NoError",
+   "manifold3d_tri_count_matches": true,
+   "stl_watertight_after_reload": true,
+   "uv": {
+    "charts": 11,
+    "overlap_px": 0,
+    "covered_px": 612744,
+    "out_of_bounds_vt": 0,
+    "raster": "1024x1024",
+    "axis_aligned_planar": true
+   }
+  },
+  {
+   "id": "hardware_handle_10",
+   "watertight": true,
+   "winding_consistent": true,
+   "volume_mm3": 26500.9551,
+   "volume_positive": true,
+   "euler_number": 2,
+   "shells": 1,
+   "genus": 0,
+   "degenerate_faces": 0,
+   "min_face_area_mm2": 7.560468749999242,
+   "duplicate_faces": 0,
+   "manifold3d_status": "NoError",
+   "manifold3d_tri_count_matches": true,
+   "stl_watertight_after_reload": true,
+   "uv": {
+    "charts": 14,
+    "overlap_px": 0,
+    "covered_px": 314425,
+    "out_of_bounds_vt": 0,
+    "raster": "1024x1024",
+    "axis_aligned_planar": true
+   }
+  },
+  {
+   "id": "base_cabinet_03",
+   "watertight": true,
+   "winding_consistent": true,
+   "volume_mm3": 380207281.9226,
+   "volume_positive": true,
+   "euler_number": 2,
+   "shells": 1,
+   "genus": 0,
+   "degenerate_faces": 0,
+   "min_face_area_mm2": 26370.915000000015,
+   "duplicate_faces": 0,
+   "manifold3d_status": "NoError",
+   "manifold3d_tri_count_matches": true,
+   "stl_watertight_after_reload": true,
+   "uv": {
+    "charts": 8,
+    "overlap_px": 0,
+    "covered_px": 728542,
+    "out_of_bounds_vt": 0,
+    "raster": "1024x1024",
+    "axis_aligned_planar": true
+   }
+  },
+  {
+   "id": "base_cabinet_04",
+   "watertight": true,
+   "winding_consistent": true,
+   "volume_mm3": 209288412.0675,
+   "volume_positive": true,
+   "euler_number": 2,
+   "shells": 1,
+   "genus": 0,
+   "degenerate_faces": 0,
+   "min_face_area_mm2": 14516.10000000001,
+   "duplicate_faces": 0,
+   "manifold3d_status": "NoError",
+   "manifold3d_tri_count_matches": true,
+   "stl_watertight_after_reload": true,
+   "uv": {
+    "charts": 8,
+    "overlap_px": 0,
+    "covered_px": 731871,
+    "out_of_bounds_vt": 0,
+    "raster": "1024x1024",
+    "axis_aligned_planar": true
+   }
+  },
+  {
+   "id": "drawer_front_06",
+   "watertight": true,
+   "winding_consistent": true,
+   "volume_mm3": 1150679.1503,
+   "volume_positive": true,
+   "euler_number": 2,
+   "shells": 1,
+   "genus": 0,
+   "degenerate_faces": 0,
+   "min_face_area_mm2": 302.41874999999567,
+   "duplicate_faces": 0,
+   "manifold3d_status": "NoError",
+   "manifold3d_tri_count_matches": true,
+   "stl_watertight_after_reload": true,
+   "uv": {
+    "charts": 11,
+    "overlap_px": 0,
+    "covered_px": 603584,
+    "out_of_bounds_vt": 0,
+    "raster": "1024x1024",
+    "axis_aligned_planar": true
+   }
+  },
+  {
+   "id": "hardware_handle_11",
+   "watertight": true,
+   "winding_consistent": true,
+   "volume_mm3": 26500.9551,
+   "volume_positive": true,
+   "euler_number": 2,
+   "shells": 1,
+   "genus": 0,
+   "degenerate_faces": 0,
+   "min_face_area_mm2": 0.9450585937499504,
+   "duplicate_faces": 0,
+   "manifold3d_status": "NoError",
+   "manifold3d_tri_count_matches": true,
+   "stl_watertight_after_reload": true,
+   "uv": {
+    "charts": 14,
+    "overlap_px": 0,
+    "covered_px": 355058,
+    "out_of_bounds_vt": 0,
+    "raster": "1024x1024",
+    "axis_aligned_planar": true
+   }
+  },
+  {
+   "id": "drawer_front_07",
+   "watertight": true,
+   "winding_consistent": true,
+   "volume_mm3": 1489174.441,
+   "volume_positive": true,
+   "euler_number": 2,
+   "shells": 1,
+   "genus": 0,
+   "degenerate_faces": 0,
+   "min_face_area_mm2": 383.0637499999948,
+   "duplicate_faces": 0,
+   "manifold3d_status": "NoError",
+   "manifold3d_tri_count_matches": true,
+   "stl_watertight_after_reload": true,
+   "uv": {
+    "charts": 11,
+    "overlap_px": 0,
+    "covered_px": 501682,
+    "out_of_bounds_vt": 0,
+    "raster": "1024x1024",
+    "axis_aligned_planar": true
+   }
+  },
+  {
+   "id": "hardware_handle_12",
+   "watertight": true,
+   "winding_consistent": true,
+   "volume_mm3": 26500.9551,
+   "volume_positive": true,
+   "euler_number": 2,
+   "shells": 1,
+   "genus": 0,
+   "degenerate_faces": 0,
+   "min_face_area_mm2": 0.9450585937499504,
+   "duplicate_faces": 0,
+   "manifold3d_status": "NoError",
+   "manifold3d_tri_count_matches": true,
+   "stl_watertight_after_reload": true,
+   "uv": {
+    "charts": 14,
+    "overlap_px": 0,
+    "covered_px": 355058,
+    "out_of_bounds_vt": 0,
+    "raster": "1024x1024",
+    "axis_aligned_planar": true
+   }
+  },
+  {
+   "id": "drawer_front_08",
+   "watertight": true,
+   "winding_consistent": true,
+   "volume_mm3": 2155667.0596,
+   "volume_positive": true,
+   "euler_number": 2,
+   "shells": 1,
+   "genus": 0,
+   "degenerate_faces": 0,
+   "min_face_area_mm2": 766.127499999989,
+   "duplicate_faces": 0,
+   "manifold3d_status": "NoError",
+   "manifold3d_tri_count_matches": true,
+   "stl_watertight_after_reload": true,
+   "uv": {
+    "charts": 11,
+    "overlap_px": 0,
+    "covered_px": 531394,
+    "out_of_bounds_vt": 0,
+    "raster": "1024x1024",
+    "axis_aligned_planar": true
+   }
+  },
+  {
+   "id": "hardware_handle_13",
+   "watertight": true,
+   "winding_consistent": true,
+   "volume_mm3": 26500.9551,
+   "volume_positive": true,
+   "euler_number": 2,
+   "shells": 1,
+   "genus": 0,
+   "degenerate_faces": 0,
+   "min_face_area_mm2": 0.9450585937499842,
+   "duplicate_faces": 0,
+   "manifold3d_status": "NoError",
+   "manifold3d_tri_count_matches": true,
+   "stl_watertight_after_reload": true,
+   "uv": {
+    "charts": 14,
+    "overlap_px": 0,
+    "covered_px": 355002,
+    "out_of_bounds_vt": 0,
+    "raster": "1024x1024",
+    "axis_aligned_planar": true
+   }
+  },
+  {
+   "id": "base_cabinet_05",
+   "watertight": true,
+   "winding_consistent": true,
+   "volume_mm3": 352126255.4235,
+   "volume_positive": true,
+   "euler_number": 2,
+   "shells": 1,
+   "genus": 0,
+   "degenerate_faces": 0,
+   "min_face_area_mm2": 796.3693749999887,
+   "duplicate_faces": 0,
+   "manifold3d_status": "NoError",
+   "manifold3d_tri_count_matches": true,
+   "stl_watertight_after_reload": true,
+   "uv": {
+    "charts": 12,
+    "overlap_px": 0,
+    "covered_px": 641064,
+    "out_of_bounds_vt": 0,
+    "raster": "1024x1024",
+    "axis_aligned_planar": true
+   }
+  },
+  {
+   "id": "door_07",
+   "watertight": true,
+   "winding_consistent": true,
+   "volume_mm3": 3167696.2856,
+   "volume_positive": true,
+   "euler_number": 2,
+   "shells": 1,
+   "genus": 0,
+   "degenerate_faces": 0,
+   "min_face_area_mm2": 856.853125000003,
+   "duplicate_faces": 0,
+   "manifold3d_status": "NoError",
+   "manifold3d_tri_count_matches": true,
+   "stl_watertight_after_reload": true,
+   "uv": {
+    "charts": 11,
+    "overlap_px": 0,
+    "covered_px": 488843,
+    "out_of_bounds_vt": 0,
+    "raster": "1024x1024",
+    "axis_aligned_planar": true
+   }
+  },
+  {
+   "id": "hardware_handle_14",
+   "watertight": true,
+   "winding_consistent": true,
+   "volume_mm3": 26500.9551,
+   "volume_positive": true,
+   "euler_number": 2,
+   "shells": 1,
+   "genus": 0,
+   "degenerate_faces": 0,
+   "min_face_area_mm2": 7.560468749999332,
+   "duplicate_faces": 0,
+   "manifold3d_status": "NoError",
+   "manifold3d_tri_count_matches": true,
+   "stl_watertight_after_reload": true,
+   "uv": {
+    "charts": 14,
+    "overlap_px": 0,
+    "covered_px": 314425,
+    "out_of_bounds_vt": 0,
+    "raster": "1024x1024",
+    "axis_aligned_planar": true
+   }
+  },
+  {
+   "id": "door_08",
+   "watertight": true,
+   "winding_consistent": true,
+   "volume_mm3": 3167696.2856,
+   "volume_positive": true,
+   "euler_number": 2,
+   "shells": 1,
+   "genus": 0,
+   "degenerate_faces": 0,
+   "min_face_area_mm2": 856.8531250000024,
+   "duplicate_faces": 0,
+   "manifold3d_status": "NoError",
+   "manifold3d_tri_count_matches": true,
+   "stl_watertight_after_reload": true,
+   "uv": {
+    "charts": 11,
+    "overlap_px": 0,
+    "covered_px": 488843,
+    "out_of_bounds_vt": 0,
+    "raster": "1024x1024",
+    "axis_aligned_planar": true
+   }
+  },
+  {
+   "id": "hardware_handle_15",
+   "watertight": true,
+   "winding_consistent": true,
+   "volume_mm3": 26500.9551,
+   "volume_positive": true,
+   "euler_number": 2,
+   "shells": 1,
+   "genus": 0,
+   "degenerate_faces": 0,
+   "min_face_area_mm2": 7.560468749999332,
+   "duplicate_faces": 0,
+   "manifold3d_status": "NoError",
+   "manifold3d_tri_count_matches": true,
+   "stl_watertight_after_reload": true,
+   "uv": {
+    "charts": 14,
+    "overlap_px": 0,
+    "covered_px": 314425,
+    "out_of_bounds_vt": 0,
+    "raster": "1024x1024",
+    "axis_aligned_planar": true
+   }
+  },
+  {
+   "id": "base_cabinet_06",
+   "watertight": true,
+   "winding_consistent": true,
+   "volume_mm3": 251146094.481,
+   "volume_positive": true,
+   "euler_number": 2,
+   "shells": 1,
+   "genus": 0,
+   "degenerate_faces": 0,
+   "min_face_area_mm2": 17419.32000000001,
+   "duplicate_faces": 0,
+   "manifold3d_status": "NoError",
+   "manifold3d_tri_count_matches": true,
+   "stl_watertight_after_reload": true,
+   "uv": {
+    "charts": 8,
+    "overlap_px": 0,
+    "covered_px": 771596,
+    "out_of_bounds_vt": 0,
+    "raster": "1024x1024",
+    "axis_aligned_planar": true
+   }
+  },
+  {
+   "id": "drawer_front_09",
+   "watertight": true,
+   "winding_consistent": true,
+   "volume_mm3": 1211106.4487,
+   "volume_positive": true,
+   "euler_number": 2,
+   "shells": 1,
+   "genus": 0,
+   "degenerate_faces": 0,
+   "min_face_area_mm2": 221.77374999999654,
+   "duplicate_faces": 0,
+   "manifold3d_status": "NoError",
+   "manifold3d_tri_count_matches": true,
+   "stl_watertight_after_reload": true,
+   "uv": {
+    "charts": 11,
+    "overlap_px": 0,
+    "covered_px": 678449,
+    "out_of_bounds_vt": 0,
+    "raster": "1024x1024",
+    "axis_aligned_planar": true
+   }
+  },
+  {
+   "id": "hardware_handle_16",
+   "watertight": true,
+   "winding_consistent": true,
+   "volume_mm3": 26500.9551,
+   "volume_positive": true,
+   "euler_number": 2,
+   "shells": 1,
+   "genus": 0,
+   "degenerate_faces": 0,
+   "min_face_area_mm2": 0.9450585937499504,
+   "duplicate_faces": 0,
+   "manifold3d_status": "NoError",
+   "manifold3d_tri_count_matches": true,
+   "stl_watertight_after_reload": true,
+   "uv": {
+    "charts": 14,
+    "overlap_px": 0,
+    "covered_px": 355058,
+    "out_of_bounds_vt": 0,
+    "raster": "1024x1024",
+    "axis_aligned_planar": true
+   }
+  },
+  {
+   "id": "drawer_front_10",
+   "watertight": true,
+   "winding_consistent": true,
+   "volume_mm3": 4265885.6214,
+   "volume_positive": true,
+   "euler_number": 2,
+   "shells": 1,
+   "genus": 0,
+   "degenerate_faces": 0,
+   "min_face_area_mm2": 1078.626874999985,
+   "duplicate_faces": 0,
+   "manifold3d_status": "NoError",
+   "manifold3d_tri_count_matches": true,
+   "stl_watertight_after_reload": true,
+   "uv": {
+    "charts": 11,
+    "overlap_px": 0,
+    "covered_px": 463900,
+    "out_of_bounds_vt": 0,
+    "raster": "1024x1024",
+    "axis_aligned_planar": true
+   }
+  },
+  {
+   "id": "hardware_handle_17",
+   "watertight": true,
+   "winding_consistent": true,
+   "volume_mm3": 26500.9551,
+   "volume_positive": true,
+   "euler_number": 2,
+   "shells": 1,
+   "genus": 0,
+   "degenerate_faces": 0,
+   "min_face_area_mm2": 0.9450585937499504,
+   "duplicate_faces": 0,
+   "manifold3d_status": "NoError",
+   "manifold3d_tri_count_matches": true,
+   "stl_watertight_after_reload": true,
+   "uv": {
+    "charts": 14,
+    "overlap_px": 0,
+    "covered_px": 355058,
+    "out_of_bounds_vt": 0,
+    "raster": "1024x1024",
+    "axis_aligned_planar": true
+   }
+  },
+  {
+   "id": "tall_cabinet_01",
+   "watertight": true,
+   "winding_consistent": true,
+   "volume_mm3": 796377512.0805,
+   "volume_positive": true,
+   "euler_number": 2,
+   "shells": 1,
+   "genus": 0,
+   "degenerate_faces": 0,
+   "min_face_area_mm2": 20322.539999999986,
+   "duplicate_faces": 0,
+   "manifold3d_status": "NoError",
+   "manifold3d_tri_count_matches": true,
+   "stl_watertight_after_reload": true,
+   "uv": {
+    "charts": 8,
+    "overlap_px": 0,
+    "covered_px": 712977,
+    "out_of_bounds_vt": 0,
+    "raster": "1024x1024",
+    "axis_aligned_planar": true
+   }
+  },
+  {
+   "id": "door_09",
+   "watertight": true,
+   "winding_consistent": true,
+   "volume_mm3": 11670406.0946,
+   "volume_positive": true,
+   "euler_number": 2,
+   "shells": 1,
+   "genus": 0,
+   "degenerate_faces": 0,
+   "min_face_area_mm2": 1320.561875000004,
+   "duplicate_faces": 0,
+   "manifold3d_status": "NoError",
+   "manifold3d_tri_count_matches": true,
+   "stl_watertight_after_reload": true,
+   "uv": {
+    "charts": 11,
+    "overlap_px": 0,
+    "covered_px": 670850,
+    "out_of_bounds_vt": 0,
+    "raster": "1024x1024",
+    "axis_aligned_planar": true
+   }
+  },
+  {
+   "id": "hardware_handle_18",
+   "watertight": true,
+   "winding_consistent": true,
+   "volume_mm3": 36486.8222,
+   "volume_positive": true,
+   "euler_number": 2,
+   "shells": 1,
+   "genus": 0,
+   "degenerate_faces": 0,
+   "min_face_area_mm2": 7.560468750000415,
+   "duplicate_faces": 0,
+   "manifold3d_status": "NoError",
+   "manifold3d_tri_count_matches": true,
+   "stl_watertight_after_reload": true,
+   "uv": {
+    "charts": 14,
+    "overlap_px": 0,
+    "covered_px": 220824,
+    "out_of_bounds_vt": 0,
+    "raster": "1024x1024",
+    "axis_aligned_planar": true
+   }
+  },
+  {
+   "id": "door_10",
+   "watertight": true,
+   "winding_consistent": true,
+   "volume_mm3": 6305883.0535,
+   "volume_positive": true,
+   "euler_number": 2,
+   "shells": 1,
+   "genus": 0,
+   "degenerate_faces": 0,
+   "min_face_area_mm2": 1320.561875000004,
+   "duplicate_faces": 0,
+   "manifold3d_status": "NoError",
+   "manifold3d_tri_count_matches": true,
+   "stl_watertight_after_reload": true,
+   "uv": {
+    "charts": 11,
+    "overlap_px": 0,
+    "covered_px": 411785,
+    "out_of_bounds_vt": 0,
+    "raster": "1024x1024",
+    "axis_aligned_planar": true
+   }
+  },
+  {
+   "id": "hardware_handle_19",
+   "watertight": true,
+   "winding_consistent": true,
+   "volume_mm3": 26500.9551,
+   "volume_positive": true,
+   "euler_number": 2,
+   "shells": 1,
+   "genus": 0,
+   "degenerate_faces": 0,
+   "min_face_area_mm2": 7.560468750000325,
+   "duplicate_faces": 0,
+   "manifold3d_status": "NoError",
+   "manifold3d_tri_count_matches": true,
+   "stl_watertight_after_reload": true,
+   "uv": {
+    "charts": 14,
+    "overlap_px": 0,
+    "covered_px": 314425,
+    "out_of_bounds_vt": 0,
+    "raster": "1024x1024",
+    "axis_aligned_planar": true
+   }
+  },
+  {
+   "id": "upper_cabinet_04",
+   "watertight": true,
+   "winding_consistent": true,
+   "volume_mm3": 201734487.6592,
+   "volume_positive": true,
+   "euler_number": 2,
+   "shells": 1,
+   "genus": 0,
+   "degenerate_faces": 0,
+   "min_face_area_mm2": 94551.2221875,
+   "duplicate_faces": 0,
+   "manifold3d_status": "NoError",
+   "manifold3d_tri_count_matches": true,
+   "stl_watertight_after_reload": true,
+   "uv": {
+    "charts": 6,
+    "overlap_px": 0,
+    "covered_px": 684400,
+    "out_of_bounds_vt": 0,
+    "raster": "1024x1024",
+    "axis_aligned_planar": true
+   }
+  },
+  {
+   "id": "door_11",
+   "watertight": true,
+   "winding_consistent": true,
+   "volume_mm3": 4688556.6511,
+   "volume_positive": true,
+   "euler_number": 2,
+   "shells": 1,
+   "genus": 0,
+   "degenerate_faces": 0,
+   "min_face_area_mm2": 529.2328125000018,
+   "duplicate_faces": 0,
+   "manifold3d_status": "NoError",
+   "manifold3d_tri_count_matches": true,
+   "stl_watertight_after_reload": true,
+   "uv": {
+    "charts": 11,
+    "overlap_px": 0,
+    "covered_px": 575002,
+    "out_of_bounds_vt": 0,
+    "raster": "1024x1024",
+    "axis_aligned_planar": true
+   }
+  },
+  {
+   "id": "hardware_handle_20",
+   "watertight": true,
+   "winding_consistent": true,
+   "volume_mm3": 26500.9551,
+   "volume_positive": true,
+   "euler_number": 2,
+   "shells": 1,
+   "genus": 0,
+   "degenerate_faces": 0,
+   "min_face_area_mm2": 7.560468749999783,
+   "duplicate_faces": 0,
+   "manifold3d_status": "NoError",
+   "manifold3d_tri_count_matches": true,
+   "stl_watertight_after_reload": true,
+   "uv": {
+    "charts": 14,
+    "overlap_px": 0,
+    "covered_px": 314425,
+    "out_of_bounds_vt": 0,
+    "raster": "1024x1024",
+    "axis_aligned_planar": true
+   }
+  },
+  {
+   "id": "upper_cabinet_05",
+   "watertight": true,
+   "winding_consistent": true,
+   "volume_mm3": 148973160.1176,
+   "volume_positive": true,
+   "euler_number": 2,
+   "shells": 1,
+   "genus": 0,
+   "degenerate_faces": 0,
+   "min_face_area_mm2": 69822.441,
+   "duplicate_faces": 0,
+   "manifold3d_status": "NoError",
+   "manifold3d_tri_count_matches": true,
+   "stl_watertight_after_reload": true,
+   "uv": {
+    "charts": 6,
+    "overlap_px": 0,
+    "covered_px": 787233,
+    "out_of_bounds_vt": 0,
+    "raster": "1024x1024",
+    "axis_aligned_planar": true
+   }
+  },
+  {
+   "id": "door_12",
+   "watertight": true,
+   "winding_consistent": true,
+   "volume_mm3": 7151545.1727,
+   "volume_positive": true,
+   "euler_number": 2,
+   "shells": 1,
+   "genus": 0,
+   "degenerate_faces": 0,
+   "min_face_area_mm2": 1078.626875000004,
+   "duplicate_faces": 0,
+   "manifold3d_status": "NoError",
+   "manifold3d_tri_count_matches": true,
+   "stl_watertight_after_reload": true,
+   "uv": {
+    "charts": 11,
+    "overlap_px": 0,
+    "covered_px": 568758,
+    "out_of_bounds_vt": 0,
+    "raster": "1024x1024",
+    "axis_aligned_planar": true
+   }
+  },
+  {
+   "id": "hardware_handle_21",
+   "watertight": true,
+   "winding_consistent": true,
+   "volume_mm3": 26500.9551,
+   "volume_positive": true,
+   "euler_number": 2,
+   "shells": 1,
+   "genus": 0,
+   "degenerate_faces": 0,
+   "min_face_area_mm2": 7.560468749999242,
+   "duplicate_faces": 0,
+   "manifold3d_status": "NoError",
+   "manifold3d_tri_count_matches": true,
+   "stl_watertight_after_reload": true,
+   "uv": {
+    "charts": 14,
+    "overlap_px": 0,
+    "covered_px": 314425,
+    "out_of_bounds_vt": 0,
+    "raster": "1024x1024",
+    "axis_aligned_planar": true
+   }
+  },
+  {
+   "id": "upper_cabinet_06",
+   "watertight": true,
+   "winding_consistent": true,
+   "volume_mm3": 177349000.14,
+   "volume_positive": true,
+   "euler_number": 2,
+   "shells": 1,
+   "genus": 0,
+   "degenerate_faces": 0,
+   "min_face_area_mm2": 116370.735,
+   "duplicate_faces": 0,
+   "manifold3d_status": "NoError",
+   "manifold3d_tri_count_matches": true,
+   "stl_watertight_after_reload": true,
+   "uv": {
+    "charts": 6,
+    "overlap_px": 0,
+    "covered_px": 631098,
+    "out_of_bounds_vt": 0,
+    "raster": "1024x1024",
+    "axis_aligned_planar": true
+   }
+  },
+  {
+   "id": "door_13",
+   "watertight": true,
+   "winding_consistent": true,
+   "volume_mm3": 4383155.5482,
+   "volume_positive": true,
+   "euler_number": 2,
+   "shells": 1,
+   "genus": 0,
+   "degenerate_faces": 0,
+   "min_face_area_mm2": 836.6918750000026,
+   "duplicate_faces": 0,
+   "manifold3d_status": "NoError",
+   "manifold3d_tri_count_matches": true,
+   "stl_watertight_after_reload": true,
+   "uv": {
+    "charts": 11,
+    "overlap_px": 0,
+    "covered_px": 508794,
+    "out_of_bounds_vt": 0,
+    "raster": "1024x1024",
+    "axis_aligned_planar": true
+   }
+  },
+  {
+   "id": "hardware_handle_22",
+   "watertight": true,
+   "winding_consistent": true,
+   "volume_mm3": 26500.9551,
+   "volume_positive": true,
+   "euler_number": 2,
+   "shells": 1,
+   "genus": 0,
+   "degenerate_faces": 0,
+   "min_face_area_mm2": 7.560468749999242,
+   "duplicate_faces": 0,
+   "manifold3d_status": "NoError",
+   "manifold3d_tri_count_matches": true,
+   "stl_watertight_after_reload": true,
+   "uv": {
+    "charts": 14,
+    "overlap_px": 0,
+    "covered_px": 314425,
+    "out_of_bounds_vt": 0,
+    "raster": "1024x1024",
+    "axis_aligned_planar": true
+   }
+  },
+  {
+   "id": "door_14",
+   "watertight": true,
+   "winding_consistent": true,
+   "volume_mm3": 4383155.5482,
+   "volume_positive": true,
+   "euler_number": 2,
+   "shells": 1,
+   "genus": 0,
+   "degenerate_faces": 0,
+   "min_face_area_mm2": 836.6918750000026,
+   "duplicate_faces": 0,
+   "manifold3d_status": "NoError",
+   "manifold3d_tri_count_matches": true,
+   "stl_watertight_after_reload": true,
+   "uv": {
+    "charts": 11,
+    "overlap_px": 0,
+    "covered_px": 508794,
+    "out_of_bounds_vt": 0,
+    "raster": "1024x1024",
+    "axis_aligned_planar": true
+   }
+  },
+  {
+   "id": "hardware_handle_23",
+   "watertight": true,
+   "winding_consistent": true,
+   "volume_mm3": 26500.9551,
+   "volume_positive": true,
+   "euler_number": 2,
+   "shells": 1,
+   "genus": 0,
+   "degenerate_faces": 0,
+   "min_face_area_mm2": 7.560468749999242,
+   "duplicate_faces": 0,
+   "manifold3d_status": "NoError",
+   "manifold3d_tri_count_matches": true,
+   "stl_watertight_after_reload": true,
+   "uv": {
+    "charts": 14,
+    "overlap_px": 0,
+    "covered_px": 314425,
+    "out_of_bounds_vt": 0,
+    "raster": "1024x1024",
+    "axis_aligned_planar": true
+   }
+  },
+  {
+   "id": "upper_cabinet_07",
+   "watertight": true,
+   "winding_consistent": true,
+   "volume_mm3": 148973160.1176,
+   "volume_positive": true,
+   "euler_number": 2,
+   "shells": 1,
+   "genus": 0,
+   "degenerate_faces": 0,
+   "min_face_area_mm2": 69822.441,
+   "duplicate_faces": 0,
+   "manifold3d_status": "NoError",
+   "manifold3d_tri_count_matches": true,
+   "stl_watertight_after_reload": true,
+   "uv": {
+    "charts": 6,
+    "overlap_px": 0,
+    "covered_px": 787233,
+    "out_of_bounds_vt": 0,
+    "raster": "1024x1024",
+    "axis_aligned_planar": true
+   }
+  },
+  {
+   "id": "door_15",
+   "watertight": true,
+   "winding_consistent": true,
+   "volume_mm3": 7151545.1727,
+   "volume_positive": true,
+   "euler_number": 2,
+   "shells": 1,
+   "genus": 0,
+   "degenerate_faces": 0,
+   "min_face_area_mm2": 1078.6268750000036,
+   "duplicate_faces": 0,
+   "manifold3d_status": "NoError",
+   "manifold3d_tri_count_matches": true,
+   "stl_watertight_after_reload": true,
+   "uv": {
+    "charts": 11,
+    "overlap_px": 0,
+    "covered_px": 568758,
+    "out_of_bounds_vt": 0,
+    "raster": "1024x1024",
+    "axis_aligned_planar": true
+   }
+  },
+  {
+   "id": "hardware_handle_24",
+   "watertight": true,
+   "winding_consistent": true,
+   "volume_mm3": 26500.9551,
+   "volume_positive": true,
+   "euler_number": 2,
+   "shells": 1,
+   "genus": 0,
+   "degenerate_faces": 0,
+   "min_face_area_mm2": 7.560468749999242,
+   "duplicate_faces": 0,
+   "manifold3d_status": "NoError",
+   "manifold3d_tri_count_matches": true,
+   "stl_watertight_after_reload": true,
+   "uv": {
+    "charts": 14,
+    "overlap_px": 0,
+    "covered_px": 314425,
+    "out_of_bounds_vt": 0,
+    "raster": "1024x1024",
+    "axis_aligned_planar": true
+   }
+  },
+  {
+   "id": "trim_filler_01",
+   "watertight": true,
+   "winding_consistent": true,
+   "volume_mm3": 1090955.9834,
+   "volume_positive": true,
+   "euler_number": 2,
+   "shells": 1,
+   "genus": 0,
+   "degenerate_faces": 0,
+   "min_face_area_mm2": 695.5631249999981,
+   "duplicate_faces": 0,
+   "manifold3d_status": "NoError",
+   "manifold3d_tri_count_matches": true,
+   "stl_watertight_after_reload": true,
+   "uv": {
+    "charts": 6,
+    "overlap_px": 0,
+    "covered_px": 246558,
+    "out_of_bounds_vt": 0,
+    "raster": "1024x1024",
+    "axis_aligned_planar": true
+   }
+  },
+  {
+   "id": "trim_filler_02",
+   "watertight": true,
+   "winding_consistent": true,
+   "volume_mm3": 1328120.3276,
+   "volume_positive": true,
+   "euler_number": 2,
+   "shells": 1,
+   "genus": 0,
+   "degenerate_faces": 0,
+   "min_face_area_mm2": 846.7724999999978,
+   "duplicate_faces": 0,
+   "manifold3d_status": "NoError",
+   "manifold3d_tri_count_matches": true,
+   "stl_watertight_after_reload": true,
+   "uv": {
+    "charts": 6,
+    "overlap_px": 0,
+    "covered_px": 289214,
+    "out_of_bounds_vt": 0,
+    "raster": "1024x1024",
+    "axis_aligned_planar": true
+   }
+  },
+  {
+   "id": "trim_filler_03",
+   "watertight": true,
+   "winding_consistent": true,
+   "volume_mm3": 5312481.3105,
+   "volume_positive": true,
+   "euler_number": 2,
+   "shells": 1,
+   "genus": 0,
+   "degenerate_faces": 0,
+   "min_face_area_mm2": 3387.090000000001,
+   "duplicate_faces": 0,
+   "manifold3d_status": "NoError",
+   "manifold3d_tri_count_matches": true,
+   "stl_watertight_after_reload": true,
+   "uv": {
+    "charts": 6,
+    "overlap_px": 0,
+    "covered_px": 456701,
+    "out_of_bounds_vt": 0,
+    "raster": "1024x1024",
+    "axis_aligned_planar": true
+   }
+  },
+  {
+   "id": "trim_toekick_01",
+   "watertight": true,
+   "winding_consistent": true,
+   "volume_mm3": 2628971.5566,
+   "volume_positive": true,
+   "euler_number": 2,
+   "shells": 1,
+   "genus": 0,
+   "degenerate_faces": 0,
+   "min_face_area_mm2": 745.9662500000027,
+   "duplicate_faces": 0,
+   "manifold3d_status": "NoError",
+   "manifold3d_tri_count_matches": true,
+   "stl_watertight_after_reload": true,
+   "uv": {
+    "charts": 6,
+    "overlap_px": 0,
+    "covered_px": 154421,
+    "out_of_bounds_vt": 0,
+    "raster": "1024x1024",
+    "axis_aligned_planar": true
+   }
+  },
+  {
+   "id": "trim_toekick_02",
+   "watertight": true,
+   "winding_consistent": true,
+   "volume_mm3": 795796.7955,
+   "volume_positive": true,
+   "euler_number": 2,
+   "shells": 1,
+   "genus": 0,
+   "degenerate_faces": 0,
+   "min_face_area_mm2": 745.9662500000027,
+   "duplicate_faces": 0,
+   "manifold3d_status": "NoError",
+   "manifold3d_tri_count_matches": true,
+   "stl_watertight_after_reload": true,
+   "uv": {
+    "charts": 6,
+    "overlap_px": 0,
+    "covered_px": 514912,
+    "out_of_bounds_vt": 0,
+    "raster": "1024x1024",
+    "axis_aligned_planar": true
+   }
+  },
+  {
+   "id": "trim_toekick_03",
+   "watertight": true,
+   "winding_consistent": true,
+   "volume_mm3": 1913701.8178,
+   "volume_positive": true,
+   "euler_number": 2,
+   "shells": 1,
+   "genus": 0,
+   "degenerate_faces": 0,
+   "min_face_area_mm2": 745.9662500000027,
+   "duplicate_faces": 0,
+   "manifold3d_status": "NoError",
+   "manifold3d_tri_count_matches": true,
+   "stl_watertight_after_reload": true,
+   "uv": {
+    "charts": 6,
+    "overlap_px": 0,
+    "covered_px": 212172,
+    "out_of_bounds_vt": 0,
+    "raster": "1024x1024",
+    "axis_aligned_planar": true
+   }
+  },
+  {
+   "id": "trim_crown_01",
+   "watertight": true,
+   "winding_consistent": true,
+   "volume_mm3": 70396829.7706,
+   "volume_positive": true,
+   "euler_number": 2,
+   "shells": 1,
+   "genus": 0,
+   "degenerate_faces": 0,
+   "min_face_area_mm2": 15270.130750000017,
+   "duplicate_faces": 0,
+   "manifold3d_status": "NoError",
+   "manifold3d_tri_count_matches": true,
+   "stl_watertight_after_reload": true,
+   "uv": {
+    "charts": 6,
+    "overlap_px": 0,
+    "covered_px": 398874,
+    "out_of_bounds_vt": 0,
+    "raster": "1024x1024",
+    "axis_aligned_planar": true
+   }
+  },
+  {
+   "id": "trim_crown_02",
+   "watertight": true,
+   "winding_consistent": true,
+   "volume_mm3": 21862125.4692,
+   "volume_positive": true,
+   "euler_number": 2,
+   "shells": 1,
+   "genus": 0,
+   "degenerate_faces": 0,
+   "min_face_area_mm2": 7220.751687500016,
+   "duplicate_faces": 0,
+   "manifold3d_status": "NoError",
+   "manifold3d_tri_count_matches": true,
+   "stl_watertight_after_reload": true,
+   "uv": {
+    "charts": 6,
+    "overlap_px": 0,
+    "covered_px": 544031,
+    "out_of_bounds_vt": 0,
+    "raster": "1024x1024",
+    "axis_aligned_planar": true
+   }
+  },
+  {
+   "id": "trim_cap_01",
+   "watertight": true,
+   "winding_consistent": true,
+   "volume_mm3": 23974722.7158,
+   "volume_positive": true,
+   "euler_number": 2,
+   "shells": 1,
+   "genus": 0,
+   "degenerate_faces": 0,
+   "min_face_area_mm2": 18417.30187500006,
+   "duplicate_faces": 0,
+   "manifold3d_status": "NoError",
+   "manifold3d_tri_count_matches": true,
+   "stl_watertight_after_reload": true,
+   "uv": {
+    "charts": 6,
+    "overlap_px": 0,
+    "covered_px": 724815,
+    "out_of_bounds_vt": 0,
+    "raster": "1024x1024",
+    "axis_aligned_planar": true
+   }
+  },
+  {
+   "id": "countertop_slab_01",
+   "watertight": true,
+   "winding_consistent": true,
+   "volume_mm3": 38580013.5656,
+   "volume_positive": true,
+   "euler_number": 2,
+   "shells": 1,
+   "genus": 0,
+   "degenerate_faces": 0,
+   "min_face_area_mm2": 10332.640625,
+   "duplicate_faces": 0,
+   "manifold3d_status": "NoError",
+   "manifold3d_tri_count_matches": true,
+   "stl_watertight_after_reload": true,
+   "uv": {
+    "charts": 6,
+    "overlap_px": 0,
+    "covered_px": 765114,
+    "out_of_bounds_vt": 0,
+    "raster": "1024x1024",
+    "axis_aligned_planar": true
+   }
+  },
+  {
+   "id": "countertop_slab_02",
+   "watertight": true,
+   "winding_consistent": true,
+   "volume_mm3": 26459667.3427,
+   "volume_positive": true,
+   "euler_number": 2,
+   "shells": 1,
+   "genus": 0,
+   "degenerate_faces": 0,
+   "min_face_area_mm2": 6602.809375,
+   "duplicate_faces": 0,
+   "manifold3d_status": "NoError",
+   "manifold3d_tri_count_matches": true,
+   "stl_watertight_after_reload": true,
+   "uv": {
+    "charts": 10,
+    "overlap_px": 0,
+    "covered_px": 689717,
+    "out_of_bounds_vt": 0,
+    "raster": "1024x1024",
+    "axis_aligned_planar": true
+   }
+  },
+  {
+   "id": "fixture_sink_01",
+   "watertight": true,
+   "winding_consistent": true,
+   "volume_mm3": 22071840.1479,
+   "volume_positive": true,
+   "euler_number": 0,
+   "shells": 1,
+   "genus": 1,
+   "degenerate_faces": 0,
+   "min_face_area_mm2": 9.849682311163633,
+   "duplicate_faces": 0,
+   "manifold3d_status": "NoError",
+   "manifold3d_tri_count_matches": true,
+   "stl_watertight_after_reload": true,
+   "uv": {
+    "charts": 15,
+    "overlap_px": 0,
+    "covered_px": 673350,
+    "out_of_bounds_vt": 0,
+    "raster": "1024x1024",
+    "axis_aligned_planar": false
+   }
+  },
+  {
+   "id": "fixture_faucet_01",
+   "watertight": true,
+   "winding_consistent": true,
+   "volume_mm3": 871734.1928,
+   "volume_positive": true,
+   "euler_number": 0,
+   "shells": 1,
+   "genus": 1,
+   "degenerate_faces": 0,
+   "min_face_area_mm2": 0.10151130654015783,
+   "duplicate_faces": 0,
+   "manifold3d_status": "NoError",
+   "manifold3d_tri_count_matches": true,
+   "stl_watertight_after_reload": true,
+   "uv": {
+    "charts": 22,
+    "overlap_px": 0,
+    "covered_px": 241418,
+    "out_of_bounds_vt": 0,
+    "raster": "1024x1024",
+    "axis_aligned_planar": false
+   }
+  },
+  {
+   "id": "backsplash_01",
+   "watertight": true,
+   "winding_consistent": true,
+   "volume_mm3": 12417137.7161,
+   "volume_positive": true,
+   "euler_number": 2,
+   "shells": 1,
+   "genus": 0,
+   "degenerate_faces": 0,
+   "min_face_area_mm2": 1451.6099999999988,
+   "duplicate_faces": 0,
+   "manifold3d_status": "NoError",
+   "manifold3d_tri_count_matches": true,
+   "stl_watertight_after_reload": true,
+   "uv": {
+    "charts": 10,
+    "overlap_px": 0,
+    "covered_px": 519590,
+    "out_of_bounds_vt": 0,
+    "raster": "1024x1024",
+    "axis_aligned_planar": true
+   }
+  },
+  {
+   "id": "backsplash_02",
+   "watertight": true,
+   "winding_consistent": true,
+   "volume_mm3": 8172376.0443,
+   "volume_positive": true,
+   "euler_number": 2,
+   "shells": 1,
+   "genus": 0,
+   "degenerate_faces": 0,
+   "min_face_area_mm2": 2222.777812500001,
+   "duplicate_faces": 0,
+   "manifold3d_status": "NoError",
+   "manifold3d_tri_count_matches": true,
+   "stl_watertight_after_reload": true,
+   "uv": {
+    "charts": 6,
+    "overlap_px": 0,
+    "covered_px": 536227,
+    "out_of_bounds_vt": 0,
+    "raster": "1024x1024",
+    "axis_aligned_planar": true
+   }
+  },
+  {
+   "id": "reference_wall_01",
+   "watertight": true,
+   "winding_consistent": true,
+   "volume_mm3": 978307720.8,
+   "volume_positive": true,
+   "euler_number": 2,
+   "shells": 1,
+   "genus": 0,
+   "degenerate_faces": 0,
+   "min_face_area_mm2": 154838.4,
+   "duplicate_faces": 0,
+   "manifold3d_status": "NoError",
+   "manifold3d_tri_count_matches": true,
+   "stl_watertight_after_reload": true,
+   "uv": {
+    "charts": 6,
+    "overlap_px": 0,
+    "covered_px": 520011,
+    "out_of_bounds_vt": 0,
+    "raster": "1024x1024",
+    "axis_aligned_planar": true
+   }
+  },
+  {
+   "id": "reference_wall_02",
+   "watertight": true,
+   "winding_consistent": true,
+   "volume_mm3": 663676092.0,
+   "volume_positive": true,
+   "euler_number": 2,
+   "shells": 1,
+   "genus": 0,
+   "degenerate_faces": 0,
+   "min_face_area_mm2": 108870.75,
+   "duplicate_faces": 0,
+   "manifold3d_status": "NoError",
+   "manifold3d_tri_count_matches": true,
+   "stl_watertight_after_reload": true,
+   "uv": {
+    "charts": 6,
+    "overlap_px": 0,
+    "covered_px": 678241,
+    "out_of_bounds_vt": 0,
+    "raster": "1024x1024",
+    "axis_aligned_planar": true
+   }
+  },
+  {
+   "id": "reference_floor_01",
+   "watertight": true,
+   "winding_consistent": true,
+   "volume_mm3": 180120718.3869,
+   "volume_positive": true,
+   "euler_number": 2,
+   "shells": 1,
+   "genus": 0,
+   "degenerate_faces": 0,
+   "min_face_area_mm2": 28508.007499999996,
+   "duplicate_faces": 0,
+   "manifold3d_status": "NoError",
+   "manifold3d_tri_count_matches": true,
+   "stl_watertight_after_reload": true,
+   "uv": {
+    "charts": 6,
+    "overlap_px": 0,
+    "covered_px": 686988,
+    "out_of_bounds_vt": 0,
+    "raster": "1024x1024",
+    "axis_aligned_planar": true
+   }
+  }
+ ],
+ "pairwise_interference": {
+  "criterion": "AABBs within 0.508 mm; flag > 1.0 mm3 (manifold3d intersection)",
+  "pairs": [
+   {
+    "a": "base_cabinet_01",
+    "b": "drawer_front_01",
+    "aabb_gap_mm": 0.0,
+    "intersection_mm3": 0.0,
+    "flagged": false
+   },
+   {
+    "a": "base_cabinet_01",
+    "b": "door_01",
+    "aabb_gap_mm": 0.0,
+    "intersection_mm3": 0.0,
+    "flagged": false
+   },
+   {
+    "a": "base_cabinet_01",
+    "b": "base_cabinet_02",
+    "aabb_gap_mm": 0.0,
+    "intersection_mm3": 0.0,
+    "flagged": false
+   },
+   {
+    "a": "base_cabinet_01",
+    "b": "trim_filler_02",
+    "aabb_gap_mm": 0.0,
+    "intersection_mm3": 0.0,
+    "flagged": false
+   },
+   {
+    "a": "base_cabinet_01",
+    "b": "trim_filler_03",
+    "aabb_gap_mm": 0.0,
+    "intersection_mm3": 0.0,
+    "flagged": false
+   },
+   {
+    "a": "base_cabinet_01",
+    "b": "trim_toekick_03",
+    "aabb_gap_mm": 0.0,
+    "intersection_mm3": 0.0,
+    "flagged": false
+   },
+   {
+    "a": "base_cabinet_01",
+    "b": "countertop_slab_01",
+    "aabb_gap_mm": 0.0,
+    "intersection_mm3": 0.0,
+    "flagged": false
+   },
+   {
+    "a": "base_cabinet_01",
+    "b": "reference_wall_02",
+    "aabb_gap_mm": 0.0,
+    "intersection_mm3": 0.0,
+    "flagged": false
+   },
+   {
+    "a": "base_cabinet_01",
+    "b": "reference_floor_01",
+    "aabb_gap_mm": 0.0,
+    "intersection_mm3": 0.0,
+    "flagged": false
+   },
+   {
+    "a": "drawer_front_01",
+    "b": "hardware_handle_01",
+    "aabb_gap_mm": 0.0,
+    "intersection_mm3": 0.0,
+    "flagged": false
+   },
+   {
+    "a": "door_01",
+    "b": "hardware_handle_02",
+    "aabb_gap_mm": 0.0,
+    "intersection_mm3": 0.0,
+    "flagged": false
+   },
+   {
+    "a": "base_cabinet_02",
+    "b": "drawer_front_02",
+    "aabb_gap_mm": 0.0,
+    "intersection_mm3": 0.0,
+    "flagged": false
+   },
+   {
+    "a": "base_cabinet_02",
+    "b": "drawer_front_03",
+    "aabb_gap_mm": 0.0,
+    "intersection_mm3": 0.0,
+    "flagged": false
+   },
+   {
+    "a": "base_cabinet_02",
+    "b": "drawer_front_04",
+    "aabb_gap_mm": 0.0,
+    "intersection_mm3": 0.0,
+    "flagged": false
+   },
+   {
+    "a": "base_cabinet_02",
+    "b": "drawer_front_05",
+    "aabb_gap_mm": 0.0,
+    "intersection_mm3": 0.0,
+    "flagged": false
+   },
+   {
+    "a": "base_cabinet_02",
+    "b": "trim_toekick_03",
+    "aabb_gap_mm": 0.0,
+    "intersection_mm3": 0.0,
+    "flagged": false
+   },
+   {
+    "a": "base_cabinet_02",
+    "b": "countertop_slab_01",
+    "aabb_gap_mm": 0.0,
+    "intersection_mm3": 0.0,
+    "flagged": false
+   },
+   {
+    "a": "base_cabinet_02",
+    "b": "reference_wall_02",
+    "aabb_gap_mm": 0.0,
+    "intersection_mm3": 0.0,
+    "flagged": false
+   },
+   {
+    "a": "base_cabinet_02",
+    "b": "reference_floor_01",
+    "aabb_gap_mm": 0.0,
+    "intersection_mm3": 0.0,
+    "flagged": false
+   },
+   {
+    "a": "drawer_front_02",
+    "b": "hardware_handle_03",
+    "aabb_gap_mm": 0.0,
+    "intersection_mm3": 0.0,
+    "flagged": false
+   },
+   {
+    "a": "drawer_front_03",
+    "b": "hardware_handle_04",
+    "aabb_gap_mm": 0.0,
+    "intersection_mm3": 0.0,
+    "flagged": false
+   },
+   {
+    "a": "drawer_front_04",
+    "b": "hardware_handle_05",
+    "aabb_gap_mm": 0.0,
+    "intersection_mm3": 0.0,
+    "flagged": false
+   },
+   {
+    "a": "drawer_front_05",
+    "b": "hardware_handle_06",
+    "aabb_gap_mm": 0.0,
+    "intersection_mm3": 0.0,
+    "flagged": false
+   },
+   {
+    "a": "upper_cabinet_01",
+    "b": "door_02",
+    "aabb_gap_mm": 0.0,
+    "intersection_mm3": 0.0,
+    "flagged": false
+   },
+   {
+    "a": "upper_cabinet_01",
+    "b": "upper_cabinet_02",
+    "aabb_gap_mm": 0.0,
+    "intersection_mm3": 0.0,
+    "flagged": false
+   },
+   {
+    "a": "upper_cabinet_01",
+    "b": "trim_crown_01",
+    "aabb_gap_mm": 0.0,
+    "intersection_mm3": 0.0,
+    "flagged": false
+   },
+   {
+    "a": "upper_cabinet_01",
+    "b": "trim_crown_02",
+    "aabb_gap_mm": 0.0,
+    "intersection_mm3": 0.0,
+    "flagged": false
+   },
+   {
+    "a": "upper_cabinet_01",
+    "b": "backsplash_02",
+    "aabb_gap_mm": 0.0,
+    "intersection_mm3": -0.0,
+    "flagged": false
+   },
+   {
+    "a": "upper_cabinet_01",
+    "b": "reference_wall_02",
+    "aabb_gap_mm": 0.0,
+    "intersection_mm3": 0.0,
+    "flagged": false
+   },
+   {
+    "a": "upper_cabinet_02",
+    "b": "door_03",
+    "aabb_gap_mm": 0.0,
+    "intersection_mm3": 0.0,
+    "flagged": false
+   },
+   {
+    "a": "upper_cabinet_02",
+    "b": "door_04",
+    "aabb_gap_mm": 0.0,
+    "intersection_mm3": 0.0,
+    "flagged": false
+   },
+   {
+    "a": "upper_cabinet_02",
+    "b": "upper_cabinet_03",
+    "aabb_gap_mm": 0.0,
+    "intersection_mm3": 0.0,
+    "flagged": false
+   },
+   {
+    "a": "upper_cabinet_02",
+    "b": "trim_crown_02",
+    "aabb_gap_mm": 0.0,
+    "intersection_mm3": 0.0,
+    "flagged": false
+   },
+   {
+    "a": "upper_cabinet_02",
+    "b": "backsplash_02",
+    "aabb_gap_mm": 0.0,
+    "intersection_mm3": -0.0,
+    "flagged": false
+   },
+   {
+    "a": "upper_cabinet_02",
+    "b": "reference_wall_02",
+    "aabb_gap_mm": 0.0,
+    "intersection_mm3": 0.0,
+    "flagged": false
+   },
+   {
+    "a": "door_03",
+    "b": "hardware_handle_07",
+    "aabb_gap_mm": 0.0,
+    "intersection_mm3": 0.0,
+    "flagged": false
+   },
+   {
+    "a": "door_04",
+    "b": "hardware_handle_08",
+    "aabb_gap_mm": 0.0,
+    "intersection_mm3": 0.0,
+    "flagged": false
+   },
+   {
+    "a": "upper_cabinet_03",
+    "b": "door_05",
+    "aabb_gap_mm": 0.0,
+    "intersection_mm3": 0.0,
+    "flagged": false
+   },
+   {
+    "a": "upper_cabinet_03",
+    "b": "door_06",
+    "aabb_gap_mm": 0.0,
+    "intersection_mm3": 0.0,
+    "flagged": false
+   },
+   {
+    "a": "upper_cabinet_03",
+    "b": "trim_crown_02",
+    "aabb_gap_mm": 0.0,
+    "intersection_mm3": 0.0,
+    "flagged": false
+   },
+   {
+    "a": "upper_cabinet_03",
+    "b": "backsplash_02",
+    "aabb_gap_mm": 0.0,
+    "intersection_mm3": 0.0,
+    "flagged": false
+   },
+   {
+    "a": "upper_cabinet_03",
+    "b": "reference_wall_02",
+    "aabb_gap_mm": 0.0,
+    "intersection_mm3": 0.0,
+    "flagged": false
+   },
+   {
+    "a": "door_05",
+    "b": "hardware_handle_09",
+    "aabb_gap_mm": 0.0,
+    "intersection_mm3": 0.0,
+    "flagged": false
+   },
+   {
+    "a": "door_06",
+    "b": "hardware_handle_10",
+    "aabb_gap_mm": 0.0,
+    "intersection_mm3": 0.0,
+    "flagged": false
+   },
+   {
+    "a": "base_cabinet_03",
+    "b": "base_cabinet_04",
+    "aabb_gap_mm": 0.0,
+    "intersection_mm3": 0.0,
+    "flagged": false
+   },
+   {
+    "a": "base_cabinet_03",
+    "b": "trim_filler_01",
+    "aabb_gap_mm": 0.0,
+    "intersection_mm3": 0.0,
+    "flagged": false
+   },
+   {
+    "a": "base_cabinet_03",
+    "b": "trim_toekick_01",
+    "aabb_gap_mm": 0.0,
+    "intersection_mm3": 0.0,
+    "flagged": false
+   },
+   {
+    "a": "base_cabinet_03",
+    "b": "trim_toekick_03",
+    "aabb_gap_mm": 0.0,
+    "intersection_mm3": 0.0,
+    "flagged": false
+   },
+   {
+    "a": "base_cabinet_03",
+    "b": "countertop_slab_01",
+    "aabb_gap_mm": 0.0,
+    "intersection_mm3": 0.0,
+    "flagged": false
+   },
+   {
+    "a": "base_cabinet_03",
+    "b": "countertop_slab_02",
+    "aabb_gap_mm": 0.0,
+    "intersection_mm3": -0.0,
+    "flagged": false
+   },
+   {
+    "a": "base_cabinet_03",
+    "b": "reference_wall_01",
+    "aabb_gap_mm": 0.0,
+    "intersection_mm3": 0.0,
+    "flagged": false
+   },
+   {
+    "a": "base_cabinet_03",
+    "b": "reference_wall_02",
+    "aabb_gap_mm": 0.0,
+    "intersection_mm3": 0.0,
+    "flagged": false
+   },
+   {
+    "a": "base_cabinet_03",
+    "b": "reference_floor_01",
+    "aabb_gap_mm": 0.0,
+    "intersection_mm3": 0.0,
+    "flagged": false
+   },
+   {
+    "a": "base_cabinet_04",
+    "b": "drawer_front_06",
+    "aabb_gap_mm": 0.0,
+    "intersection_mm3": 0.0,
+    "flagged": false
+   },
+   {
+    "a": "base_cabinet_04",
+    "b": "drawer_front_07",
+    "aabb_gap_mm": 0.0,
+    "intersection_mm3": 0.0,
+    "flagged": false
+   },
+   {
+    "a": "base_cabinet_04",
+    "b": "drawer_front_08",
+    "aabb_gap_mm": 0.0,
+    "intersection_mm3": 0.0,
+    "flagged": false
+   },
+   {
+    "a": "base_cabinet_04",
+    "b": "base_cabinet_05",
+    "aabb_gap_mm": 0.0,
+    "intersection_mm3": 0.0,
+    "flagged": false
+   },
+   {
+    "a": "base_cabinet_04",
+    "b": "trim_filler_01",
+    "aabb_gap_mm": 0.0,
+    "intersection_mm3": 0.0,
+    "flagged": false
+   },
+   {
+    "a": "base_cabinet_04",
+    "b": "trim_toekick_01",
+    "aabb_gap_mm": 0.0,
+    "intersection_mm3": 0.0,
+    "flagged": false
+   },
+   {
+    "a": "base_cabinet_04",
+    "b": "countertop_slab_02",
+    "aabb_gap_mm": 0.0,
+    "intersection_mm3": 0.0,
+    "flagged": false
+   },
+   {
+    "a": "base_cabinet_04",
+    "b": "reference_wall_01",
+    "aabb_gap_mm": 0.0,
+    "intersection_mm3": 0.0,
+    "flagged": false
+   },
+   {
+    "a": "base_cabinet_04",
+    "b": "reference_floor_01",
+    "aabb_gap_mm": 0.0,
+    "intersection_mm3": 0.0,
+    "flagged": false
+   },
+   {
+    "a": "drawer_front_06",
+    "b": "hardware_handle_11",
+    "aabb_gap_mm": 0.0,
+    "intersection_mm3": 0.0,
+    "flagged": false
+   },
+   {
+    "a": "drawer_front_07",
+    "b": "hardware_handle_12",
+    "aabb_gap_mm": 0.0,
+    "intersection_mm3": 0.0,
+    "flagged": false
+   },
+   {
+    "a": "drawer_front_08",
+    "b": "hardware_handle_13",
+    "aabb_gap_mm": 0.0,
+    "intersection_mm3": 0.0,
+    "flagged": false
+   },
+   {
+    "a": "base_cabinet_05",
+    "b": "door_07",
+    "aabb_gap_mm": 0.0,
+    "intersection_mm3": 0.0,
+    "flagged": false
+   },
+   {
+    "a": "base_cabinet_05",
+    "b": "door_08",
+    "aabb_gap_mm": 0.0,
+    "intersection_mm3": 0.0,
+    "flagged": false
+   },
+   {
+    "a": "base_cabinet_05",
+    "b": "base_cabinet_06",
+    "aabb_gap_mm": 0.0,
+    "intersection_mm3": 0.0,
+    "flagged": false
+   },
+   {
+    "a": "base_cabinet_05",
+    "b": "trim_toekick_01",
+    "aabb_gap_mm": 0.0,
+    "intersection_mm3": 0.0,
+    "flagged": false
+   },
+   {
+    "a": "base_cabinet_05",
+    "b": "countertop_slab_02",
+    "aabb_gap_mm": 0.0,
+    "intersection_mm3": 0.0,
+    "flagged": false
+   },
+   {
+    "a": "base_cabinet_05",
+    "b": "fixture_sink_01",
+    "aabb_gap_mm": 0.0,
+    "intersection_mm3": 0.0,
+    "flagged": false
+   },
+   {
+    "a": "base_cabinet_05",
+    "b": "reference_wall_01",
+    "aabb_gap_mm": 0.0,
+    "intersection_mm3": 0.0,
+    "flagged": false
+   },
+   {
+    "a": "base_cabinet_05",
+    "b": "reference_floor_01",
+    "aabb_gap_mm": 0.0,
+    "intersection_mm3": 0.0,
+    "flagged": false
+   },
+   {
+    "a": "door_07",
+    "b": "hardware_handle_14",
+    "aabb_gap_mm": 0.0,
+    "intersection_mm3": 0.0,
+    "flagged": false
+   },
+   {
+    "a": "door_08",
+    "b": "hardware_handle_15",
+    "aabb_gap_mm": 0.0,
+    "intersection_mm3": 0.0,
+    "flagged": false
+   },
+   {
+    "a": "base_cabinet_06",
+    "b": "drawer_front_09",
+    "aabb_gap_mm": 0.0,
+    "intersection_mm3": 0.0,
+    "flagged": false
+   },
+   {
+    "a": "base_cabinet_06",
+    "b": "drawer_front_10",
+    "aabb_gap_mm": 0.0,
+    "intersection_mm3": 0.0,
+    "flagged": false
+   },
+   {
+    "a": "base_cabinet_06",
+    "b": "tall_cabinet_01",
+    "aabb_gap_mm": 0.0,
+    "intersection_mm3": -0.0,
+    "flagged": false
+   },
+   {
+    "a": "base_cabinet_06",
+    "b": "trim_toekick_01",
+    "aabb_gap_mm": 0.0,
+    "intersection_mm3": 0.0,
+    "flagged": false
+   },
+   {
+    "a": "base_cabinet_06",
+    "b": "trim_toekick_02",
+    "aabb_gap_mm": 0.0,
+    "intersection_mm3": 0.0,
+    "flagged": false
+   },
+   {
+    "a": "base_cabinet_06",
+    "b": "countertop_slab_02",
+    "aabb_gap_mm": 0.0,
+    "intersection_mm3": 0.0,
+    "flagged": false
+   },
+   {
+    "a": "base_cabinet_06",
+    "b": "reference_wall_01",
+    "aabb_gap_mm": 0.0,
+    "intersection_mm3": 0.0,
+    "flagged": false
+   },
+   {
+    "a": "base_cabinet_06",
+    "b": "reference_floor_01",
+    "aabb_gap_mm": 0.0,
+    "intersection_mm3": 0.0,
+    "flagged": false
+   },
+   {
+    "a": "drawer_front_09",
+    "b": "hardware_handle_16",
+    "aabb_gap_mm": 0.0,
+    "intersection_mm3": 0.0,
+    "flagged": false
+   },
+   {
+    "a": "drawer_front_10",
+    "b": "hardware_handle_17",
+    "aabb_gap_mm": 0.0,
+    "intersection_mm3": 0.0,
+    "flagged": false
+   },
+   {
+    "a": "tall_cabinet_01",
+    "b": "door_09",
+    "aabb_gap_mm": 0.0,
+    "intersection_mm3": 0.0,
+    "flagged": false
+   },
+   {
+    "a": "tall_cabinet_01",
+    "b": "door_10",
+    "aabb_gap_mm": 0.0,
+    "intersection_mm3": 0.0,
+    "flagged": false
+   },
+   {
+    "a": "tall_cabinet_01",
+    "b": "trim_toekick_01",
+    "aabb_gap_mm": 0.0,
+    "intersection_mm3": 0.0,
+    "flagged": false
+   },
+   {
+    "a": "tall_cabinet_01",
+    "b": "trim_toekick_02",
+    "aabb_gap_mm": 0.0,
+    "intersection_mm3": 0.0,
+    "flagged": false
+   },
+   {
+    "a": "tall_cabinet_01",
+    "b": "trim_cap_01",
+    "aabb_gap_mm": 0.0,
+    "intersection_mm3": 0.0,
+    "flagged": false
+   },
+   {
+    "a": "tall_cabinet_01",
+    "b": "countertop_slab_02",
+    "aabb_gap_mm": 0.0,
+    "intersection_mm3": 0.0,
+    "flagged": false
+   },
+   {
+    "a": "tall_cabinet_01",
+    "b": "backsplash_01",
+    "aabb_gap_mm": 0.0,
+    "intersection_mm3": 0.0,
+    "flagged": false
+   },
+   {
+    "a": "tall_cabinet_01",
+    "b": "reference_wall_01",
+    "aabb_gap_mm": 0.0,
+    "intersection_mm3": 0.0,
+    "flagged": false
+   },
+   {
+    "a": "tall_cabinet_01",
+    "b": "reference_floor_01",
+    "aabb_gap_mm": 0.0,
+    "intersection_mm3": 0.0,
+    "flagged": false
+   },
+   {
+    "a": "door_09",
+    "b": "hardware_handle_18",
+    "aabb_gap_mm": 0.0,
+    "intersection_mm3": 0.0,
+    "flagged": false
+   },
+   {
+    "a": "door_10",
+    "b": "hardware_handle_19",
+    "aabb_gap_mm": 0.0,
+    "intersection_mm3": 0.0,
+    "flagged": false
+   },
+   {
+    "a": "upper_cabinet_04",
+    "b": "door_11",
+    "aabb_gap_mm": 0.0,
+    "intersection_mm3": 0.0,
+    "flagged": false
+   },
+   {
+    "a": "upper_cabinet_04",
+    "b": "upper_cabinet_05",
+    "aabb_gap_mm": 0.0,
+    "intersection_mm3": 0.0,
+    "flagged": false
+   },
+   {
+    "a": "upper_cabinet_04",
+    "b": "trim_crown_01",
+    "aabb_gap_mm": 0.0,
+    "intersection_mm3": 0.0,
+    "flagged": false
+   },
+   {
+    "a": "upper_cabinet_04",
+    "b": "backsplash_01",
+    "aabb_gap_mm": 0.0,
+    "intersection_mm3": 0.0,
+    "flagged": false
+   },
+   {
+    "a": "upper_cabinet_04",
+    "b": "backsplash_02",
+    "aabb_gap_mm": 0.0,
+    "intersection_mm3": -0.0,
+    "flagged": false
+   },
+   {
+    "a": "upper_cabinet_04",
+    "b": "reference_wall_01",
+    "aabb_gap_mm": 0.0,
+    "intersection_mm3": 0.0,
+    "flagged": false
+   },
+   {
+    "a": "upper_cabinet_04",
+    "b": "reference_wall_02",
+    "aabb_gap_mm": 0.0,
+    "intersection_mm3": 0.0,
+    "flagged": false
+   },
+   {
+    "a": "door_11",
+    "b": "hardware_handle_20",
+    "aabb_gap_mm": 0.0,
+    "intersection_mm3": 0.0,
+    "flagged": false
+   },
+   {
+    "a": "upper_cabinet_05",
+    "b": "door_12",
+    "aabb_gap_mm": 0.0,
+    "intersection_mm3": 0.0,
+    "flagged": false
+   },
+   {
+    "a": "upper_cabinet_05",
+    "b": "upper_cabinet_06",
+    "aabb_gap_mm": 0.0,
+    "intersection_mm3": 0.0,
+    "flagged": false
+   },
+   {
+    "a": "upper_cabinet_05",
+    "b": "trim_crown_01",
+    "aabb_gap_mm": 0.0,
+    "intersection_mm3": 0.0,
+    "flagged": false
+   },
+   {
+    "a": "upper_cabinet_05",
+    "b": "backsplash_01",
+    "aabb_gap_mm": 0.0,
+    "intersection_mm3": -0.0,
+    "flagged": false
+   },
+   {
+    "a": "upper_cabinet_05",
+    "b": "reference_wall_01",
+    "aabb_gap_mm": 0.0,
+    "intersection_mm3": 0.0,
+    "flagged": false
+   },
+   {
+    "a": "door_12",
+    "b": "hardware_handle_21",
+    "aabb_gap_mm": 0.0,
+    "intersection_mm3": 0.0,
+    "flagged": false
+   },
+   {
+    "a": "upper_cabinet_06",
+    "b": "door_13",
+    "aabb_gap_mm": 0.0,
+    "intersection_mm3": 0.0,
+    "flagged": false
+   },
+   {
+    "a": "upper_cabinet_06",
+    "b": "door_14",
+    "aabb_gap_mm": 0.0,
+    "intersection_mm3": 0.0,
+    "flagged": false
+   },
+   {
+    "a": "upper_cabinet_06",
+    "b": "upper_cabinet_07",
+    "aabb_gap_mm": 0.0,
+    "intersection_mm3": 0.0,
+    "flagged": false
+   },
+   {
+    "a": "upper_cabinet_06",
+    "b": "trim_crown_01",
+    "aabb_gap_mm": 0.0,
+    "intersection_mm3": 0.0,
+    "flagged": false
+   },
+   {
+    "a": "upper_cabinet_06",
+    "b": "backsplash_01",
+    "aabb_gap_mm": 0.0,
+    "intersection_mm3": 0.0,
+    "flagged": false
+   },
+   {
+    "a": "upper_cabinet_06",
+    "b": "reference_wall_01",
+    "aabb_gap_mm": 0.0,
+    "intersection_mm3": 0.0,
+    "flagged": false
+   },
+   {
+    "a": "door_13",
+    "b": "hardware_handle_22",
+    "aabb_gap_mm": 0.0,
+    "intersection_mm3": 0.0,
+    "flagged": false
+   },
+   {
+    "a": "door_14",
+    "b": "hardware_handle_23",
+    "aabb_gap_mm": 0.0,
+    "intersection_mm3": 0.0,
+    "flagged": false
+   },
+   {
+    "a": "upper_cabinet_07",
+    "b": "door_15",
+    "aabb_gap_mm": 0.0,
+    "intersection_mm3": 0.0,
+    "flagged": false
+   },
+   {
+    "a": "upper_cabinet_07",
+    "b": "trim_crown_01",
+    "aabb_gap_mm": 0.0,
+    "intersection_mm3": 0.0,
+    "flagged": false
+   },
+   {
+    "a": "upper_cabinet_07",
+    "b": "backsplash_01",
+    "aabb_gap_mm": 0.0,
+    "intersection_mm3": 0.0,
+    "flagged": false
+   },
+   {
+    "a": "upper_cabinet_07",
+    "b": "reference_wall_01",
+    "aabb_gap_mm": 0.0,
+    "intersection_mm3": 0.0,
+    "flagged": false
+   },
+   {
+    "a": "door_15",
+    "b": "hardware_handle_24",
+    "aabb_gap_mm": 0.0,
+    "intersection_mm3": 0.0,
+    "flagged": false
+   },
+   {
+    "a": "trim_filler_01",
+    "b": "trim_filler_02",
+    "aabb_gap_mm": 0.0,
+    "intersection_mm3": 0.0,
+    "flagged": false
+   },
+   {
+    "a": "trim_filler_01",
+    "b": "trim_filler_03",
+    "aabb_gap_mm": 0.0,
+    "intersection_mm3": 0.0,
+    "flagged": false
+   },
+   {
+    "a": "trim_filler_01",
+    "b": "countertop_slab_01",
+    "aabb_gap_mm": 0.0,
+    "intersection_mm3": 0.0,
+    "flagged": false
+   },
+   {
+    "a": "trim_filler_01",
+    "b": "countertop_slab_02",
+    "aabb_gap_mm": 0.0,
+    "intersection_mm3": 0.0,
+    "flagged": false
+   },
+   {
+    "a": "trim_filler_02",
+    "b": "trim_filler_03",
+    "aabb_gap_mm": 0.0,
+    "intersection_mm3": 0.0,
+    "flagged": false
+   },
+   {
+    "a": "trim_filler_02",
+    "b": "countertop_slab_01",
+    "aabb_gap_mm": 0.0,
+    "intersection_mm3": 0.0,
+    "flagged": false
+   },
+   {
+    "a": "trim_filler_03",
+    "b": "trim_toekick_03",
+    "aabb_gap_mm": 0.0,
+    "intersection_mm3": 0.0,
+    "flagged": false
+   },
+   {
+    "a": "trim_filler_03",
+    "b": "countertop_slab_01",
+    "aabb_gap_mm": 0.0,
+    "intersection_mm3": 0.0,
+    "flagged": false
+   },
+   {
+    "a": "trim_toekick_01",
+    "b": "trim_toekick_02",
+    "aabb_gap_mm": 0.0,
+    "intersection_mm3": 0.0,
+    "flagged": false
+   },
+   {
+    "a": "trim_toekick_01",
+    "b": "trim_toekick_03",
+    "aabb_gap_mm": 0.0,
+    "intersection_mm3": 0.0,
+    "flagged": false
+   },
+   {
+    "a": "trim_toekick_01",
+    "b": "reference_floor_01",
+    "aabb_gap_mm": 0.0,
+    "intersection_mm3": 0.0,
+    "flagged": false
+   },
+   {
+    "a": "trim_toekick_02",
+    "b": "reference_floor_01",
+    "aabb_gap_mm": 0.0,
+    "intersection_mm3": 0.0,
+    "flagged": false
+   },
+   {
+    "a": "trim_toekick_03",
+    "b": "reference_floor_01",
+    "aabb_gap_mm": 0.0,
+    "intersection_mm3": 0.0,
+    "flagged": false
+   },
+   {
+    "a": "trim_crown_01",
+    "b": "trim_crown_02",
+    "aabb_gap_mm": 0.0,
+    "intersection_mm3": 0.0,
+    "flagged": false
+   },
+   {
+    "a": "trim_crown_01",
+    "b": "trim_cap_01",
+    "aabb_gap_mm": 0.0,
+    "intersection_mm3": 0.0,
+    "flagged": false
+   },
+   {
+    "a": "trim_crown_01",
+    "b": "reference_wall_01",
+    "aabb_gap_mm": 0.0,
+    "intersection_mm3": 0.0,
+    "flagged": false
+   },
+   {
+    "a": "trim_crown_01",
+    "b": "reference_wall_02",
+    "aabb_gap_mm": 0.0,
+    "intersection_mm3": -0.0,
+    "flagged": false
+   },
+   {
+    "a": "trim_crown_02",
+    "b": "reference_wall_02",
+    "aabb_gap_mm": 0.0,
+    "intersection_mm3": 0.0,
+    "flagged": false
+   },
+   {
+    "a": "trim_cap_01",
+    "b": "reference_wall_01",
+    "aabb_gap_mm": 0.0,
+    "intersection_mm3": 0.0,
+    "flagged": false
+   },
+   {
+    "a": "countertop_slab_01",
+    "b": "countertop_slab_02",
+    "aabb_gap_mm": 0.0,
+    "intersection_mm3": 0.0,
+    "flagged": false
+   },
+   {
+    "a": "countertop_slab_01",
+    "b": "backsplash_01",
+    "aabb_gap_mm": 0.0,
+    "intersection_mm3": 0.0,
+    "flagged": false
+   },
+   {
+    "a": "countertop_slab_01",
+    "b": "backsplash_02",
+    "aabb_gap_mm": 0.0,
+    "intersection_mm3": 0.0,
+    "flagged": false
+   },
+   {
+    "a": "countertop_slab_01",
+    "b": "reference_wall_01",
+    "aabb_gap_mm": 0.0,
+    "intersection_mm3": 0.0,
+    "flagged": false
+   },
+   {
+    "a": "countertop_slab_01",
+    "b": "reference_wall_02",
+    "aabb_gap_mm": 0.0,
+    "intersection_mm3": 0.0,
+    "flagged": false
+   },
+   {
+    "a": "countertop_slab_02",
+    "b": "fixture_sink_01",
+    "aabb_gap_mm": 0.0,
+    "intersection_mm3": 0.0,
+    "flagged": false
+   },
+   {
+    "a": "countertop_slab_02",
+    "b": "fixture_faucet_01",
+    "aabb_gap_mm": 0.0,
+    "intersection_mm3": 0.0,
+    "flagged": false
+   },
+   {
+    "a": "countertop_slab_02",
+    "b": "backsplash_01",
+    "aabb_gap_mm": 0.0,
+    "intersection_mm3": 0.0,
+    "flagged": false
+   },
+   {
+    "a": "countertop_slab_02",
+    "b": "reference_wall_01",
+    "aabb_gap_mm": 0.0,
+    "intersection_mm3": 0.0,
+    "flagged": false
+   },
+   {
+    "a": "backsplash_01",
+    "b": "backsplash_02",
+    "aabb_gap_mm": 0.0,
+    "intersection_mm3": 0.0,
+    "flagged": false
+   },
+   {
+    "a": "backsplash_01",
+    "b": "reference_wall_01",
+    "aabb_gap_mm": 0.0,
+    "intersection_mm3": 0.0,
+    "flagged": false
+   },
+   {
+    "a": "backsplash_02",
+    "b": "reference_wall_01",
+    "aabb_gap_mm": 0.0,
+    "intersection_mm3": 0.0,
+    "flagged": false
+   },
+   {
+    "a": "backsplash_02",
+    "b": "reference_wall_02",
+    "aabb_gap_mm": 0.0,
+    "intersection_mm3": 0.0,
+    "flagged": false
+   },
+   {
+    "a": "reference_wall_01",
+    "b": "reference_wall_02",
+    "aabb_gap_mm": 0.0,
+    "intersection_mm3": 0.0,
+    "flagged": false
+   },
+   {
+    "a": "reference_wall_01",
+    "b": "reference_floor_01",
+    "aabb_gap_mm": 0.0,
+    "intersection_mm3": 0.0,
+    "flagged": false
+   },
+   {
+    "a": "reference_wall_02",
+    "b": "reference_floor_01",
+    "aabb_gap_mm": 0.0,
+    "intersection_mm3": 0.0,
+    "flagged": false
+   }
+  ]
+ },
+ "front_clearances": {
+  "expected_reveal_mm": 3.175,
+  "pairs": [
+   {
+    "a": "drawer_front_01",
+    "b": "door_01",
+    "kind": "front-front",
+    "adjacency": "edge",
+    "aabb_gap_mm": 3.175,
+    "min_gap_mm": 3.175,
+    "is_reveal_3_175": true
+   },
+   {
+    "a": "drawer_front_01",
+    "b": "drawer_front_02",
+    "kind": "front-front",
+    "adjacency": "edge",
+    "aabb_gap_mm": 3.175,
+    "min_gap_mm": 3.175,
+    "is_reveal_3_175": true
+   },
+   {
+    "a": "drawer_front_01",
+    "b": "drawer_front_03",
+    "kind": "front-front",
+    "adjacency": "diagonal",
+    "aabb_gap_mm": 4.4901,
+    "min_gap_mm": 4.4901,
+    "is_reveal_3_175": false
+   },
+   {
+    "a": "drawer_front_01",
+    "b": "trim_filler_02",
+    "kind": "front-filler",
+    "adjacency": "edge",
+    "aabb_gap_mm": 1.5875,
+    "min_gap_mm": 1.5875,
+    "is_reveal_3_175": false
+   },
+   {
+    "a": "drawer_front_01",
+    "b": "trim_filler_03",
+    "kind": "front-filler",
+    "adjacency": "edge",
+    "aabb_gap_mm": 1.5875,
+    "min_gap_mm": 1.5875,
+    "is_reveal_3_175": false
+   },
+   {
+    "a": "door_01",
+    "b": "drawer_front_02",
+    "kind": "front-front",
+    "adjacency": "diagonal",
+    "aabb_gap_mm": 4.4901,
+    "min_gap_mm": 4.4901,
+    "is_reveal_3_175": false
+   },
+   {
+    "a": "door_01",
+    "b": "drawer_front_03",
+    "kind": "front-front",
+    "adjacency": "edge",
+    "aabb_gap_mm": 3.175,
+    "min_gap_mm": 3.175,
+    "is_reveal_3_175": true
+   },
+   {
+    "a": "door_01",
+    "b": "drawer_front_04",
+    "kind": "front-front",
+    "adjacency": "edge",
+    "aabb_gap_mm": 3.175,
+    "min_gap_mm": 3.175,
+    "is_reveal_3_175": true
+   },
+   {
+    "a": "door_01",
+    "b": "drawer_front_05",
+    "kind": "front-front",
+    "adjacency": "edge",
+    "aabb_gap_mm": 3.175,
+    "min_gap_mm": 3.175,
+    "is_reveal_3_175": true
+   },
+   {
+    "a": "door_01",
+    "b": "trim_filler_02",
+    "kind": "front-filler",
+    "adjacency": "edge",
+    "aabb_gap_mm": 1.5875,
+    "min_gap_mm": 1.5875,
+    "is_reveal_3_175": false
+   },
+   {
+    "a": "door_01",
+    "b": "trim_filler_03",
+    "kind": "front-filler",
+    "adjacency": "edge",
+    "aabb_gap_mm": 1.5875,
+    "min_gap_mm": 1.5875,
+    "is_reveal_3_175": false
+   },
+   {
+    "a": "drawer_front_02",
+    "b": "drawer_front_03",
+    "kind": "front-front",
+    "adjacency": "edge",
+    "aabb_gap_mm": 3.175,
+    "min_gap_mm": 3.175,
+    "is_reveal_3_175": true
+   },
+   {
+    "a": "drawer_front_03",
+    "b": "drawer_front_04",
+    "kind": "front-front",
+    "adjacency": "edge",
+    "aabb_gap_mm": 3.175,
+    "min_gap_mm": 3.175,
+    "is_reveal_3_175": true
+   },
+   {
+    "a": "drawer_front_04",
+    "b": "drawer_front_05",
+    "kind": "front-front",
+    "adjacency": "edge",
+    "aabb_gap_mm": 3.175,
+    "min_gap_mm": 3.175,
+    "is_reveal_3_175": true
+   },
+   {
+    "a": "door_02",
+    "b": "door_03",
+    "kind": "front-front",
+    "adjacency": "edge",
+    "aabb_gap_mm": 3.175,
+    "min_gap_mm": 3.175,
+    "is_reveal_3_175": true
+   },
+   {
+    "a": "door_02",
+    "b": "door_11",
+    "kind": "front-front",
+    "adjacency": "diagonal",
+    "aabb_gap_mm": 7.0496,
+    "min_gap_mm": 7.0496,
+    "is_reveal_3_175": false
+   },
+   {
+    "a": "door_03",
+    "b": "door_04",
+    "kind": "front-front",
+    "adjacency": "edge",
+    "aabb_gap_mm": 3.175,
+    "min_gap_mm": 3.175,
+    "is_reveal_3_175": true
+   },
+   {
+    "a": "door_04",
+    "b": "door_05",
+    "kind": "front-front",
+    "adjacency": "edge",
+    "aabb_gap_mm": 3.175,
+    "min_gap_mm": 3.175,
+    "is_reveal_3_175": true
+   },
+   {
+    "a": "door_05",
+    "b": "door_06",
+    "kind": "front-front",
+    "adjacency": "edge",
+    "aabb_gap_mm": 3.175,
+    "min_gap_mm": 3.175,
+    "is_reveal_3_175": true
+   },
+   {
+    "a": "drawer_front_06",
+    "b": "drawer_front_07",
+    "kind": "front-front",
+    "adjacency": "edge",
+    "aabb_gap_mm": 3.175,
+    "min_gap_mm": 3.175,
+    "is_reveal_3_175": true
+   },
+   {
+    "a": "drawer_front_06",
+    "b": "trim_filler_01",
+    "kind": "front-filler",
+    "adjacency": "edge",
+    "aabb_gap_mm": 1.5875,
+    "min_gap_mm": 1.5875,
+    "is_reveal_3_175": false
+   },
+   {
+    "a": "drawer_front_07",
+    "b": "drawer_front_08",
+    "kind": "front-front",
+    "adjacency": "edge",
+    "aabb_gap_mm": 3.175,
+    "min_gap_mm": 3.175,
+    "is_reveal_3_175": true
+   },
+   {
+    "a": "drawer_front_07",
+    "b": "door_07",
+    "kind": "front-front",
+    "adjacency": "edge",
+    "aabb_gap_mm": 3.175,
+    "min_gap_mm": 3.175,
+    "is_reveal_3_175": true
+   },
+   {
+    "a": "drawer_front_07",
+    "b": "trim_filler_01",
+    "kind": "front-filler",
+    "adjacency": "edge",
+    "aabb_gap_mm": 1.5875,
+    "min_gap_mm": 1.5875,
+    "is_reveal_3_175": false
+   },
+   {
+    "a": "drawer_front_08",
+    "b": "door_07",
+    "kind": "front-front",
+    "adjacency": "edge",
+    "aabb_gap_mm": 3.175,
+    "min_gap_mm": 3.175,
+    "is_reveal_3_175": true
+   },
+   {
+    "a": "drawer_front_08",
+    "b": "trim_filler_01",
+    "kind": "front-filler",
+    "adjacency": "edge",
+    "aabb_gap_mm": 1.5875,
+    "min_gap_mm": 1.5875,
+    "is_reveal_3_175": false
+   },
+   {
+    "a": "door_07",
+    "b": "door_08",
+    "kind": "front-front",
+    "adjacency": "edge",
+    "aabb_gap_mm": 3.175,
+    "min_gap_mm": 3.175,
+    "is_reveal_3_175": true
+   },
+   {
+    "a": "door_08",
+    "b": "drawer_front_10",
+    "kind": "front-front",
+    "adjacency": "edge",
+    "aabb_gap_mm": 3.175,
+    "min_gap_mm": 3.175,
+    "is_reveal_3_175": true
+   },
+   {
+    "a": "drawer_front_09",
+    "b": "drawer_front_10",
+    "kind": "front-front",
+    "adjacency": "edge",
+    "aabb_gap_mm": 3.175,
+    "min_gap_mm": 3.175,
+    "is_reveal_3_175": true
+   },
+   {
+    "a": "drawer_front_09",
+    "b": "door_09",
+    "kind": "front-front",
+    "adjacency": "edge",
+    "aabb_gap_mm": 3.175,
+    "min_gap_mm": 3.175,
+    "is_reveal_3_175": true
+   },
+   {
+    "a": "drawer_front_10",
+    "b": "door_09",
+    "kind": "front-front",
+    "adjacency": "edge",
+    "aabb_gap_mm": 3.175,
+    "min_gap_mm": 3.175,
+    "is_reveal_3_175": true
+   },
+   {
+    "a": "door_09",
+    "b": "door_10",
+    "kind": "front-front",
+    "adjacency": "edge",
+    "aabb_gap_mm": 3.175,
+    "min_gap_mm": 3.175,
+    "is_reveal_3_175": true
+   },
+   {
+    "a": "door_11",
+    "b": "door_12",
+    "kind": "front-front",
+    "adjacency": "edge",
+    "aabb_gap_mm": 3.175,
+    "min_gap_mm": 3.175,
+    "is_reveal_3_175": true
+   },
+   {
+    "a": "door_12",
+    "b": "door_13",
+    "kind": "front-front",
+    "adjacency": "edge",
+    "aabb_gap_mm": 3.175,
+    "min_gap_mm": 3.175,
+    "is_reveal_3_175": true
+   },
+   {
+    "a": "door_13",
+    "b": "door_14",
+    "kind": "front-front",
+    "adjacency": "edge",
+    "aabb_gap_mm": 3.175,
+    "min_gap_mm": 3.175,
+    "is_reveal_3_175": true
+   },
+   {
+    "a": "door_14",
+    "b": "door_15",
+    "kind": "front-front",
+    "adjacency": "edge",
+    "aabb_gap_mm": 3.175,
+    "min_gap_mm": 3.175,
+    "is_reveal_3_175": true
+   },
+   {
+    "a": "trim_filler_01",
+    "b": "trim_filler_02",
+    "kind": "filler-filler",
+    "adjacency": "edge",
+    "aabb_gap_mm": 0.0,
+    "min_gap_mm": 0.0,
+    "is_reveal_3_175": false
+   },
+   {
+    "a": "trim_filler_01",
+    "b": "trim_filler_03",
+    "kind": "filler-filler",
+    "adjacency": "edge",
+    "aabb_gap_mm": 0.0,
+    "min_gap_mm": 0.0,
+    "is_reveal_3_175": false
+   },
+   {
+    "a": "trim_filler_02",
+    "b": "trim_filler_03",
+    "kind": "filler-filler",
+    "adjacency": "edge",
+    "aabb_gap_mm": 0.0,
+    "min_gap_mm": 0.0,
+    "is_reveal_3_175": false
+   }
+  ]
+ },
+ "door_swing_sweep": {
+  "note": "door + its pulls rotated about the front-face hinge line in 5 deg steps (cap 110); max_open_deg = largest angle with no intersection > 1.0 mm3 vs any other fabrication part",
+  "doors": {
+   "door_01": {
+    "hinge_side": "left",
+    "max_open_deg": 85,
+    "first_collision": {
+     "angle_deg": 90,
+     "parts": [
+      "fixture_sink_01"
+     ],
+     "intersection_mm3": {
+      "fixture_sink_01": 1344.251
+     }
+    },
+    "swept_with": [
+     "hardware_handle_02"
+    ]
+   },
+   "door_02": {
+    "hinge_side": "right",
+    "max_open_deg": 110,
+    "first_collision": null,
+    "swept_with": []
+   },
+   "door_03": {
+    "hinge_side": "left",
+    "max_open_deg": 110,
+    "first_collision": null,
+    "swept_with": [
+     "hardware_handle_07"
+    ]
+   },
+   "door_04": {
+    "hinge_side": "right",
+    "max_open_deg": 110,
+    "first_collision": null,
+    "swept_with": [
+     "hardware_handle_08"
+    ]
+   },
+   "door_05": {
+    "hinge_side": "left",
+    "max_open_deg": 110,
+    "first_collision": null,
+    "swept_with": [
+     "hardware_handle_09"
+    ]
+   },
+   "door_06": {
+    "hinge_side": "right",
+    "max_open_deg": 110,
+    "first_collision": null,
+    "swept_with": [
+     "hardware_handle_10"
+    ]
+   },
+   "door_07": {
+    "hinge_side": "right",
+    "max_open_deg": 110,
+    "first_collision": null,
+    "swept_with": [
+     "hardware_handle_14"
+    ]
+   },
+   "door_08": {
+    "hinge_side": "left",
+    "max_open_deg": 110,
+    "first_collision": null,
+    "swept_with": [
+     "hardware_handle_15"
+    ]
+   },
+   "door_09": {
+    "hinge_side": "left",
+    "max_open_deg": 110,
+    "first_collision": null,
+    "swept_with": [
+     "hardware_handle_18"
+    ]
+   },
+   "door_10": {
+    "hinge_side": "left",
+    "max_open_deg": 110,
+    "first_collision": null,
+    "swept_with": [
+     "hardware_handle_19"
+    ]
+   },
+   "door_11": {
+    "hinge_side": "right",
+    "max_open_deg": 80,
+    "first_collision": {
+     "angle_deg": 85,
+     "parts": [
+      "door_02"
+     ],
+     "intersection_mm3": {
+      "door_02": 21003.645
+     }
+    },
+    "swept_with": [
+     "hardware_handle_20"
+    ]
+   },
+   "door_12": {
+    "hinge_side": "right",
+    "max_open_deg": 110,
+    "first_collision": null,
+    "swept_with": [
+     "hardware_handle_21"
+    ]
+   },
+   "door_13": {
+    "hinge_side": "right",
+    "max_open_deg": 110,
+    "first_collision": null,
+    "swept_with": [
+     "hardware_handle_22"
+    ]
+   },
+   "door_14": {
+    "hinge_side": "left",
+    "max_open_deg": 110,
+    "first_collision": null,
+    "swept_with": [
+     "hardware_handle_23"
+    ]
+   },
+   "door_15": {
+    "hinge_side": "left",
+    "max_open_deg": 90,
+    "first_collision": {
+     "angle_deg": 95,
+     "parts": [
+      "door_09",
+      "door_10",
+      "tall_cabinet_01",
+      "trim_cap_01"
+     ],
+     "intersection_mm3": {
+      "tall_cabinet_01": 438422.915,
+      "door_09": 38819.422,
+      "door_10": 112051.866,
+      "trim_cap_01": 24843.518
+     }
+    },
+    "swept_with": [
+     "hardware_handle_24"
+    ]
+   }
+  }
+ },
+ "uv": {
+  "parts": 81,
+  "overlap_px_total": 0,
+  "parts_with_overlap": [],
+  "oob_vertices": 0
+ },
+ "previews": [
+  "preview_iso.png",
+  "preview_cam02.png"
+ ]
+}
