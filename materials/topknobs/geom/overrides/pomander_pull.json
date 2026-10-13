@@ -1,0 +1,21 @@
+{
+  "params": {},
+  "sizes": {
+    "3_3_4_inch_pull": {
+      "params": {
+        "bevel": 2.94
+      }
+    },
+    "5_1_16_inch_pull": {
+      "params": {
+        "bevel": 3.44
+      }
+    },
+    "12_inch_app_pull": {
+      "params": {
+        "bevel": 6.0
+      }
+    }
+  },
+  "notes": "audit_1: bevel lowered on the two short sizes and the appliance size, where the default round bevel folded the bar's cap into a fin hanging below the bar."
+}

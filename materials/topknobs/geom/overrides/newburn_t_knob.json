@@ -1,0 +1,2 @@
+{"params": {"z_from_photo": true},
+ "notes": "audit_15: the bar is a round rod (round end caps in photo _1); the photo shaft measures 11.1 mm = the spec Width 7/16\", caps 13.7 mm. Squashing the whole bar to 11.1 mm in Z made it an 8.9 mm-deep oval, so Z is taken from the photo and the overall Z exceeds the spec width by the caps."}

@@ -3,6 +3,9 @@ catalog -> viewer/keane_showroom_studio.html.
 
 Finish textures are written as viewer/textures/<id>.js (one JSONP call carrying a data: URL each). The page loads
 them only when a finish is picked. Script tags work from file://, and data: URLs can go to WebGL without a server.
+Top Knobs knobs & pulls (materials/topknobs/: products.json, geom/, finishes.json) go the same way: the catalog is
+embedded, each product's shapes are viewer/hardware/<slug>.js and its chip picture viewer/hardware/thumbs/<slug>.jpg.
+Products without a geometry file are left out with a warning.
 
 Sources (downloaded by hand into materials/, see materials/manifest.json):
   Countertops/*.png       showroom slab photos (Vadara)        full slab, 126 x 63 in
@@ -11,8 +14,9 @@ Sources (downloaded by hand into materials/, see materials/manifest.json):
   materials/decore/*.jpg  decore.com DRS131 finishes           400 px chip, assumed ~10 in across
 
 Paths are relative to the repo root, so this runs from any checkout:  python3 tools/build_studio.py
+(TK_DATA=<dir> python3 tools/build_studio.py reads geom/ and finishes.json from <dir> instead, e.g. mock data.)
 """
-import json, base64, io, math, re
+import json, base64, io, math, os, re
 from pathlib import Path
 from PIL import Image, ImageOps, ImageStat
 
@@ -112,10 +116,94 @@ for d in M['decore']:
         e.update(kind='solid')
     fronts.append(e)
 
+# ---- Top Knobs knobs & pulls (materials/topknobs/README.md): the page embeds the catalog; each product's geometry is
+# viewer/hardware/<slug>.js (JSONP, loaded on pick) and its chip picture viewer/hardware/thumbs/<slug>.jpg.
+# TK_DATA=<dir> reads geom/ and finishes.json from another folder (mock data for testing the page).
+TK = R / 'materials/topknobs'; TKD = Path(os.environ.get('TK_DATA') or TK)
+HWD = R / 'viewer/hardware'; (HWD / 'thumbs').mkdir(parents=True, exist_ok=True)
+
+def rnd(o, nd=2):
+    if isinstance(o, float): return round(o, nd) + 0.0
+    if isinstance(o, list): return [rnd(v, nd) for v in o]
+    if isinstance(o, dict): return {k: rnd(v, 4 if k == 'stretch' else nd) for k, v in o.items()}
+    return o
+
+def hardware():
+    prods = json.load(open(TK / 'products.json'))['products'] if (TK / 'products.json').exists() else []
+    fpath = TKD / 'finishes.json'
+    F = json.load(open(fpath)) if fpath.exists() else {'finishes': {}, 'secondary': {}}
+    if not fpath.exists(): print(f'warning: {fpath.relative_to(R) if fpath.is_relative_to(R) else fpath} missing, using a neutral metal for every finish')
+    fin, out, wrote, missing = F['finishes'], [], set(), []
+    for p in prods:
+        gp, op = TKD / 'geom' / f'{p["slug"]}.json', TKD / 'geom/overrides' / f'{p["slug"]}.json'
+        g = json.load(open(gp)) if gp.exists() else None
+        ov = json.load(open(op)) if op.exists() else {}
+        shapes = {k: v['shape'] for k, v in (g or {}).get('sizes', {}).items() if v.get('shape')}
+        shapes.update({k: v['shape'] for k, v in ov.get('sizes', {}).items() if v.get('shape')})
+        sizes = [s for s in p['sizes'] if s['key'] in shapes]
+        if not sizes: missing.append(p['slug']); continue
+        typ = ov.get('type') or (g or {}).get('type') or 'other'
+        notes = ' '.join([(g or {}).get('notes') or '', ov.get('notes') or ''] + [(v.get('fit') or {}).get('notes') or '' for v in (g or {}).get('sizes', {}).values()])
+        # Mounting: 'edge' tabs hang over the top edge of the front (origin on that edge); 'hang' pieces were traced from
+        # the front with +Z = down the door (cup, drop, plate), so they stay horizontal even on doors (tools/hw_pulls.py).
+        mount = 'edge' if 'edge tab' in notes or 'mode tab' in notes else 'hang' if '+Z = down' in notes else None
+        data = {'type': typ, 'sizes': {s['key']: rnd(shapes[s['key']]) for s in sizes}}
+        if mount: data['mount'] = mount
+        (HWD / f'{p["slug"]}.js').write_text(f'window.__hwData({json.dumps(p["slug"])},{json.dumps(data, separators=(",", ":"))});\n')
+        wrote.add(p['slug'])
+        if p.get('thumb') and (TK / p['thumb']).exists():   # crop the white sweep so the part fills its chip
+            im = Image.open(TK / p['thumb']).convert('RGBA'); bg = Image.new('RGBA', im.size, 'white'); bg.alpha_composite(im); im = bg.convert('RGB')
+            box = ImageOps.invert(im.convert('L')).point(lambda v: 255 if v > 12 else 0).getbbox() or (0, 0, *im.size)
+            cx, cy, half = (box[0] + box[2]) / 2, (box[1] + box[3]) / 2, max(box[2] - box[0], box[3] - box[1]) * 0.56
+            x0, y0, n = round(cx - half), round(cy - half), round(2 * half)
+            sq = Image.new('RGB', (n, n), 'white'); sq.paste(im, (-x0, -y0))
+            sq.resize((150, 150), Image.Resampling.LANCZOS).save(HWD / 'thumbs' / f'{p["slug"]}.jpg', 'JPEG', quality=80, optimize=True)
+        # "Default" (SS46 / SS47) names no finish: take the longest finish label the product name spells out instead
+        named = max((f for f in fin if f.lower() in p['name'].lower()), key=len, default=None)
+        if 'Default' in p['finishes'] and named:
+            sizes = [dict(z, skus={named if f == 'Default' else f: v for f, v in z['skus'].items()}) for z in sizes]
+            p = dict(p, finishes=[named if f == 'Default' else f for f in p['finishes']])
+        labels = [f for f in p['finishes'] if any(f in s['skus'] for s in sizes)]
+        for f in labels:
+            if f not in fin:   # no measured finish: neutral metal so the product still shows
+                fin[f] = dict(id='tk_' + slug(f), label=f, family='Specialty', color=[0.5, 0.5, 0.5], roughness=0.3, metalness=1, swatch='#bcbcbc')
+        url = (p.get('url') or '').replace('https://www.topknobs.com/', '')
+        out.append(dict(slug=p['slug'], name=p['name'], collection=p.get('collection') or 'Other', type=typ, finishes=labels, url=url,
+                        sizes=[dict(s, skus=[s['skus'].get(f) for f in labels]) for s in sizes]))
+    for f in HWD.glob('*.js'):   # products whose geometry went away
+        if f.stem not in wrote: f.unlink()
+    for f in (HWD / 'thumbs').glob('*.jpg'):
+        if f.stem not in wrote: f.unlink()
+    if missing: print(f'warning: {len(missing)} of {len(prods)} Top Knobs products have no geometry yet and are left out: {", ".join(missing[:8])}{" ..." if len(missing) > 8 else ""}')
+    used = {f for p in out for f in p['finishes']}
+    used |= {t for f in used for t in fin[f].get('two_tone', [])}
+    keep = ('id', 'label', 'family', 'color', 'roughness', 'metalness', 'clearcoat', 'clearcoat_roughness', 'anisotropy', 'swatch', 'two_tone')
+    order = ['Polished', 'Brushed', 'Satin', 'Matte', 'Bronze', 'Brass', 'Black', 'Specialty']
+    freq = {f: sum(f in p['finishes'] for p in out) for f in used}
+    labs = sorted(used, key=lambda f: (order.index(fin[f].get('family')) if fin[f].get('family') in order else len(order), -freq[f], f))
+    finishes = {f: {k: rnd(fin[f][k], 4) for k in keep if k in fin[f]} for f in labs}
+    secondary = {k: {a: rnd(v[a], 4) for a in ('label', 'color', 'roughness', 'metalness', 'transmission', 'ior', 'thickness') if a in v}
+                 for k, v in F.get('secondary', {}).items()}
+    # Compact form, expanded by the page into products[].sizes[] = {key, label, c2c_mm, length_mm, width_mm, proj_mm,
+    # diam_mm, skus}: finishes become indices into the finish list, dims an array, and the url and size key are left
+    # out when they follow from the slug and label. Keeps 422 products under 200 kB.
+    dims = ('c2c_mm', 'length_mm', 'width_mm', 'proj_mm', 'diam_mm')
+    fi = {f: i for i, f in enumerate(labs)}
+    prods = []
+    for p in out:
+        e = dict(slug=p['slug'], name=p['name'], collection=p['collection'], type=p['type'], f=[fi[f] for f in p['finishes']],
+                 s=[dict(l=z['label'], d=[round(z[k], 2) if z.get(k) else 0 for k in dims], s=z['skus'],
+                         **({} if z['key'] == slug(z['label']) else {'k': z['key']})) for z in p['sizes']])
+        if p['url'] != f'collections/{p["slug"].replace("_", "-")}.html': e['url'] = p['url']
+        prods.append(e)
+    return dict(finishes=finishes, secondary=secondary, products=prods)
+
+hw = hardware()
+
 mats = A['materials']
 digest = dict(parts=parts, views=views, photoPaint=mats['mat_cabinet_primary']['baseColor'],
               photoMetal=mats['mat_hardware_finish']['baseColor'])
-catalog = dict(counters=counters, fronts=fronts, sources=M.get('sources', {}))
+catalog = dict(counters=counters, fronts=fronts, sources=M.get('sources', {}), hardware=hw)
 glb = base64.b64encode(open(R / 'export/kitchen_world.glb', 'rb').read()).decode()
 safe = lambda o: json.dumps(o, separators=(',', ':')).replace('</', '<\\/')
 html = (R / 'viewer/studio_template.html').read_text()
@@ -127,3 +215,6 @@ print(f'counters {len(counters)} (quartz {sum(c["kind"] == "slab" for c in count
       f'fronts {len(fronts)} (solid {sum(f["group"] == "solid" for f in fronts)}, woodgrain {sum(f["group"] == "woodgrain" for f in fronts)}, '
       f'textured {sum(f["kind"] == "tex" for f in fronts)})')
 print(f'page {len(html) / 1e6:.2f} MB -> {out.relative_to(R)}; textures {tex_bytes / 1e6:.1f} MB in {TEX.relative_to(R)}/')
+hw_bytes = sum(p.stat().st_size for p in HWD.rglob('*.*'))
+print(f'hardware {len(hw["products"])} products, {sum(len(p["s"]) for p in hw["products"])} sizes, {len(hw["finishes"])} finishes; '
+      f'catalog {len(safe(hw)) / 1e3:.0f} kB in the page, {hw_bytes / 1e6:.1f} MB in {HWD.relative_to(R)}/')

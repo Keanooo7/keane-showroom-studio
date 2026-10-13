@@ -1,0 +1,1028 @@
+{
+ "note": "color is linear sRGB (0..1), the base colour / F0; swatch is sRGB, the photographed appearance (for UI chips). anisotropy runs along the long (+X) axis. thickness in mm (geometry frame). \"wear\" (optional) is the relief-highlight base colour of antiqued finishes, for edge/cavity tinting.",
+ "exposure": 0.7749,
+ "finishes": {
+  "Aluminum": {
+   "id": "tk_aluminum",
+   "label": "Aluminum",
+   "family": "Satin",
+   "color": [
+    0.837,
+    0.7961,
+    0.8111
+   ],
+   "roughness": 0.4,
+   "metalness": 1,
+   "clearcoat": 0,
+   "anisotropy": 0.3,
+   "swatch": "#dbd7d9",
+   "samples": 7,
+   "notes": "bead-blast/anodised satin"
+  },
+  "Antique Copper": {
+   "id": "tk_antique_copper",
+   "label": "Antique Copper",
+   "family": "Specialty",
+   "color": [
+    0.5505,
+    0.2089,
+    0.1292
+   ],
+   "roughness": 0.45,
+   "metalness": 1,
+   "clearcoat": 0,
+   "anisotropy": 0,
+   "swatch": "#b57863",
+   "samples": 8,
+   "notes": "brushed-antiqued copper"
+  },
+  "Ash Gray": {
+   "id": "tk_ash_gray",
+   "label": "Ash Gray",
+   "family": "Satin",
+   "color": [
+    0.1382,
+    0.1094,
+    0.0959
+   ],
+   "roughness": 0.3,
+   "metalness": 1,
+   "clearcoat": 0,
+   "anisotropy": 0.4,
+   "swatch": "#6d6460",
+   "samples": 8,
+   "notes": "satin gunmetal"
+  },
+  "Black Iron": {
+   "id": "tk_black_iron",
+   "label": "Black Iron",
+   "family": "Black",
+   "color": [
+    0.2008,
+    0.1741,
+    0.1551
+   ],
+   "roughness": 0.55,
+   "metalness": 0.8,
+   "clearcoat": 0,
+   "anisotropy": 0,
+   "swatch": "#706a65",
+   "samples": 8,
+   "notes": "mottled dark pewter-like iron (see wear)",
+   "wear": [
+    0.2962,
+    0.2737,
+    0.2518
+   ]
+  },
+  "Black Nickel": {
+   "id": "tk_black_nickel",
+   "label": "Black Nickel",
+   "family": "Polished",
+   "color": [
+    0.2179,
+    0.1669,
+    0.1593
+   ],
+   "roughness": 0.1,
+   "metalness": 1,
+   "clearcoat": 0,
+   "anisotropy": 0,
+   "swatch": "#908280",
+   "samples": 4,
+   "notes": "smoked mirror finish"
+  },
+  "Brass Antique": {
+   "id": "tk_brass_antique",
+   "label": "Brass Antique",
+   "family": "Brass",
+   "color": [
+    0.1951,
+    0.1402,
+    0.0833
+   ],
+   "roughness": 0.5,
+   "metalness": 1,
+   "clearcoat": 0,
+   "anisotropy": 0,
+   "swatch": "#716350",
+   "samples": 5,
+   "notes": "dark recesses, brass on raised hammered detail (see wear)",
+   "wear": [
+    0.6661,
+    0.4954,
+    0.2537
+   ]
+  },
+  "Brushed Bronze": {
+   "id": "tk_brushed_bronze",
+   "label": "Brushed Bronze",
+   "family": "Brushed",
+   "color": [
+    0.7507,
+    0.4413,
+    0.2386
+   ],
+   "roughness": 0.35,
+   "metalness": 1,
+   "clearcoat": 0,
+   "anisotropy": 0.7,
+   "swatch": "#d3a882",
+   "samples": 8,
+   "notes": "brushed warm gold"
+  },
+  "Brushed Satin Nickel": {
+   "id": "tk_brushed_satin_nickel",
+   "label": "Brushed Satin Nickel",
+   "family": "Brushed",
+   "color": [
+    0.6177,
+    0.5506,
+    0.4718
+   ],
+   "roughness": 0.34,
+   "metalness": 1,
+   "clearcoat": 0,
+   "anisotropy": 0.7,
+   "swatch": "#c3baae",
+   "samples": 8,
+   "notes": ""
+  },
+  "Cast Iron": {
+   "id": "tk_cast_iron",
+   "label": "Cast Iron",
+   "family": "Specialty",
+   "color": [
+    0.4041,
+    0.3345,
+    0.265
+   ],
+   "roughness": 0.6,
+   "metalness": 0.8,
+   "clearcoat": 0,
+   "anisotropy": 0,
+   "swatch": "#92877b",
+   "samples": 8,
+   "notes": "antiqued grey cast iron, mottled (see wear)",
+   "wear": [
+    0.349,
+    0.2984,
+    0.2743
+   ]
+  },
+  "Coal Black": {
+   "id": "tk_coal_black",
+   "label": "Coal Black",
+   "family": "Black",
+   "color": [
+    0.0209,
+    0.0138,
+    0.0114
+   ],
+   "roughness": 0.68,
+   "metalness": 0.3,
+   "clearcoat": 0,
+   "anisotropy": 0,
+   "swatch": "#393533",
+   "samples": 5,
+   "notes": "textured powder coat"
+  },
+  "Dark Antique Brass": {
+   "id": "tk_dark_antique_brass",
+   "label": "Dark Antique Brass",
+   "family": "Brass",
+   "color": [
+    0.1569,
+    0.1177,
+    0.0559
+   ],
+   "roughness": 0.5,
+   "metalness": 1,
+   "clearcoat": 0,
+   "anisotropy": 0,
+   "swatch": "#675c45",
+   "samples": 8,
+   "notes": "black body, brass on raised detail (see wear)",
+   "wear": [
+    0.98,
+    0.8462,
+    0.3499
+   ]
+  },
+  "Flat Black": {
+   "id": "tk_flat_black",
+   "label": "Flat Black",
+   "family": "Black",
+   "color": [
+    0.0268,
+    0.0214,
+    0.0215
+   ],
+   "roughness": 0.62,
+   "metalness": 0.3,
+   "clearcoat": 0,
+   "anisotropy": 0,
+   "swatch": "#3f3c3c",
+   "samples": 8,
+   "notes": "powder coat"
+  },
+  "German Bronze": {
+   "id": "tk_german_bronze",
+   "label": "German Bronze",
+   "family": "Bronze",
+   "color": [
+    0.0616,
+    0.0318,
+    0.0114
+   ],
+   "roughness": 0.5,
+   "metalness": 1,
+   "clearcoat": 0,
+   "anisotropy": 0,
+   "swatch": "#48392a",
+   "samples": 8,
+   "notes": "living cast-bronze patina, mottled",
+   "wear": [
+    0.1005,
+    0.0572,
+    0.0129
+   ]
+  },
+  "Honey Bronze": {
+   "id": "tk_honey_bronze",
+   "label": "Honey Bronze",
+   "family": "Satin",
+   "color": [
+    0.6123,
+    0.4463,
+    0.247
+   ],
+   "roughness": 0.28,
+   "metalness": 1,
+   "clearcoat": 0,
+   "anisotropy": 0.5,
+   "swatch": "#c9b08a",
+   "samples": 8,
+   "notes": "satin champagne gold"
+  },
+  "Light Bronze": {
+   "id": "tk_light_bronze",
+   "label": "Light Bronze",
+   "family": "Bronze",
+   "color": [
+    0.5501,
+    0.3772,
+    0.1834
+   ],
+   "roughness": 0.45,
+   "metalness": 1,
+   "clearcoat": 0,
+   "anisotropy": 0,
+   "swatch": "#b59a72",
+   "samples": 8,
+   "notes": "living cast bronze"
+  },
+  "Mahogany Bronze": {
+   "id": "tk_mahogany_bronze",
+   "label": "Mahogany Bronze",
+   "family": "Bronze",
+   "color": [
+    0.0984,
+    0.034,
+    0.0241
+   ],
+   "roughness": 0.48,
+   "metalness": 1,
+   "clearcoat": 0,
+   "anisotropy": 0,
+   "swatch": "#573b35",
+   "samples": 8,
+   "notes": "living cast bronze, red-brown"
+  },
+  "Medium Bronze": {
+   "id": "tk_medium_bronze",
+   "label": "Medium Bronze",
+   "family": "Bronze",
+   "color": [
+    0.0578,
+    0.0411,
+    0.0372
+   ],
+   "roughness": 0.5,
+   "metalness": 1,
+   "clearcoat": 0,
+   "anisotropy": 0,
+   "swatch": "#463e3c",
+   "samples": 8,
+   "notes": "living cast bronze, dark brown"
+  },
+  "Oil Rubbed Bronze": {
+   "id": "tk_oil_rubbed_bronze",
+   "label": "Oil Rubbed Bronze",
+   "family": "Bronze",
+   "color": [
+    0.0285,
+    0.0101,
+    0.0038
+   ],
+   "roughness": 0.45,
+   "metalness": 1,
+   "clearcoat": 0,
+   "anisotropy": 0,
+   "swatch": "#392b23",
+   "samples": 7,
+   "notes": "very dark brown, copper glints",
+   "wear": [
+    0.0564,
+    0.0146,
+    0.0103
+   ]
+  },
+  "Old English Copper": {
+   "id": "tk_old_english_copper",
+   "label": "Old English Copper",
+   "family": "Specialty",
+   "color": [
+    0.4963,
+    0.2149,
+    0.0862
+   ],
+   "roughness": 0.5,
+   "metalness": 1,
+   "clearcoat": 0,
+   "anisotropy": 0,
+   "swatch": "#a87651",
+   "samples": 8,
+   "notes": "antiqued copper, darker recesses (see wear)",
+   "wear": [
+    0.98,
+    0.5444,
+    0.2256
+   ]
+  },
+  "Patina Black": {
+   "id": "tk_patina_black",
+   "label": "Patina Black",
+   "family": "Black",
+   "color": [
+    0.003,
+    0.003,
+    0.003
+   ],
+   "roughness": 0.5,
+   "metalness": 0.9,
+   "clearcoat": 0,
+   "anisotropy": 0,
+   "swatch": "#131218",
+   "samples": 8,
+   "notes": "hand-forged steel, black patina"
+  },
+  "Patina Rouge": {
+   "id": "tk_patina_rouge",
+   "label": "Patina Rouge",
+   "family": "Specialty",
+   "color": [
+    0.1427,
+    0.0632,
+    0.0454
+   ],
+   "roughness": 0.55,
+   "metalness": 0.9,
+   "clearcoat": 0,
+   "anisotropy": 0,
+   "swatch": "#614740",
+   "samples": 8,
+   "notes": "red-brown forged patina",
+   "wear": [
+    0.1746,
+    0.0924,
+    0.0735
+   ]
+  },
+  "Pewter": {
+   "id": "tk_pewter",
+   "label": "Pewter",
+   "family": "Specialty",
+   "color": [
+    0.0966,
+    0.0678,
+    0.052
+   ],
+   "roughness": 0.42,
+   "metalness": 1,
+   "clearcoat": 0,
+   "anisotropy": 0,
+   "swatch": "#5a4f48",
+   "samples": 5,
+   "notes": "forged pewter"
+  },
+  "Pewter Antique": {
+   "id": "tk_pewter_antique",
+   "label": "Pewter Antique",
+   "family": "Specialty",
+   "color": [
+    0.3249,
+    0.2472,
+    0.1905
+   ],
+   "roughness": 0.4,
+   "metalness": 1,
+   "clearcoat": 0,
+   "anisotropy": 0,
+   "swatch": "#958578",
+   "samples": 8,
+   "notes": "warm antiqued pewter"
+  },
+  "Pewter Light": {
+   "id": "tk_pewter_light",
+   "label": "Pewter Light",
+   "family": "Specialty",
+   "color": [
+    0.507,
+    0.5145,
+    0.5192
+   ],
+   "roughness": 0.48,
+   "metalness": 1,
+   "clearcoat": 0,
+   "anisotropy": 0,
+   "swatch": "#acadae",
+   "samples": 8,
+   "notes": "light matte pewter"
+  },
+  "Polished Brass": {
+   "id": "tk_polished_brass",
+   "label": "Polished Brass",
+   "family": "Polished",
+   "color": [
+    0.9186,
+    0.8038,
+    0.4133
+   ],
+   "roughness": 0.08,
+   "metalness": 1,
+   "clearcoat": 0,
+   "anisotropy": 0,
+   "swatch": "#f2dfa9",
+   "samples": 8,
+   "notes": "lacquered bright brass"
+  },
+  "Polished Chrome": {
+   "id": "tk_polished_chrome",
+   "label": "Polished Chrome",
+   "family": "Polished",
+   "color": [
+    0.5534,
+    0.5538,
+    0.543
+   ],
+   "roughness": 0.06,
+   "metalness": 1,
+   "clearcoat": 0,
+   "anisotropy": 0,
+   "swatch": "#d3d3d1",
+   "samples": 8,
+   "notes": "mirror chrome; exposure anchor"
+  },
+  "Polished Nickel": {
+   "id": "tk_polished_nickel",
+   "label": "Polished Nickel",
+   "family": "Polished",
+   "color": [
+    0.6437,
+    0.5661,
+    0.4635
+   ],
+   "roughness": 0.08,
+   "metalness": 1,
+   "clearcoat": 0,
+   "anisotropy": 0,
+   "swatch": "#d9cebe",
+   "samples": 8,
+   "notes": "warmer than chrome"
+  },
+  "Polished Stainless Steel": {
+   "id": "tk_polished_stainless_steel",
+   "label": "Polished Stainless Steel",
+   "family": "Polished",
+   "color": [
+    0.6642,
+    0.6119,
+    0.5704
+   ],
+   "roughness": 0.1,
+   "metalness": 1,
+   "clearcoat": 0,
+   "anisotropy": 0,
+   "swatch": "#e9e1db",
+   "samples": 8,
+   "notes": ""
+  },
+  "Rust": {
+   "id": "tk_rust",
+   "label": "Rust",
+   "family": "Specialty",
+   "color": [
+    0.0325,
+    0.0161,
+    0.0111
+   ],
+   "roughness": 0.75,
+   "metalness": 0.3,
+   "clearcoat": 0,
+   "anisotropy": 0,
+   "swatch": "#3c3330",
+   "samples": 3,
+   "notes": "dark rust-brown cast iron"
+  },
+  "Sable": {
+   "id": "tk_sable",
+   "label": "Sable",
+   "family": "Bronze",
+   "color": [
+    0.0621,
+    0.0421,
+    0.0421
+   ],
+   "roughness": 0.42,
+   "metalness": 0.8,
+   "clearcoat": 0,
+   "anisotropy": 0,
+   "swatch": "#4f4646",
+   "samples": 8,
+   "notes": "dark chocolate satin"
+  },
+  "Silicon Bronze Light": {
+   "id": "tk_silicon_bronze_light",
+   "label": "Silicon Bronze Light",
+   "family": "Bronze",
+   "color": [
+    0.4406,
+    0.3598,
+    0.2823
+   ],
+   "roughness": 0.48,
+   "metalness": 1,
+   "clearcoat": 0,
+   "anisotropy": 0,
+   "swatch": "#a29586",
+   "samples": 8,
+   "notes": "living cast bronze, grey"
+  },
+  "Stainless Steel": {
+   "id": "tk_stainless_steel",
+   "label": "Stainless Steel",
+   "family": "Brushed",
+   "color": [
+    0.6408,
+    0.5925,
+    0.554
+   ],
+   "roughness": 0.3,
+   "metalness": 1,
+   "clearcoat": 0,
+   "anisotropy": 0.75,
+   "swatch": "#d8d1cb",
+   "samples": 8,
+   "notes": "brushed stainless"
+  },
+  "Tuscan Bronze": {
+   "id": "tk_tuscan_bronze",
+   "label": "Tuscan Bronze",
+   "family": "Bronze",
+   "color": [
+    0.02,
+    0.0121,
+    0.0138
+   ],
+   "roughness": 0.35,
+   "metalness": 1,
+   "clearcoat": 0,
+   "anisotropy": 0,
+   "swatch": "#363135",
+   "samples": 8,
+   "notes": "near-black body, copper wear on edges (see wear)",
+   "wear": [
+    0.0668,
+    0.0371,
+    0.0359
+   ]
+  },
+  "Umbrio": {
+   "id": "tk_umbrio",
+   "label": "Umbrio",
+   "family": "Bronze",
+   "color": [
+    0.0795,
+    0.0459,
+    0.0425
+   ],
+   "roughness": 0.35,
+   "metalness": 1,
+   "clearcoat": 0,
+   "anisotropy": 0,
+   "swatch": "#504b4e",
+   "samples": 8,
+   "notes": "near-black body, copper wear on edges (see wear)",
+   "wear": [
+    0.172,
+    0.0812,
+    0.061
+   ]
+  },
+  "Chrome": {
+   "id": "tk_chrome",
+   "label": "Chrome",
+   "family": "Polished",
+   "color": [
+    0.5534,
+    0.5538,
+    0.543
+   ],
+   "roughness": 0.06,
+   "metalness": 1,
+   "clearcoat": 0,
+   "anisotropy": 0,
+   "swatch": "#d3d3d1",
+   "samples": 0,
+   "notes": "only used for the chrome bases of the two travertine knobs; photos show the stone"
+  },
+  "Default": {
+   "id": "tk_default",
+   "label": "Default",
+   "family": "Brushed",
+   "color": [
+    0.6408,
+    0.5925,
+    0.554
+   ],
+   "roughness": 0.3,
+   "metalness": 1,
+   "clearcoat": 0,
+   "anisotropy": 0.75,
+   "swatch": "#d8d1cb",
+   "samples": 0,
+   "notes": "unnamed finish of SS46 (brushed stainless, use this) and SS47 (polished stainless: use \"Polished Stainless Steel\" for that product)"
+  },
+  "Flat Black and Honey Bronze": {
+   "id": "tk_flat_black_and_honey_bronze",
+   "label": "Flat Black and Honey Bronze",
+   "family": "Black",
+   "color": [
+    0.0268,
+    0.0214,
+    0.0215
+   ],
+   "roughness": 0.62,
+   "metalness": 0.3,
+   "clearcoat": 0,
+   "anisotropy": 0,
+   "swatch": "#3f3c3c",
+   "samples": 8,
+   "notes": "body Flat Black, accent (\"mat\": \"accent\") Honey Bronze",
+   "two_tone": [
+    "Flat Black",
+    "Honey Bronze"
+   ]
+  },
+  "Flat Black and Pewter Antique": {
+   "id": "tk_flat_black_and_pewter_antique",
+   "label": "Flat Black and Pewter Antique",
+   "family": "Black",
+   "color": [
+    0.0268,
+    0.0214,
+    0.0215
+   ],
+   "roughness": 0.62,
+   "metalness": 0.3,
+   "clearcoat": 0,
+   "anisotropy": 0,
+   "swatch": "#3f3c3c",
+   "samples": 8,
+   "notes": "body Flat Black, accent (\"mat\": \"accent\") Pewter Antique",
+   "two_tone": [
+    "Flat Black",
+    "Pewter Antique"
+   ]
+  },
+  "Honey Bronze and Flat Black": {
+   "id": "tk_honey_bronze_and_flat_black",
+   "label": "Honey Bronze and Flat Black",
+   "family": "Satin",
+   "color": [
+    0.6123,
+    0.4463,
+    0.247
+   ],
+   "roughness": 0.28,
+   "metalness": 1,
+   "clearcoat": 0,
+   "anisotropy": 0.5,
+   "swatch": "#c9b08a",
+   "samples": 8,
+   "notes": "body Honey Bronze, accent (\"mat\": \"accent\") Flat Black",
+   "two_tone": [
+    "Honey Bronze",
+    "Flat Black"
+   ]
+  },
+  "Pewter Antique and Flat Black": {
+   "id": "tk_pewter_antique_and_flat_black",
+   "label": "Pewter Antique and Flat Black",
+   "family": "Specialty",
+   "color": [
+    0.3249,
+    0.2472,
+    0.1905
+   ],
+   "roughness": 0.4,
+   "metalness": 1,
+   "clearcoat": 0,
+   "anisotropy": 0,
+   "swatch": "#958578",
+   "samples": 8,
+   "notes": "body Pewter Antique, accent (\"mat\": \"accent\") Flat Black",
+   "two_tone": [
+    "Pewter Antique",
+    "Flat Black"
+   ]
+  }
+ },
+ "secondary": {
+  "crystal": {
+   "label": "Clear crystal",
+   "color": [
+    0.97,
+    0.97,
+    0.97
+   ],
+   "roughness": 0.02,
+   "metalness": 0,
+   "transmission": 1,
+   "ior": 1.55,
+   "thickness": 20,
+   "swatch": "#ccc3c0",
+   "samples": 9,
+   "used_by": [
+    "clear_crystal_center_knob",
+    "clear_crystal_knob",
+    "clear_melon_crystal_knob",
+    "clear_octagon_crystal_knob",
+    "crystal_emerald_knob",
+    "wentworth_crystal_knob"
+   ]
+  },
+  "crystal_amber": {
+   "label": "Amber crystal",
+   "color": [
+    0.97,
+    0.7507,
+    0.0398
+   ],
+   "roughness": 0.02,
+   "metalness": 0,
+   "transmission": 1,
+   "ior": 1.55,
+   "thickness": 20,
+   "swatch": "#f2ce32",
+   "samples": 2,
+   "used_by": [
+    "amber_crystal_knob"
+   ]
+  },
+  "crystal_wine": {
+   "label": "Wine crystal",
+   "color": [
+    0.564,
+    0.1981,
+    0.1196
+   ],
+   "roughness": 0.02,
+   "metalness": 0,
+   "transmission": 1,
+   "ior": 1.55,
+   "thickness": 20,
+   "swatch": "#9e5c47",
+   "samples": 5,
+   "used_by": [
+    "wine_crystal_center_knob",
+    "wine_crystal_knob",
+    "wine_octagon_crystal_knob"
+   ]
+  },
+  "crystal_light_blue": {
+   "label": "Light blue crystal",
+   "color": [
+    0.7314,
+    0.8783,
+    0.97
+   ],
+   "roughness": 0.02,
+   "metalness": 0,
+   "transmission": 1,
+   "ior": 1.55,
+   "thickness": 20,
+   "swatch": "#e3ebf2",
+   "samples": 2,
+   "used_by": [
+    "light_blue_crystal_knob"
+   ]
+  },
+  "crystal_blue": {
+   "label": "Blue crystal",
+   "color": [
+    0.2251,
+    0.4269,
+    0.97
+   ],
+   "roughness": 0.02,
+   "metalness": 0,
+   "transmission": 1,
+   "ior": 1.55,
+   "thickness": 20,
+   "swatch": "#6b89c3",
+   "samples": 4,
+   "used_by": [
+    "blue_crystal_center_knob",
+    "blue_crystal_knob"
+   ]
+  },
+  "crystal_green": {
+   "label": "Green crystal",
+   "color": [
+    0.3123,
+    0.9213,
+    0.0359
+   ],
+   "roughness": 0.02,
+   "metalness": 0,
+   "transmission": 1,
+   "ior": 1.55,
+   "thickness": 20,
+   "swatch": "#78bc26",
+   "samples": 2,
+   "used_by": [
+    "green_crystal_knob"
+   ]
+  },
+  "crystal_pink": {
+   "label": "Pink crystal",
+   "color": [
+    0.9039,
+    0.8939,
+    0.97
+   ],
+   "roughness": 0.02,
+   "metalness": 0,
+   "transmission": 1,
+   "ior": 1.55,
+   "thickness": 20,
+   "swatch": "#f2e6eb",
+   "samples": 2,
+   "used_by": [
+    "pink_crystal_knob"
+   ]
+  },
+  "crystal_black": {
+   "label": "Black crystal",
+   "color": [
+    0.006,
+    0.006,
+    0.007
+   ],
+   "roughness": 0.03,
+   "metalness": 0,
+   "transmission": 0,
+   "ior": 1.55,
+   "thickness": 0,
+   "swatch": "#555050",
+   "samples": 5,
+   "used_by": [
+    "black_crystal_center_knob",
+    "black_crystal_knob",
+    "black_octagon_crystal_knob"
+   ]
+  },
+  "glass": {
+   "label": "Clear glass",
+   "color": [
+    0.97,
+    0.97,
+    0.97
+   ],
+   "roughness": 0.02,
+   "metalness": 0,
+   "transmission": 1,
+   "ior": 1.5,
+   "thickness": 20,
+   "swatch": "#e3e0db",
+   "samples": 2,
+   "used_by": [
+    "clarity_clear_glass_knob"
+   ]
+  },
+  "ceramic": {
+   "label": "Black glazed ceramic",
+   "color": [
+    0.005,
+    0.005,
+    0.005
+   ],
+   "roughness": 0.06,
+   "metalness": 0,
+   "transmission": 0,
+   "ior": 1.5,
+   "thickness": 0,
+   "swatch": "#3d3c43",
+   "samples": 1,
+   "used_by": [
+    "ceramic_large_knob"
+   ]
+  },
+  "travertine": {
+   "label": "Tumbled travertine",
+   "color": [
+    0.8,
+    0.7592,
+    0.7431
+   ],
+   "roughness": 0.55,
+   "metalness": 0,
+   "transmission": 0,
+   "ior": 1.5,
+   "thickness": 0,
+   "swatch": "#ece6e4",
+   "samples": 1,
+   "used_by": [
+    "tumbled_travertine_knob"
+   ]
+  },
+  "travertine_red": {
+   "label": "Honed red travertine",
+   "color": [
+    0.7283,
+    0.26,
+    0.1831
+   ],
+   "roughness": 0.55,
+   "metalness": 0,
+   "transmission": 0,
+   "ior": 1.5,
+   "thickness": 0,
+   "swatch": "#ca8676",
+   "samples": 1,
+   "used_by": [
+    "honed_red_travertine_knob"
+   ]
+  },
+  "wood": {
+   "label": "Wood (fallback, not in catalog)",
+   "color": [
+    0.3,
+    0.17,
+    0.08
+   ],
+   "roughness": 0.55,
+   "metalness": 0,
+   "transmission": 0,
+   "ior": 1.5,
+   "thickness": 0,
+   "swatch": "#957350",
+   "samples": 0,
+   "used_by": []
+  },
+  "leather": {
+   "label": "Leather (fallback, not in catalog)",
+   "color": [
+    0.12,
+    0.06,
+    0.03
+   ],
+   "roughness": 0.6,
+   "metalness": 0,
+   "transmission": 0,
+   "ior": 1.5,
+   "thickness": 0,
+   "swatch": "#614530",
+   "samples": 0,
+   "used_by": []
+  },
+  "acrylic": {
+   "label": "Clear acrylic (fallback, not in catalog)",
+   "color": [
+    0.95,
+    0.95,
+    0.95
+   ],
+   "roughness": 0.05,
+   "metalness": 0,
+   "transmission": 1,
+   "ior": 1.49,
+   "thickness": 10,
+   "swatch": "#f9f9f9",
+   "samples": 0,
+   "used_by": []
+  }
+ }
+}

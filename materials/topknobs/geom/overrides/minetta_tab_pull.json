@@ -1,0 +1,295 @@
+{
+ "type": "tab_pull",
+ "params": {},
+ "sizes": {
+  "3_3_4_inch_pull": {
+   "shape": {
+    "kind": "group",
+    "parts": [
+     {
+      "kind": "extrude",
+      "outline": [
+       [
+        -3.97,
+        0
+       ],
+       [
+        3.97,
+        0
+       ],
+       [
+        3.97,
+        6.22
+       ],
+       [
+        13.49,
+        6.22
+       ],
+       [
+        13.49,
+        22.22
+       ],
+       [
+        -3.97,
+        22.22
+       ]
+      ],
+      "depth": 119.06,
+      "bevel": 0.6,
+      "rotate": [
+       0,
+       -90,
+       0
+      ],
+      "offset": [
+       0,
+       0,
+       0
+      ]
+     }
+    ]
+   }
+  },
+  "5_1_16_inch_pull": {
+   "shape": {
+    "kind": "group",
+    "parts": [
+     {
+      "kind": "extrude",
+      "outline": [
+       [
+        -3.97,
+        0
+       ],
+       [
+        3.97,
+        0
+       ],
+       [
+        3.97,
+        6.22
+       ],
+       [
+        13.49,
+        6.22
+       ],
+       [
+        13.49,
+        22.22
+       ],
+       [
+        -3.97,
+        22.22
+       ]
+      ],
+      "depth": 150.81,
+      "bevel": 0.6,
+      "rotate": [
+       0,
+       -90,
+       0
+      ],
+      "offset": [
+       0,
+       0,
+       0
+      ]
+     }
+    ]
+   }
+  },
+  "6_5_16_inch_pull": {
+   "shape": {
+    "kind": "group",
+    "parts": [
+     {
+      "kind": "extrude",
+      "outline": [
+       [
+        -3.97,
+        0
+       ],
+       [
+        3.97,
+        0
+       ],
+       [
+        3.97,
+        6.22
+       ],
+       [
+        13.49,
+        6.22
+       ],
+       [
+        13.49,
+        22.22
+       ],
+       [
+        -3.97,
+        22.22
+       ]
+      ],
+      "depth": 182.56,
+      "bevel": 0.6,
+      "rotate": [
+       0,
+       -90,
+       0
+      ],
+      "offset": [
+       0,
+       0,
+       0
+      ]
+     }
+    ]
+   }
+  },
+  "7_9_16_inch_pull": {
+   "shape": {
+    "kind": "group",
+    "parts": [
+     {
+      "kind": "extrude",
+      "outline": [
+       [
+        -3.97,
+        0
+       ],
+       [
+        3.97,
+        0
+       ],
+       [
+        3.97,
+        6.22
+       ],
+       [
+        13.49,
+        6.22
+       ],
+       [
+        13.49,
+        22.22
+       ],
+       [
+        -3.97,
+        22.22
+       ]
+      ],
+      "depth": 214.31,
+      "bevel": 0.6,
+      "rotate": [
+       0,
+       -90,
+       0
+      ],
+      "offset": [
+       0,
+       0,
+       0
+      ]
+     }
+    ]
+   }
+  },
+  "8_13_16_inch_pull": {
+   "shape": {
+    "kind": "group",
+    "parts": [
+     {
+      "kind": "extrude",
+      "outline": [
+       [
+        -3.97,
+        0
+       ],
+       [
+        3.97,
+        0
+       ],
+       [
+        3.97,
+        6.22
+       ],
+       [
+        13.49,
+        6.22
+       ],
+       [
+        13.49,
+        22.22
+       ],
+       [
+        -3.97,
+        22.22
+       ]
+      ],
+      "depth": 246.06,
+      "bevel": 0.6,
+      "rotate": [
+       0,
+       -90,
+       0
+      ],
+      "offset": [
+       0,
+       0,
+       0
+      ]
+     }
+    ]
+   }
+  },
+  "12_inch_pull": {
+   "shape": {
+    "kind": "group",
+    "parts": [
+     {
+      "kind": "extrude",
+      "outline": [
+       [
+        -3.97,
+        0
+       ],
+       [
+        3.97,
+        0
+       ],
+       [
+        3.97,
+        6.22
+       ],
+       [
+        13.49,
+        6.22
+       ],
+       [
+        13.49,
+        22.22
+       ],
+       [
+        -3.97,
+        22.22
+       ]
+      ],
+      "depth": 327.02,
+      "bevel": 0.6,
+      "rotate": [
+       0,
+       -90,
+       0
+      ],
+      "offset": [
+       0,
+       0,
+       0
+      ]
+     }
+    ]
+   }
+  }
+ },
+ "notes": "audit_1: the generator extruded the side elevation into a solid 7/8 x 11/16 in block. The 3/4 photo (_1) shows a lip overhanging a narrow stem (a finger grip underneath), and the spec base 5/16 in deep runs the full length: section = 5/16 in stem on the door (centred on the screw line) under a full-width 11/16 in lip, 16 mm thick (the lip edge line in the side elevation _0), overhanging towards +Z (down the door)."
+}

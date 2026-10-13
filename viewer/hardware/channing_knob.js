@@ -1,0 +1,1 @@
+window.__hwData("channing_knob",{"type":"square_knob","sizes":{"one_size":{"kind":"lathe","section":"square","profile":[[0,0],[4.67,0],[4.67,16.5],[13.09,16.5],[13.49,16.9],[13.49,27.67],[12.59,28.57],[0,28.57]]}}});

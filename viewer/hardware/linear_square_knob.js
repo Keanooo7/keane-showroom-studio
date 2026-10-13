@@ -1,0 +1,1 @@
+window.__hwData("linear_square_knob",{"type":"square_knob","sizes":{"one_size":{"kind":"lathe","profile":[[0,0],[7.94,0],[7.94,2.6],[9.53,2.7],[9.53,28.07],[9.0,28.57],[0,28.57]],"section":"square"}}});

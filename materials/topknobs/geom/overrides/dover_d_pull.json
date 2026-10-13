@@ -1,0 +1,9 @@
+{
+ "type": "bar_pull",
+ "params": {
+  "depth": 12.7,
+  "section": "flat",
+  "bevel": 2.5
+ },
+ "notes": "spec Width 5/16\" is the band thickness: _1 shows a flat band about twice as wide as thick and the base is 7/16\" x 9/16\", so the extrusion depth is 1/2\" (spec Width kept out of the mesh)"
+}

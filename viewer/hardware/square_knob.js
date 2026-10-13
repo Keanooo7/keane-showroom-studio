@@ -1,0 +1,1 @@
+window.__hwData("square_knob",{"type":"square_knob","sizes":{"one_size":{"kind":"group","parts":[{"kind":"extrude","outline":[[4.76,17.46],[-4.76,17.46],[-4.76,9.0],[-0.8,9.0],[-0.8,0.0],[4.76,0.0]],"depth":25.4,"bevel":0.6,"offset":[0,0,0],"rotate":[0,90,0]}]}}});

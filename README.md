@@ -42,8 +42,12 @@ sfm/          cameras.json, measurements.json, sparse_points.ply, REPORT.md, qa/
 geometry/     layout_spec.json (the editable source of truth)
 verify/       model-over-photo overlays, alignment scores, albedo estimate
 sugar_model/  GPU kit, CAPTURE_PROTOCOL.md, postprocess/, tests/
-tools/        make_spec.py → build_cad.py → overlay.py / albedo.py / build_viewer.py
-viewer/       keane_showroom_twin.html (self-contained 3D viewer)
+tools/        make_spec.py → build_cad.py → overlay.py / albedo.py / build_viewer.py; build_studio.py (studio page)
+              Top Knobs: fetch_topknobs.py → topknobs_prep.py → hw_pulls.py / hw_knobs.py / hw_finishes.py → build_studio.py
+              QA: hw_mesh.py (SHAPE → mesh, as three.js builds it), hw_preview.py (renders, contact sheets), hw_sweep.mjs (headless studio check)
+materials/    finish sources + manifest.json (quartz, granite, Decore, tile)
+  topknobs/   Top Knobs knobs & pulls: catalog.json, products.json, img/, geom/<slug>.json (+ overrides/), finishes.json, qa/ (README.md there)
+viewer/       keane_showroom_twin.html (self-contained 3D viewer); keane_showroom_studio.html (+ textures/, hardware/, loaded on demand)
 ```
 
 ## Conventions
@@ -64,6 +68,17 @@ python3 tools/overlay.py        # re-check against the photos
 `viewer/keane_showroom_studio.html` is a material configurator modelled on how car configurators (e.g. Porsche) present a build. It uses the same GLB. The CAD files and `keane_showroom_twin.html` are unchanged.
 ```
 python3 tools/build_studio.py   # repo-relative paths; embeds GLB + Countertops/*.png -> viewer/keane_showroom_studio.html
+TK_DATA=<dir> python3 tools/build_studio.py   # same, but reads Top Knobs geom/ + finishes.json from <dir> (mock data)
+```
+Top Knobs hardware (`materials/topknobs/`, contract in its README). The generators need a Python with numpy, scipy, PIL and
+contourpy; the sweep needs Node with puppeteer-core and Google Chrome.
+```
+python3 tools/hw_pulls.py --sheets && python3 tools/hw_knobs.py   # geom/<slug>.json from the photos + spec tables (~10 min), hand fixes in geom/overrides/
+python3 tools/hw_finishes.py                                      # finishes.json, measured from the finish photos
+python3 tools/hw_preview.py --all --sheet qa/sheet.png --sheet-only   # contact sheets: renders over the photos, dims vs spec
+python3 tools/build_studio.py
+node tools/hw_sweep.mjs            # every size on every mount, every finish, doors/drawers split -> materials/topknobs/qa/sweep.json
+node tools/hw_sweep.mjs --shots    # review screenshots -> materials/topknobs/qa/shots/
 ```
 - **Geometry, rebuilt at load inside each part's CAD envelope**: Shaker doors and drawer fronts (2-1/4 in stiles and rails, 1/4 in recessed panel, 1.6 mm edge radius). Quartz slabs re-extruded from the CAD top-face outline with a 1.5 mm eased edge, sink notch included. Bar pulls on square posts with radiused edges. Carcass and trim boxes get 1.5 mm rounded edges. Pivots, door swings and drawer travel are untouched.
 - **Materials**: slab photos mapped at true 126 × 63 in slab scale. Each run is cut from a different area of the slab, and edge faces are unfolded so veins continue over the edge. Cabinet paint is a two-layer satin: a pigment base plus a smoother top coat. The film is visually smooth. Only faint grain shows, and only in raking light: vertical on stiles and panels, horizontal on rails and drawer fronts. Most of the realism comes from light on the profiles: highlight lines on the edges and shadow in the recesses. An earlier blotchy "orange-peel" bump map was removed because it read as hammered leather. Backsplash is procedural glazed 3 × 12 in tile (W1 vertical stack, W2 running bond) with colour, normal and roughness maps. Fireclay and quartz use clear-coat.
@@ -72,7 +87,8 @@ python3 tools/build_studio.py   # repo-relative paths; embeds GLB + Countertops/
   - *Countertops*: 34 Vadara quartz designs (vadara.uk/designs) are mapped as full 126 × 63 in slabs; 4 of them come from `Countertops/*.png`. 48 MSI granites (msisurfaces.com/granite-countertops) are tiled from the maker's close-up. **Its 24 × 24 in scale is an assumption.** The stone tiles are made seamless by offset-and-blend, not mirroring, to avoid symmetry lines.
   - *Backsplash*: glazed tile laid vertically (3 × 12 in stack) or horizontally (12 × 3 in running bond), or a stone slab cut from the same texture as the countertop; each at full height or as a 6 in backsplash with the wall showing above.
   - *Cabinets*: showroom paint plus 38 Decore DRS131 finishes (23 solid, 16 woodgrain). DRS131 is a one-piece RTF door, so Decore woodgrain runs vertically on doors and horizontally on drawer fronts with no rail joints. Embossed foils (Taction, Deep Grain, Groovz, Portuna) get a relief map taken from the printed grain. The chip scale (~10 in) is assumed. Woodgrain chips are mirrored 2 × 2, which reads like book-matched veneer.
-  - Textures are written to `viewer/textures/<id>.js` (28 MB) and load only when picked, so **keep the `textures/` folder next to the HTML**. The page still opens directly from disk.
+  - *Hardware*: the showroom bar pull (photo-matched, 3 finishes) plus the whole Top Knobs knobs & pulls catalog (422 products, 1,135 sizes, 39 finishes: SS46 / SS47's "Default" is read as the stainless their names give; see `materials/topknobs/README.md`). Each piece is built in the page from its `geom/` shape (extrude / lathe / group) at spec-table size, with a measured `finishes.json` material: anisotropic brushing along the pull, a second colour for two-tone finishes, and crystal or glass that the path tracer refracts (the live view shows it as plain transparency). Pieces replace the 24 CAD pulls at their mounting points: pulls and knobs centred on drawers, knobs at the latch end of the old door pull, door pulls aligned to where the old pull ended, cup, drop and plate pulls always horizontal, and edge tabs on the top edge. A piece sits on the recessed Shaker panel only when its screws and its whole footprint land on it, otherwise on the frame. A pull longer than its front minus 1 in is still shown, with a note.
+  - Textures are written to `viewer/textures/<id>.js` (28 MB) and hardware to `viewer/hardware/<slug>.js` plus `thumbs/` (5 MB). Both load only when picked, so **keep `textures/` and `hardware/` next to the HTML**. The page still opens directly from disk.
 - **Interface** (modelled on the Porsche Car Configurator):
   - *App bar*: Share build, Summary, and Photo render as the primary action.
   - *Stage*: pinned while the options scroll. A glass control pill holds Adjust scene, Open fronts, download and fullscreen, and a chip shows Live or Photo progress.
@@ -80,10 +96,11 @@ python3 tools/build_studio.py   # repo-relative paths; embeds GLB + Countertops/
   - *Options*: accordion cards for Countertop, Backsplash, Cabinets and Hardware. Brands are sub-dropdowns and families are tiers (Vadara collections, MSI tone bands, Decore sheen families). The selected name shows under its tier and in the card header.
   - *Swatches*: rounded frames with a gloss sheen scaled to the finish, a ring on the selected one, and a tooltip with name, code, brand and family.
   - *Backsplash*: two picture option cards.
-  - *Search*: covers every finish.
+  - *Hardware*: an Apply to switch (All fronts / Doors / Drawers), so doors and drawers can take different pieces. The showroom bar pull comes first, then Top Knobs sub-dropdowns by type (Knobs, Pulls, Appliance, Cup, Ring & drop, Tab & finger) with tiers by collection and photo chips. The picked product opens a panel under its chip with its finishes, its sizes as Top Knobs labels them (default: closest to 6-3/4 in), the SKU, c-c, length and projection, and a link to topknobs.com. `window.__studio.hw` (`list`, `catalog`, `set`, `measure`, `mats`) lets a script sweep every product and read back placed bounds, how each piece sits on its front, and the live materials (`tools/hw_sweep.mjs`).
+  - *Search*: covers every finish and every hardware name, collection, type and SKU.
   - *Camera*: follows the section being edited (Countertop → high view into the L-corner, Backsplash → straight-on sink wall, Cabinets and Hardware → drawers).
   - *Summary dialog*: a Change link per row.
-  - *Build link*: the whole build lives in the URL hash, so a copied link reopens it exactly.
+  - *Build link*: the whole build lives in the URL hash, so a copied link reopens it exactly. Hardware adds `hd` / `hr` (door / drawer piece as `slug.size.finish`) when it differs from the bar-pull finish in `h`, so older links still open unchanged.
 - Camera presets include the five solved photo cameras, so renders can be compared directly against `verify/` photos.
 
 ## Assumptions to confirm with a tape measure

@@ -1,0 +1,13 @@
+{
+ "params": {
+  "depth": 7.94
+ },
+ "sizes": {
+  "12_inch_app_pull": {
+   "params": {
+    "depth": 15.88
+   }
+  }
+ },
+ "notes": "audit 3: spec Width 3/32 in (3/16 in app) contradicts the photos and the Base Diameter; extruded through the base short side, 5/16 in (5/8 in app)"
+}

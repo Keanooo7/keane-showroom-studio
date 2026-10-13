@@ -1,0 +1,225 @@
+{
+ "type": "square_knob",
+ "sizes": {
+  "1_1_8_inch": {
+   "shape": {
+    "kind": "group",
+    "parts": [
+     {
+      "kind": "extrude",
+      "outline": [
+       [
+        -4.0,
+        0.0
+       ],
+       [
+        4.0,
+        0.0
+       ],
+       [
+        4.75,
+        21.57
+       ],
+       [
+        -4.75,
+        21.57
+       ]
+      ],
+      "depth": 12.7,
+      "bevel": 0.8,
+      "offset": [
+       0.0,
+       0.0,
+       0.0
+      ],
+      "rotate": [
+       0,
+       0,
+       0
+      ]
+     },
+     {
+      "kind": "extrude",
+      "outline": [
+       [
+        -14.29,
+        21.07
+       ],
+       [
+        14.29,
+        21.07
+       ],
+       [
+        14.29,
+        28.57
+       ],
+       [
+        -14.29,
+        28.57
+       ]
+      ],
+      "depth": 28.57,
+      "bevel": 1.6,
+      "offset": [
+       0.0,
+       0.0,
+       0.0
+      ],
+      "rotate": [
+       0,
+       0,
+       0
+      ]
+     }
+    ]
+   }
+  },
+  "1_3_8_inch": {
+   "shape": {
+    "kind": "group",
+    "parts": [
+     {
+      "kind": "extrude",
+      "outline": [
+       [
+        -4.0,
+        0.0
+       ],
+       [
+        4.0,
+        0.0
+       ],
+       [
+        4.75,
+        21.57
+       ],
+       [
+        -4.75,
+        21.57
+       ]
+      ],
+      "depth": 12.7,
+      "bevel": 0.8,
+      "offset": [
+       0.0,
+       0.0,
+       0.0
+      ],
+      "rotate": [
+       0,
+       0,
+       0
+      ]
+     },
+     {
+      "kind": "extrude",
+      "outline": [
+       [
+        -17.46,
+        21.07
+       ],
+       [
+        17.46,
+        21.07
+       ],
+       [
+        17.46,
+        28.57
+       ],
+       [
+        -17.46,
+        28.57
+       ]
+      ],
+      "depth": 34.92,
+      "bevel": 1.6,
+      "offset": [
+       0.0,
+       0.0,
+       0.0
+      ],
+      "rotate": [
+       0,
+       0,
+       0
+      ]
+     }
+    ]
+   }
+  },
+  "1_15_16_inch": {
+   "shape": {
+    "kind": "group",
+    "parts": [
+     {
+      "kind": "extrude",
+      "outline": [
+       [
+        -4.0,
+        0.0
+       ],
+       [
+        4.0,
+        0.0
+       ],
+       [
+        4.75,
+        21.57
+       ],
+       [
+        -4.75,
+        21.57
+       ]
+      ],
+      "depth": 12.7,
+      "bevel": 0.8,
+      "offset": [
+       0.0,
+       0.0,
+       0.0
+      ],
+      "rotate": [
+       0,
+       0,
+       0
+      ]
+     },
+     {
+      "kind": "extrude",
+      "outline": [
+       [
+        -24.61,
+        21.07
+       ],
+       [
+        24.61,
+        21.07
+       ],
+       [
+        24.61,
+        28.57
+       ],
+       [
+        -24.61,
+        28.57
+       ]
+      ],
+      "depth": 49.21,
+      "bevel": 1.6,
+      "offset": [
+       0.0,
+       0.0,
+       0.0
+      ],
+      "rotate": [
+       0,
+       0,
+       0
+      ]
+     }
+    ]
+   }
+  }
+ },
+ "notes": "flat hammered plate 7.5 mm thick (photo _0 head height minus the top face at ~25 deg) on a rectangular post 8-9.5 x 12.7 (base 5/16\" x 1/2\"); the lathe fit made an hourglass head and the largest size took a 15 % taller projection from the photo"
+}

@@ -136,6 +136,27 @@ details[open]>summary .chev{transform:rotate(180deg)}
 .sw.hide,.grp.hide,.sub.hide{display:none}
 .empty{color:var(--muted);font-size:14px;margin:0}
 .empty[hidden]{display:none}
+/* hardware: product chips carry the maker's photo; the picked product's finishes, sizes and spec open under its tier */
+.sw.prod{background-color:#fff;background-size:contain}
+.sw.prod::after{background:none}
+.hwsel{margin-top:12px;padding:14px;border-radius:12px;background:var(--bg);display:flex;flex-direction:column;gap:10px;min-width:0}
+.hwsel[hidden]{display:none}
+.hwsel .hd{display:flex;gap:12px;align-items:center;min-width:0}
+.hwsel .hd .ph{width:52px;height:52px;border-radius:9px;background:#fff center/contain no-repeat;flex:none;box-shadow:inset 0 0 0 1px rgba(0,0,0,.08)}
+.hwsel .hd b{display:block;font-size:15px;font-weight:600}
+.hwsel .hd small{display:block;color:var(--muted);font-size:13px}
+.hwsel h4{margin:2px 0 0;font-size:13.5px;font-weight:600;display:flex;gap:8px;align-items:baseline;min-width:0}
+.hwsel h4 span{color:var(--muted);font-weight:500;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.hwsel .sws{margin-top:0;grid-template-columns:repeat(auto-fill,40px);gap:9px}
+.sw.fin{width:40px;height:40px;border-radius:50%}
+.sizes{display:flex;flex-wrap:wrap;gap:6px}
+.sizes button{height:32px;padding:0 10px;border-radius:8px;border:1px solid var(--line);background:var(--card);cursor:pointer;font-size:13px;white-space:nowrap}
+.sizes button[aria-pressed="true"]{border-color:var(--ring);box-shadow:inset 0 0 0 1px var(--ring);font-weight:600}
+.spec{margin:0;font:500 12.5px/1.55 var(--f-mono);color:var(--muted);overflow-wrap:anywhere}
+.spec a{color:var(--ink)}
+.warn{margin:0;font-size:13.5px;color:#B3541E;display:flex;gap:8px;align-items:flex-start}
+.warn svg{width:16px;height:16px;flex:none;margin-top:2px}
+.warn[hidden]{display:none}
 /* backsplash height: two-way segmented switch above the option cards */
 .seg{display:flex;align-items:center;gap:12px;margin-bottom:12px}
 .seg>span{font-weight:600;font-size:14.5px}
@@ -242,7 +263,7 @@ dialog::backdrop{background:rgba(10,10,12,.45);backdrop-filter:blur(2px)}
     </div>
     <div class="search">
       <svg><use href="#i-search"/></svg>
-      <input id="q" type="search" placeholder="Search finishes, e.g. walnut, V816, black" aria-label="Search finishes" autocomplete="off">
+      <input id="q" type="search" placeholder="Search finishes, e.g. walnut, V816, TK880" aria-label="Search finishes and hardware" autocomplete="off">
       <button id="q-clear" aria-label="Clear search" hidden><svg width="16" height="16"><use href="#i-x"/></svg></button>
     </div>
 
@@ -288,6 +309,7 @@ dialog::backdrop{background:rgba(10,10,12,.45);backdrop-filter:blur(2px)}
     <ul>
       <li><b>Geometry</b>: fitted from five showroom photos. Doors and drawers are rebuilt as Shaker fronts (2-1/4 in frame, 1/4 in recessed panel, 1.6 mm edge radius). Countertops are re-extruded from the CAD footprint with a 1.5 mm eased edge.</li>
       <li><b>Finish library</b>: 38 Decore DRS131 finishes (decore.com), 34 Vadara quartz designs (vadara.uk) and 48 MSI granites (msisurfaces.com). Each texture loads only when picked.</li>
+      <li><b>Hardware</b>: the showroom bar pull (matched to the photos) or any Top Knobs knob or pull, built from the maker's spec table and product photos at true size. Doors and drawers can take different pieces. Each piece loads only when picked.</li>
       <li><b>Scale</b>: Vadara slabs map at 126 × 63 in. MSI close-ups are assumed to show 24 × 24 in, and Decore chips about 10 in.</li>
       <li><b>Live view</b>: PBR materials, a studio HDR light room, soft shadows, ambient occlusion and Khronos PBR Neutral tone mapping for true product colour.</li>
       <li><b>Photo render</b>: path tracing with an edge-preserving denoise. It converges in about a minute and stops at 400 samples.</li>
@@ -309,7 +331,7 @@ import * as THREE from 'three';
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
 import { RoundedBoxGeometry } from 'three/addons/geometries/RoundedBoxGeometry.js';
-import { mergeGeometries } from 'three/addons/utils/BufferGeometryUtils.js';
+import { mergeGeometries, toCreasedNormals } from 'three/addons/utils/BufferGeometryUtils.js';
 import { EffectComposer } from 'three/addons/postprocessing/EffectComposer.js';
 import { RenderPass } from 'three/addons/postprocessing/RenderPass.js';
 import { GTAOPass } from 'three/addons/postprocessing/GTAOPass.js';
@@ -686,7 +708,7 @@ function quartzSlab(geo, uvOff) {
 const isBox = g => (g.index ? g.index.count : g.attributes.position.count) === 36;
 
 // ============================ load + upgrade the CAD assembly ============================
-const nodes = {}, doors = [], drawers = [], frontMeshes = [], splashMeshes = [], report = { fronts: 0, pulls: 0, boxes: 0, slabs: [] };
+const nodes = {}, doors = [], drawers = [], frontMeshes = [], splashMeshes = [], handles = [], report = { fronts: 0, pulls: 0, boxes: 0, slabs: [] };
 const bin = Uint8Array.from(atob(window.__GLB_B64), c => c.charCodeAt(0));
 new GLTFLoader().parse(bin.buffer, '', gltf => {
   const root = gltf.scene; scene.add(root);
@@ -698,7 +720,7 @@ new GLTFLoader().parse(bin.buffer, '', gltf => {
     o.castShadow = o.receiveShadow = true;
     if (cat === 'door' || cat === 'drawer_front') { o.geometry = shakerFront(bb, cat === 'drawer_front', id); frontMeshes.push(o); report.fronts++; }
     else if (cat === 'hardware_handle') {
-      o.geometry = barPull(bb); report.pulls++;
+      o.geometry = barPull(bb); report.pulls++; handles.push(o);
       // pulls centred on a drawer land on the recessed panel, not in mid-air
       const par = o.parent; if (par && par.isMesh && /drawer_front/.test(par.name)) {
         par.geometry.computeBoundingBox(); const pb = par.geometry.boundingBox, S = Math.min(2.25 * IN, 0.2 * Math.min(pb.max.x - pb.min.x, pb.max.y - pb.min.y));
@@ -738,8 +760,9 @@ new GLTFLoader().parse(bin.buffer, '', gltf => {
     if (d.swing) doors.push({ n, q0: n.quaternion.clone(), sign: d.swing.sign, max: d.swing.max * Math.PI / 180 });
     if (d.travel_mm) drawers.push({ n, p0: n.position.clone(), dir: new THREE.Vector3(0, 0, 1).applyQuaternion(n.quaternion), travel: d.travel_mm });
   }
+  initMounts(handles);
   console.log('[studio] upgraded', JSON.stringify(report));
-  window.__studio = { THREE, scene, camera, renderer, composer, gtao, controls, nodes, get pt() { return pt; } };
+  window.__studio = { THREE, scene, camera, renderer, composer, gtao, controls, nodes, get pt() { return pt; }, hw: HW_HOOK };
   $('status').hidden = true;
   ready = true; resize();
   restoreBuild();
@@ -864,9 +887,7 @@ $('body-front').innerHTML =
   `<p class="note"><svg><use href="#i-info"/></svg>Decore DRS131 is a one-piece RTF door. Woodgrain runs vertically on doors and horizontally on drawer fronts, with no rail joints.</p>` +
   sub('Decore solid colours', groupBy(solids, 'family', ['Smooth', 'Satin', 'Soft-touch', 'Supermatte']), 'front', true) +
   sub('Decore woodgrain', groupBy(woods, 'family', ['Smooth woodgrain', 'Textured']), 'front', false) + empty;
-$('body-metal').innerHTML = grp('Bar pulls', METALS, 'metal') + empty;
-
-const SEL = { counter: null, front: null, metal: null, splash: 'vtile', splashH: 'full' };
+const SEL = { counter: null, front: null, splash: 'vtile', splashH: 'full', hw: { door: null, drawer: null } };
 let lastSection = null, restoring = false;
 function markSelected(sec, id) {
   const card = $('card-' + sec), it = ITEMS[id];
@@ -881,7 +902,7 @@ function follow(sec) { if (restoring) return; const v = +$('card-' + sec).datase
 document.querySelectorAll('.card>summary').forEach(sm => sm.addEventListener('click', () => { const card = sm.parentElement; setTimeout(() => { if (card.open) follow(card.id.slice(5)); }, 0); }));
 document.querySelector('.opts').addEventListener('click', e => {
   const b = e.target.closest('.sw'); if (!b) return; const it = ITEMS[b.dataset.id]; if (!it) return;
-  follow(it.sec); ({ counter: pickCounter, front: pickFront, metal: pickMetal })[it.sec](it.o);
+  follow(it.sec); ({ counter: pickCounter, front: pickFront, metal: pickHwItem })[it.sec](it.o);
 });
 const busy = (id, on) => document.querySelectorAll(`.sw[data-id="${id}"]`).forEach(b => b.toggleAttribute('aria-busy', on));
 
@@ -921,11 +942,413 @@ async function pickFront(o) {
   if (uvChanged) sceneChanged(); else if (pt) pt.updateMaterials();
   writeHash(); queueThumbs();
 }
-function pickMetal(o) {
-  SEL.metal = o; markSelected('metal', o.id);
-  metal.color.setRGB(...o.color, THREE.LinearSRGBColorSpace); metal.roughness = o.roughness; metal.metalness = o.metalness;
-  if (pt) pt.updateMaterials(); writeHash(); queueThumbs();
+// ============================ hardware: showroom bar pull + Top Knobs library ============================
+// The catalog is embedded in compact form and expanded here to products[].sizes[] = {key, label, c2c_mm, length_mm,
+// width_mm, proj_mm, diam_mm, skus[] (aligned with finishes)}. Each product's shapes load from hardware/<slug>.js on first
+// pick (JSONP, like the finish textures), in the frame of materials/topknobs/README.md: mm, origin at the mounting point on
+// the front surface, +X along the pull, +Y out of the front, +Z across (down the front for hanging pieces).
+const HW = CAT.hardware || { finishes: {}, secondary: {}, products: [] };
+const FIN_LABELS = Object.keys(HW.finishes), FIN_BY_ID = Object.fromEntries(FIN_LABELS.map(l => [HW.finishes[l].id, l]));
+const slugify = t => t.toLowerCase().replace(/[^a-z0-9]+/g, '_').replace(/^_+|_+$/g, '');
+HW.products.forEach(p => {
+  p.finishes = p.f.map(i => FIN_LABELS[i]);
+  p.url = 'https://www.topknobs.com/' + (p.url || `collections/${p.slug.replace(/_/g, '-')}.html`);
+  p.sizes = p.s.map(z => { const [c2c_mm, length_mm, width_mm, proj_mm, diam_mm] = z.d.map(v => v || null);
+    return { key: z.k || slugify(z.l), label: z.l, c2c_mm, length_mm, width_mm, proj_mm, diam_mm, skus: z.s }; });
+  delete p.f; delete p.s;
+});
+const HWP = Object.fromEntries(HW.products.map(p => [p.slug, p]));
+const HW_TYPES = [['Knobs', ['round_knob', 'square_knob', 'oblong_knob', 't_knob']], ['Pulls', ['bar_pull']], ['Appliance pulls', ['appliance_pull']],
+  ['Cup pulls', ['cup_pull']], ['Ring & drop pulls', ['ring_pull', 'drop_pull']], ['Tab & finger pulls', ['tab_pull', 'finger_pull']], ['Other hardware', []]];
+const typeLabel = t => (HW_TYPES.find(([, ts]) => ts.includes(t)) || HW_TYPES.at(-1))[0];
+// the menu a product sits in: its geometry type, except that Top Knobs' appliance line (and products sold only in
+// appliance sizes) go under Appliance pulls
+const menuOf = p => p.type === 'bar_pull' && (p.collection === 'Appliance' || p.sizes.every(z => /\bAPP\b/.test(z.label))) ? 'Appliance pulls' : typeLabel(p.type);
+const HANG = new Set(['cup_pull', 'drop_pull', 'ring_pull']);   // gravity decides their orientation: always horizontal, +Z down
+const BAR_TK = { metal_bronze: 'Honey Bronze', metal_black: 'Flat Black', metal_nickel: 'Polished Nickel' };   // nearest Top Knobs finish
+const DEFAULT_LEN = 171.45;   // default size: overall length closest to the showroom's 6-3/4 in pull
+const collName = c => c.replace(/\s*\(R\)/g, '®');
+const inch = mm => { const s = Math.round(mm / IN * 16), w = Math.floor(s / 16); let n = s % 16, d = 16; if (!n) return `${w} in`;
+  while (n % 2 === 0) { n /= 2; d /= 2; } return `${w ? w + ' ' : ''}${n}/${d} in`; };
+
+// ---------- loading
+const hwWait = {}, hwLoad = {};
+window.__hwData = (slug, d) => hwWait[slug] && hwWait[slug](d);
+function loadHw(slug) {
+  return hwLoad[slug] || (hwLoad[slug] = new Promise((res, rej) => {
+    hwWait[slug] = res;
+    const sc = document.createElement('script'); sc.src = 'hardware/' + slug + '.js';
+    sc.onerror = () => { delete hwLoad[slug]; rej(new Error('missing hardware/' + slug + '.js')); };
+    document.head.appendChild(sc);
+  }));
 }
+
+// ---------- SHAPE -> BufferGeometry (mm, hardware frame), built the way tools/hw_mesh.py measures it
+const D2R = Math.PI / 180;
+function ring(pts) {   // finite points, no repeats, no closing duplicate: three.js turns those into NaN bevel vectors
+  const r = [];
+  for (const q of pts || []) {
+    if (!q || !Number.isFinite(+q[0]) || !Number.isFinite(+q[1])) continue;
+    const l = r[r.length - 1]; if (!l || Math.hypot(q[0] - l[0], q[1] - l[1]) > 1e-4) r.push([+q[0], +q[1]]);
+  }
+  while (r.length > 2 && Math.hypot(r[0][0] - r.at(-1)[0], r[0][1] - r.at(-1)[1]) <= 1e-4) r.pop();
+  return r;
+}
+const ringArea = r => r.reduce((a, q, i) => { const n = r[(i + 1) % r.length]; return a + q[0] * n[1] - n[0] * q[1]; }, 0) / 2;
+function extrudeTry(shape, depth, bev) {
+  const b = bev > 0.01;
+  const g = new THREE.ExtrudeGeometry(shape, b ? { depth: depth - 2 * bev, bevelEnabled: true, bevelThickness: bev, bevelSize: bev, bevelOffset: -bev, bevelSegments: 3, curveSegments: 1 }
+    : { depth, bevelEnabled: false, curveSegments: 1 });
+  g.translate(0, 0, b ? bev - depth / 2 : -depth / 2);
+  if (!b) return g;
+  // A bevel wider than a thin part of the outline folds the inset cap over itself (thin bars, narrow posts): every cap
+  // triangle must still face out (+Z on the front cap, -Z on the back), else retry with a smaller bevel.
+  const p = g.attributes.position, cap = g.groups[0];
+  for (let i = cap.start; i < cap.start + cap.count; i += 3) {
+    const ax = p.getX(i), ay = p.getY(i), nz = (p.getX(i + 1) - ax) * (p.getY(i + 2) - ay) - (p.getY(i + 1) - ay) * (p.getX(i + 2) - ax);
+    if (!(nz * Math.sign(p.getZ(i)) > -1e-6)) { g.dispose(); return null; }
+  }
+  return g;
+}
+function extrudeGeo(s) {
+  const out = ring(s.outline); if (out.length < 3 || Math.abs(ringArea(out)) < 1e-6) return null;
+  if (ringArea(out) < 0) out.reverse();
+  const shape = new THREE.Shape(out.map(([x, y]) => new THREE.Vector2(x, y)));
+  for (const h of s.holes || []) { const r = ring(h); if (r.length < 3) continue; if (ringArea(r) > 0) r.reverse(); shape.holes.push(new THREE.Path(r.map(([x, y]) => new THREE.Vector2(x, y)))); }
+  const depth = Math.max(0.05, +s.depth || 0);
+  let bev = Math.min(Math.max(0, +s.bevel || 0), (depth - 0.02) / 2);
+  for (let k = 0; k < 16; k++, bev = k < 15 ? bev * 0.8 : 0) { const g = extrudeTry(shape, depth, bev); if (g) return g; }
+  return null;
+}
+function latheGeo(s) {
+  const prof = (s.profile || []).filter(q => q && Number.isFinite(+q[0]) && Number.isFinite(+q[1])).map(([r, y]) => new THREE.Vector2(Math.max(0, +r), +y));
+  if (prof.length < 2) return null;
+  // square / hexagon / octagon: r is the half-width across flats. Corners sit on vertices, the rest is pushed out onto
+  // the flats. Starting at pi / n puts flats on Z (and on X, except the hexagon, whose corners sit on X), as hw_mesh.py.
+  const n = { square: 4, hexagon: 6, octagon: 8 }[s.section] || 0, k = 8, seg = n ? n * k : 64;
+  const g = new THREE.LatheGeometry(prof, seg, n ? Math.PI / n : 0);
+  if (n) {
+    const p = g.attributes.position;
+    for (let i = 0; i < p.count; i++) { const th = ((Math.floor(i / prof.length) % k) / k) * 2 * Math.PI / n, f = 1 / Math.cos(th - Math.PI / n); p.setX(i, p.getX(i) * f); p.setZ(i, p.getZ(i) * f); }
+  }
+  const st = s.stretch || [1, 1]; g.scale(+st[0] || 1, 1, +st[1] || 1);
+  if (typeof s.rotate === 'number') g.rotateY(s.rotate * D2R);
+  return g;   // lathe UVs run u around the knob: brushed finishes turn circumferentially
+}
+function boxUVs(g) {   // u along +X wherever the face allows, so a brushed finish runs along the pull
+  const p = g.attributes.position, uv = new Float32Array(p.count * 2), a = new THREE.Vector3(), b = new THREE.Vector3(), c = new THREE.Vector3();
+  for (let i = 0; i < p.count; i += 3) {
+    a.fromBufferAttribute(p, i); b.fromBufferAttribute(p, i + 1); c.fromBufferAttribute(p, i + 2);
+    const n = c.clone().sub(b).cross(a.clone().sub(b)), ax = Math.abs(n.x), ay = Math.abs(n.y), az = Math.abs(n.z);
+    [a, b, c].forEach((v, j) => { const [u, w] = ax > ay && ax > az ? [v.z, v.y] : ay >= az ? [v.x, v.z] : [v.x, v.y]; uv[(i + j) * 2] = u / 20; uv[(i + j) * 2 + 1] = w / 20; });
+  }
+  g.setAttribute('uv', new THREE.BufferAttribute(uv, 2));
+}
+// SHAPE -> { material key: [geometries] }. A part's rotate (deg, Euler XYZ) applies before its offset.
+function shapeParts(s, mat, m, out) {
+  if (!s || typeof s !== 'object') return out;
+  if (s.offset || Array.isArray(s.rotate)) {   // a lathe's numeric "rotate" is its own turn about Y (latheGeo)
+    const r = Array.isArray(s.rotate) ? s.rotate : [0, 0, 0], o = s.offset || [0, 0, 0];
+    m = m.clone().multiply(new THREE.Matrix4().compose(new THREE.Vector3(+o[0] || 0, +o[1] || 0, +o[2] || 0),
+      new THREE.Quaternion().setFromEuler(new THREE.Euler((+r[0] || 0) * D2R, (+r[1] || 0) * D2R, (+r[2] || 0) * D2R, 'XYZ')), new THREE.Vector3(1, 1, 1)));
+  }
+  mat = s.mat || mat;
+  if (s.kind === 'group') { (s.parts || []).forEach(q => shapeParts(q, mat, m, out)); return out; }
+  let g = s.kind === 'extrude' ? extrudeGeo(s) : s.kind === 'lathe' ? latheGeo(s) : null;
+  if (!g) { console.warn('[studio] hardware part skipped', s.kind); return out; }
+  g = g.index ? g.toNonIndexed() : g; g.clearGroups(); g.applyMatrix4(m);
+  if (s.kind === 'extrude') boxUVs(g);
+  (out[mat || 'body'] ||= []).push(g);
+  return out;
+}
+function finishGeo(list) {
+  const P = [], U = [];
+  for (const g of list) {
+    const p = g.attributes.position.array, uv = g.attributes.uv.array;
+    for (let t = 0; t < p.length; t += 9) {   // drop zero-area / non-finite triangles (lathe poles, collapsed walls): NaN normals
+      const ux = p[t + 3] - p[t], uy = p[t + 4] - p[t + 1], uz = p[t + 5] - p[t + 2], vx = p[t + 6] - p[t], vy = p[t + 7] - p[t + 1], vz = p[t + 8] - p[t + 2];
+      if (!(Math.hypot(uy * vz - uz * vy, uz * vx - ux * vz, ux * vy - uy * vx) > 1e-7)) continue;
+      for (let j = 0; j < 9; j++) P.push(p[t + j]);
+      for (let j = 0; j < 6; j++) U.push(uv[t / 3 * 2 + j]);
+    }
+    g.dispose();
+  }
+  if (!P.length) return null;
+  let g = new THREE.BufferGeometry();
+  g.setAttribute('position', new THREE.Float32BufferAttribute(P, 3)); g.setAttribute('uv', new THREE.Float32BufferAttribute(U, 2));
+  g = toCreasedNormals(g, 40 * D2R);   // round bars and domes shade smooth, real corners stay crisp
+  g.computeBoundingBox(); g.computeBoundingSphere();
+  return g;
+}
+const geoCache = {};
+function hwGeo(slug, size, d) {
+  const k = slug + '|' + size; if (geoCache[k] !== undefined) return geoCache[k];
+  let res = null;
+  try {
+    const raw = shapeParts(d.sizes[size], null, new THREE.Matrix4(), {}), parts = {}, bbox = new THREE.Box3();
+    for (const [m, list] of Object.entries(raw)) { const g = finishGeo(list); if (g) { parts[m] = g; bbox.union(g.boundingBox); } }
+    // footprint: what touches the front (within 1 mm of the lowest point), to tell whether it all lands on the panel
+    const foot = new THREE.Box3(), v = new THREE.Vector3();
+    for (const g of Object.values(parts)) { const p = g.attributes.position; for (let i = 0; i < p.count; i++) if (p.getY(i) < bbox.min.y + 1) foot.expandByPoint(v.fromBufferAttribute(p, i)); }
+    if (Object.keys(parts).length) res = { parts, bbox, foot, type: d.type, hang: HANG.has(d.type) || d.mount === 'hang' || d.mount === 'edge', edge: d.mount === 'edge' };
+  } catch (e) { console.warn('[studio] hardware geometry failed', slug, size, e); }
+  return (geoCache[k] = res);
+}
+
+// ---------- materials: body + accent per target, so a finish change is a material update, not a scene rebuild
+const hwMat = {
+  door: { body: metal, accent: new THREE.MeshPhysicalMaterial({ name: 'metal_accent', metalness: 1, roughness: 0.32 }) },
+  drawer: { body: Object.assign(metal.clone(), { name: 'metal_drawer' }), accent: new THREE.MeshPhysicalMaterial({ name: 'metal_accent_drawer', metalness: 1, roughness: 0.32 }) },
+};
+function setMetal(m, f) {   // f: a finishes.json entry or a METALS entry
+  m.color.setRGB(...f.color, THREE.LinearSRGBColorSpace); m.roughness = f.roughness; m.metalness = f.metalness ?? 1;
+  m.clearcoat = f.clearcoat || 0; m.clearcoatRoughness = f.clearcoat_roughness ?? 0.08;
+  m.anisotropy = f.anisotropy || 0; m.anisotropyRotation = 0;   // UVs run u along +X: brushing follows the pull
+}
+const finPair = label => { const f = HW.finishes[label] || METALS[0], t = f.two_tone; return t ? [HW.finishes[t[0]] || f, HW.finishes[t[1]] || f] : [f, f]; };
+const secMats = {};
+// Transmission (crystal, glass) is left to the path tracer; the live view fakes it with plain transparency, no extra pass.
+// Clear glass has no diffuse colour, so the faked version darkens its albedo: what reads is the see-through and the gloss.
+// A saturated tint (amber, blue, green, wine) would wash out that way, so it keeps more of its colour and more body.
+function glassMode(m) {
+  const t = m.userData.transmission, c = m.userData.color; if (!t) return;
+  const tint = Math.max(...c) - Math.min(...c) > 0.2, keep = tint ? 0.6 : 1 - 0.8 * t;
+  m.transmission = photo ? t : 0; m.transparent = !photo; m.opacity = photo ? 1 : tint ? 0.72 : 1 - 0.7 * t; m.depthWrite = photo;
+  m.color.setRGB(...c.map(v => photo ? v : v * keep), THREE.LinearSRGBColorSpace); m.needsUpdate = true;
+}
+function secMat(id) {
+  if (secMats[id]) return secMats[id];
+  const d = HW.secondary[id] || { color: [0.8, 0.8, 0.8], roughness: 0.4 };
+  const m = new THREE.MeshPhysicalMaterial({ name: 'hw_' + id, roughness: d.roughness ?? 0.3, metalness: d.metalness ?? 0, ior: d.ior ?? 1.5 });
+  m.color.setRGB(...d.color, THREE.LinearSRGBColorSpace); m.userData = { transmission: d.transmission || 0, color: d.color }; glassMode(m);
+  return (secMats[id] = m);
+}
+const matFor = (t, k) => k === 'body' ? hwMat[t].body : k === 'accent' ? hwMat[t].accent : secMat(k);
+
+// ---------- mounts: every CAD bar pull is a mounting point
+const MOUNTS = [];
+function initMounts(list) {
+  for (const o of list) {
+    const par = o.parent, door = !/drawer_front/.test(par.name), tgt = door ? 'door' : 'drawer';
+    par.geometry.computeBoundingBox(); o.geometry.computeBoundingBox();
+    const pb = par.geometry.boundingBox.clone(), ob = o.geometry.boundingBox, alongX = ob.max.x - ob.min.x > ob.max.y - ob.min.y;
+    const ax = alongX ? 'x' : 'y', cx = alongX ? 'y' : 'x';
+    const w = pb.max.x - pb.min.x, h = pb.max.y - pb.min.y, S = Math.min(2.25 * IN, 0.2 * Math.min(w, h));
+    if (!door) o.material = hwMat.drawer.body;
+    MOUNTS.push({ o, par, door, tgt, ax, pb, c0: o.position[ax] + (ob.min[ax] + ob.max[ax]) / 2, L0: ob.max[ax] - ob.min[ax], across: o.position[cx],
+      // the end of the old pull nearest the door's latch corner: the top on base doors, the bottom on wall doors
+      end: Math.sign(o.position.y - (pb.min.y + pb.max.y) / 2) || 1, side: Math.sign(o.position.x - (pb.min.x + pb.max.x) / 2) || 1,
+      onPanel: (x, y) => Math.min(w, h) >= 100 && x > pb.min.x + S && x < pb.max.x - S && y > pb.min.y + S && y < pb.max.y - S,
+      placed: 'bar', obj: null, fits: true, bbox: [L0Of(ob, alongX), 41.275, 12.7] });
+  }
+}
+function L0Of(b, alongX) { return +(alongX ? b.max.x - b.min.x : b.max.y - b.min.y).toFixed(2); }
+// Place a product on one mount, in the front's own frame (mm, +Z out of the front).
+function placeOn(mt, g, size) {
+  const { pb } = mt, b = g.bbox, knob = !size.c2c_mm, horiz = !mt.door || g.hang;
+  const X = new THREE.Vector3(), Y = new THREE.Vector3(0, 0, 1), pos = new THREE.Vector3();
+  let axis, lo, hi;
+  if (!horiz) {   // vertical on a door: knob at the latch end of the old pull, a pull's latch-side end where the old one ended
+    X.set(0, 1, 0); axis = 'y'; pos.x = mt.across;
+    pos.y = knob ? mt.c0 + mt.end * (mt.L0 / 2 - 4.76) : mt.end > 0 ? mt.c0 + mt.L0 / 2 - b.max.x : mt.c0 - mt.L0 / 2 - b.min.x;
+  } else if (mt.door) {   // hanging piece on a door: horizontal at the knob position, edge tabs on the latch edge
+    const flip = g.edge && mt.end < 0;   // wall door: the tab sits on the bottom edge and runs up
+    X.set(flip ? -1 : 1, 0, 0); axis = 'x'; pos.x = mt.across;
+    pos.y = g.edge ? (mt.end > 0 ? pb.max.y : pb.min.y) : mt.c0 + mt.end * (mt.L0 / 2 - 4.76);
+  } else {   // drawer: centred on the old pull, edge tabs on the top edge
+    X.set(1, 0, 0); axis = 'x'; pos.x = mt.ax === 'x' ? mt.c0 : mt.across; pos.y = g.edge ? pb.max.y : mt.ax === 'x' ? mt.across : mt.c0;
+  }
+  // keep it on the front (1/2 in margin); a piece longer than the front minus 1 in is centred and flagged
+  const s = axis === 'x' ? X.x : X.y, len = b.max.x - b.min.x, fmin = pb.min[axis], fmax = pb.max[axis];
+  let e0 = pos[axis] + Math.min(s * b.min.x, s * b.max.x), e1 = pos[axis] + Math.max(s * b.min.x, s * b.max.x);
+  const fits = len <= fmax - fmin - IN;
+  if (!fits) { if (mt.door) pos[axis] += (fmin + fmax) / 2 - (e0 + e1) / 2; }
+  else if (mt.door) { const m = IN / 2; if (e0 < fmin + m) pos[axis] += fmin + m - e0; else if (e1 > fmax - m) pos[axis] -= e1 - (fmax - m); }
+  // back face on the recessed Shaker panel only when every screw and the whole footprint land on it, else on the frame
+  const Zh = X.clone().cross(Y), f = g.foot;
+  const pts = [...(knob ? [pos.clone()] : [-1, 1].map(k => pos.clone().addScaledVector(X, k * size.c2c_mm / 2))),
+    ...[[f.min.x, f.min.z], [f.min.x, f.max.z], [f.max.x, f.min.z], [f.max.x, f.max.z]].map(([x, z]) => pos.clone().addScaledVector(X, x).addScaledVector(Zh, z))];
+  const surface = pb.max.z - (!g.edge && pts.every(p => mt.onPanel(p.x, p.y)) ? RECESS : 0);
+  pos.z = surface - b.min.y;   // seat the lowest point on it (a bevel can stop a hair short of y = 0)
+  const obj = new THREE.Group(); obj.name = mt.o.name + '_tk'; obj.userData.surface = surface;
+  obj.quaternion.setFromRotationMatrix(new THREE.Matrix4().makeBasis(X, Y, Zh)); obj.position.copy(pos);
+  for (const [k, geo] of Object.entries(g.parts)) { const me = new THREE.Mesh(geo, matFor(mt.tgt, k)); me.name = obj.name + '_' + k; me.castShadow = me.receiveShadow = true; obj.add(me); }
+  return { obj, fits, bbox: ['x', 'y', 'z'].map(a => +(b.max[a] - b.min[a]).toFixed(2)) };
+}
+
+// ---------- selection: SEL.hw.door / SEL.hw.drawer = { slug: 'bar', metal } | { slug, size, finish }
+let hwTarget = 'all';
+const hwTok = { door: 0, drawer: 0 };
+const hwTargets = () => hwTarget === 'all' ? ['door', 'drawer'] : hwTarget === 'doors' ? ['door'] : ['drawer'];
+const sizeOf = (p, key) => p.sizes.find(z => z.key === key) || p.sizes[0];
+const defaultSize = p => p.sizes.reduce((a, z) => Math.abs((z.length_mm || z.c2c_mm || 0) - DEFAULT_LEN) < Math.abs((a.length_mm || a.c2c_mm || 0) - DEFAULT_LEN) ? z : a).key;
+function defaultFinish(p, cur) {
+  const want = cur && (cur.slug === 'bar' ? BAR_TK[cur.metal.id] : cur.finish);
+  return p.finishes.includes(want) ? want : FIN_LABELS.find(l => p.finishes.includes(l)) || p.finishes[0];
+}
+const skuOf = sel => { const p = HWP[sel.slug]; return p ? sizeOf(p, sel.size).skus[p.finishes.indexOf(sel.finish)] || '' : ''; };
+const encHw = sel => sel.slug === 'bar' ? 'bar.' + sel.metal.id : [sel.slug, sel.size, HW.finishes[sel.finish]?.id || ''].join('.');
+function decHw(v) {
+  if (!v) return null; const [slug, a, b] = v.split('.');
+  if (slug === 'bar') { const m = METALS.find(x => x.id === a); return m ? { slug, metal: m } : null; }
+  const p = HWP[slug]; if (!p) return null;
+  return { slug, size: p.sizes.some(z => z.key === a) ? a : defaultSize(p), finish: p.finishes.includes(FIN_BY_ID[b]) ? FIN_BY_ID[b] : defaultFinish(p) };
+}
+async function setHw(t, sel) {
+  const tok = ++hwTok[t], prev = SEL.hw[t]; SEL.hw[t] = sel; markHw();
+  let g = null;
+  if (sel.slug !== 'bar') {
+    const p = HWP[sel.slug], id = 'tk:' + sel.slug; busy(id, true);
+    let d; try { d = await loadHw(sel.slug); } catch (e) { d = null; }
+    busy(id, false); if (tok !== hwTok[t]) return;
+    g = d && d.sizes && d.sizes[sel.size] ? hwGeo(sel.slug, sel.size, d) : null;
+    if (!g) { toast(`3D model for ${p.name} is missing`); return setHw(t, prev && prev.slug !== sel.slug ? prev : { slug: 'bar', metal: METALS[0] }); }
+  }
+  const [fb, fa] = sel.slug === 'bar' ? [sel.metal, sel.metal] : finPair(sel.finish);
+  setMetal(hwMat[t].body, fb); setMetal(hwMat[t].accent, fa);
+  const key = sel.slug === 'bar' ? 'bar' : sel.slug + '|' + sel.size;
+  let rebuilt = false;
+  for (const mt of MOUNTS) {
+    if (mt.tgt !== t || mt.placed === key) continue;
+    if (mt.obj) { mt.par.remove(mt.obj); mt.obj = null; }
+    if (key === 'bar') { mt.par.add(mt.o); mt.fits = true; mt.bbox = [mt.L0, 41.275, 12.7]; }
+    else { mt.par.remove(mt.o); const r = placeOn(mt, g, sizeOf(HWP[sel.slug], sel.size)); mt.obj = r.obj; mt.fits = r.fits; mt.bbox = r.bbox; mt.par.add(r.obj); }
+    mt.placed = key; rebuilt = true;
+  }
+  if (rebuilt) sceneChanged(); else if (pt) pt.updateMaterials();
+  markHw(); writeHash(); queueThumbs();
+}
+function pickHwItem(o) {
+  return Promise.all(hwTargets().map(t => {
+    const cur = SEL.hw[t];
+    if (!o.p) return setHw(t, { slug: 'bar', metal: o });
+    if (cur && cur.slug === o.p.slug) return setHw(t, cur);
+    return setHw(t, { slug: o.p.slug, size: defaultSize(o.p), finish: defaultFinish(o.p, cur) });
+  }));
+}
+// the selection the detail panel shows, and the targets an edit there applies to
+const shownSel = () => { const H = SEL.hw; return hwTarget === 'drawers' ? H.drawer : hwTarget === 'doors' ? H.door : H.door?.slug !== 'bar' ? H.door : H.drawer; };
+const editTargets = sel => hwTargets().filter(t => SEL.hw[t] && SEL.hw[t].slug === sel.slug);
+
+// ---------- UI
+const hwItems = HW.products.map(p => ({ id: 'tk:' + p.slug, p, name: p.name, brand: 'Top Knobs ' + collName(p.collection),
+  family: `${p.sizes.length} size${p.sizes.length > 1 ? 's' : ''} · ${p.finishes.length} finish${p.finishes.length > 1 ? 'es' : ''}`, thumb: 'hardware/thumbs/' + p.slug + '.jpg' }));
+function hwChip(o) {
+  ITEMS[o.id] = { o, sec: 'metal' };
+  const q = [o.name, collName(o.p.collection), 'top knobs', menuOf(o.p), o.p.type.replace(/_/g, ' '), ...o.p.sizes.flatMap(z => z.skus.filter(Boolean))].join(' ').toLowerCase();
+  return `<button class="sw prod" data-id="${o.id}" aria-pressed="false" aria-label="${esc(o.name)}" data-q="${esc(q)}" style="background-image:url(${o.thumb})"></button>`;
+}
+const hwGrp = (title, items) => `<div class="grp"><h3>${esc(title)} <span class="n">${items.length}</span></h3><p class="pickname"></p><div class="sws">${items.map(hwChip).join('')}</div></div>`;
+function hwSubs() {
+  return HW_TYPES.map(([label]) => {
+    const items = hwItems.filter(o => menuOf(o.p) === label); if (!items.length) return '';
+    const groups = groupBy([...items].sort((a, b) => a.p.collection.localeCompare(b.p.collection) || a.name.localeCompare(b.name)), 'brand');
+    return `<details class="sub"><summary>${esc(label)} <span class="n">${items.length}</span>${chev}</summary><div class="inner">${groups.map(([t, v]) => hwGrp(t.replace(/^Top Knobs /, ''), v)).join('')}</div></details>`;
+  }).join('');
+}
+$('body-metal').innerHTML =
+  `<div class="seg"><span id="hw-t-lbl">Apply to</span><div id="hw-t" role="group" aria-labelledby="hw-t-lbl">` +
+  [['all', 'All fronts'], ['doors', 'Doors'], ['drawers', 'Drawers']].map(([k, t]) => `<button data-t="${k}" aria-pressed="${k === hwTarget}">${t}</button>`).join('') + `</div></div>` +
+  grp('Showroom bar pull', METALS, 'metal') +
+  (HW.products.length ? `<p class="note"><svg><use href="#i-info"/></svg>Top Knobs knobs and pulls at true size. Knobs go on the latch corner of doors and the middle of drawers.</p>` + hwSubs() : '') +
+  `<div class="hwsel" id="hw-detail" hidden></div>` + empty;
+// finish chip: a metal ramp built from the maker-photo swatch (sRGB), split diagonally for two-tone finishes
+const hexLin = h => [1, 3, 5].map(i => { const v = parseInt(h.slice(i, i + 2), 16) / 255; return v <= 0.04045 ? v / 12.92 : Math.pow((v + 0.055) / 1.055, 2.4); });
+const finLin = f => /^#[0-9a-f]{6}$/i.test(f.swatch || '') ? hexLin(f.swatch) : f.color;
+const finBg = f => {
+  const pair = f.two_tone ? f.two_tone.map(l => HW.finishes[l] || f) : null;
+  if (pair) return `background-image:linear-gradient(135deg,${shade(finLin(pair[0]), 0.5)},${shade(finLin(pair[0]), 1.1)} 49.5%,${shade(finLin(pair[1]), 0.9)} 50.5%,${shade(finLin(pair[1]), 0.5)})`;
+  const c = finLin(f);
+  return f.metalness > 0.5 ? `background-image:linear-gradient(135deg,${shade(c, 0.4)},${shade(c, 1.15)} 45%,${shade(c, 0.75)})` : `background-color:${lin2hex(c)}`;
+};
+function drawHwDetail() {
+  const el = $('hw-detail'), sel = shownSel();
+  if (!sel || sel.slug === 'bar' || !HWP[sel.slug]) { el.hidden = true; return; }
+  const p = HWP[sel.slug], z = sizeOf(p, sel.size), sku = skuOf(sel), tg = editTargets(sel);
+  const where = tg.length === 2 ? 'Doors and drawers' : tg[0] === 'door' ? 'Doors' : 'Drawers';
+  const dims = [z.c2c_mm && `c-c ${inch(z.c2c_mm)} (${Math.round(z.c2c_mm)} mm)`, z.c2c_mm ? z.length_mm && `${inch(z.length_mm)} long` : z.diam_mm ? `Ø ${inch(z.diam_mm)}` : z.length_mm && `${inch(z.length_mm)} × ${inch(z.width_mm || z.length_mm)}`,
+    z.proj_mm && `${inch(z.proj_mm)} projection`].filter(Boolean);
+  const bad = MOUNTS.filter(m => tg.includes(m.tgt) && m.placed === sel.slug + '|' + sel.size && !m.fits), n = MOUNTS.filter(m => tg.includes(m.tgt)).length;
+  el.innerHTML = `<div class="hd"><span class="ph" style="background-image:url(hardware/thumbs/${p.slug}.jpg)"></span><div><b>${esc(p.name)}</b><small>${esc(collName(p.collection))} · ${esc(menuOf(p))} · ${where}</small></div></div>
+    <h4>Finish <span>${esc(sel.finish)}</span></h4>
+    <div class="sws">${FIN_LABELS.filter(l => p.finishes.includes(l)).map(l => `<button class="sw fin" data-fin="${esc(l)}" data-tip="${esc(l)}" data-sub="${esc(HW.finishes[l].family || '')}" aria-label="${esc(l)}" aria-pressed="${l === sel.finish}" style="${finBg(HW.finishes[l])};--g:${HW.finishes[l].metalness > 0.5 ? Math.max(0.12, 0.55 - HW.finishes[l].roughness * 0.7).toFixed(2) : 0.1}"></button>`).join('')}</div>
+    ${p.sizes.length > 1 ? `<h4>Size</h4><div class="sizes" role="group" aria-label="Size">${p.sizes.map(s => `<button data-size="${esc(s.key)}" aria-pressed="${s.key === z.key}">${esc(s.label)}</button>`).join('')}</div>` : ''}
+    <p class="spec">${esc([sku, ...dims].filter(Boolean).join(' · '))} · <a href="${esc(p.url)}" target="_blank" rel="noopener">topknobs.com ↗</a></p>
+    <p class="warn"${bad.length ? '' : ' hidden'}><svg><use href="#i-info"/></svg>Does not fit ${bad.length} of ${n} ${where.toLowerCase()}: it needs a front at least 1 in longer than the pull. Shown anyway.</p>`;
+  // open under the picked product's tier, so finish and size sit next to the chip just clicked
+  const chip = $('card-metal').querySelector(`.sw[data-id="tk:${sel.slug}"]`);
+  (chip ? chip.closest('.grp') : $('body-metal')).appendChild(el); el.hidden = false;
+}
+const hwName = sel => sel.slug === 'bar' ? 'Showroom bar pull · ' + sel.metal.name : `${HWP[sel.slug].name} · ${sel.finish}`;
+function markHw() {
+  const card = $('card-metal'), H = SEL.hw, shown = hwTargets().map(t => H[t]).filter(Boolean);
+  const ids = new Set(shown.map(s => s.slug === 'bar' ? s.metal.id : 'tk:' + s.slug));
+  card.querySelectorAll('.sw[data-id]').forEach(b => b.setAttribute('aria-pressed', ids.has(b.dataset.id)));
+  card.querySelectorAll('.pickname').forEach(p => p.textContent = '');
+  for (const s of shown) {
+    const btn = card.querySelector(`.sw[data-id="${s.slug === 'bar' ? s.metal.id : 'tk:' + s.slug}"]`); if (!btn) continue;
+    btn.closest('.grp').querySelector('.pickname').textContent = s.slug === 'bar' ? s.metal.name : `${HWP[s.slug].name}  ${skuOf(s)}`;
+    const d = btn.closest('.sub'); if (d) d.open = true;
+  }
+  if (H.door && H.drawer) $('sel-metal').textContent = encHw(H.door) === encHw(H.drawer) ? hwName(H.door) : `Doors: ${hwName(H.door)} · Drawers: ${hwName(H.drawer)}`;
+  document.querySelectorAll('#hw-t [data-t]').forEach(b => b.setAttribute('aria-pressed', b.dataset.t === hwTarget));
+  drawHwDetail();
+}
+$('body-metal').addEventListener('click', e => {
+  const t = e.target.closest('[data-t]'), f = e.target.closest('[data-fin]'), z = e.target.closest('[data-size]');
+  if (t) { hwTarget = t.dataset.t; markHw(); return; }
+  const sel = shownSel(); if (!sel || sel.slug === 'bar' || !(f || z)) return;
+  follow('metal');
+  editTargets(sel).forEach(k => setHw(k, { ...SEL.hw[k], ...(f ? { finish: f.dataset.fin } : { size: z.dataset.size }) }));
+});
+function hwSummaryRows() {
+  const H = SEL.hw, row = (k, sel) => {
+    if (sel.slug === 'bar') return ['metal', k, chipBg(sel.metal), 'Showroom bar pull', sel.metal.name + ' · 6-3/4 in'];
+    const p = HWP[sel.slug], z = sizeOf(p, sel.size);
+    return ['metal', k, `background:#fff url(hardware/thumbs/${p.slug}.jpg) center/contain no-repeat`, p.name, [sel.finish, z.label, skuOf(sel)].filter(Boolean).join(' · ')];
+  };
+  return encHw(H.door) === encHw(H.drawer) ? [row('Hardware', H.door)] : [row('Door hardware', H.door), row('Drawer hardware', H.drawer)];
+}
+// Test hook (window.__studio.hw): sweep every product headlessly and compare the placed bounds with the spec table.
+const HW_HOOK = {
+  list: () => HW.products.map(p => p.slug),
+  catalog: () => ({ finishes: HW.finishes, secondary: HW.secondary, products: HW.products.map(p => ({ slug: p.slug, type: p.type, finishes: p.finishes, sizes: p.sizes.map(z => z.key) })) }),
+  async set({ slug, size, finish, target = 'all' } = {}) {
+    const ts = target === 'all' ? ['door', 'drawer'] : target === 'doors' ? ['door'] : ['drawer'];
+    if (!slug || slug === 'bar') { const m = METALS.find(x => x.id === finish) || METALS[0]; await Promise.all(ts.map(t => setHw(t, { slug: 'bar', metal: m }))); }
+    else {
+      const p = HWP[slug]; if (!p) throw new Error('unknown product ' + slug);
+      const fin = p.finishes.includes(finish) ? finish : p.finishes.includes(FIN_BY_ID[finish]) ? FIN_BY_ID[finish] : defaultFinish(p);
+      await Promise.all(ts.map(t => setHw(t, { slug, size: p.sizes.some(z => z.key === size) ? size : defaultSize(p), finish: fin })));
+    }
+    return this.measure();
+  },
+  // Per mount: bbox_mm in the hardware frame, and where the piece sits in its front's frame (mm, +Z out of the front):
+  // back_mm = lowest point above the surface it was set on (0 = touching), base_on_panel = its footprint on the door
+  // (points within 1 mm of the back) stays inside the recessed panel when set on it, over_mm = overhang past the front.
+  measure: () => MOUNTS.map(m => { const s = SEL.hw[m.tgt];
+    const r = { mount: m.o.name, target: m.door ? 'doors' : 'drawers', slug: s.slug, size: s.size || null, finish: s.slug === 'bar' ? s.metal.id : s.finish, bbox_mm: m.bbox, fits: m.fits,
+      placed: m.placed === (s.slug === 'bar' ? 'bar' : s.slug + '|' + s.size) };
+    if (!m.obj) return r;
+    m.obj.updateMatrix();
+    const pb = m.pb, z0 = m.obj.userData.surface, v = new THREE.Vector3(), all = new THREE.Box3(), foot = new THREE.Box3();
+    let finite = true;
+    for (const c of m.obj.children) {
+      const pa = c.geometry.attributes.position, na = c.geometry.attributes.normal;
+      for (let i = 0; i < pa.count; i++) {
+        v.fromBufferAttribute(pa, i).applyMatrix4(m.obj.matrix); all.expandByPoint(v); if (v.z - z0 < 1) foot.expandByPoint(v);
+        if (!Number.isFinite(v.x + v.y + v.z) || na && !Number.isFinite(na.getX(i) + na.getY(i) + na.getZ(i))) finite = false;
+      }
+    }
+    const panel = z0 < pb.max.z - 1e-3;
+    return Object.assign(r, { surface: panel ? 'panel' : 'front', back_mm: +(all.min.z - z0).toFixed(3),
+      base_on_panel: !panel || foot.isEmpty() || m.onPanel(foot.min.x, foot.min.y) && m.onPanel(foot.max.x, foot.max.y),
+      over_mm: +Math.max(pb.min.x - all.min.x, all.max.x - pb.max.x, pb.min.y - all.min.y, all.max.y - pb.max.y, 0).toFixed(2),
+      edge: !!geoCache[s.slug + '|' + s.size]?.edge, finite }); }),
+  // live material values per target, to check a picked finish reached the scene
+  mats: () => Object.fromEntries(Object.entries(hwMat).map(([t, o]) => [t, Object.fromEntries(Object.entries(o).map(([k, m]) =>
+    [k, { color: m.color.toArray().map(x => +x.toFixed(4)), roughness: m.roughness, metalness: m.metalness, anisotropy: m.anisotropy }]))])),
+};
 
 // backsplash: option cards with a picture, like the seat cards
 // Both tile layouts run on both walls; the thumbnails crop the same area of each tile sheet, so they share a scale.
@@ -963,8 +1386,8 @@ function applySearch() {
   const folds = [...opts.querySelectorAll('details')];
   if (q && !preSearch) preSearch = folds.map(d => d.open);
   opts.classList.toggle('searching', !!q);
-  opts.querySelectorAll('.sw').forEach(b => b.classList.toggle('hide', !!q && !b.dataset.q.includes(q)));
-  const count = el => el.querySelectorAll('.sw:not(.hide)').length;
+  opts.querySelectorAll('.sw[data-q]').forEach(b => b.classList.toggle('hide', !!q && !b.dataset.q.includes(q)));
+  const count = el => el.querySelectorAll('.sw[data-q]:not(.hide)').length;
   opts.querySelectorAll('.grp').forEach(g => { const n = count(g); g.classList.toggle('hide', !n); g.querySelector('h3 .n').textContent = n; });
   opts.querySelectorAll('.sub').forEach(d => { const n = count(d); d.classList.toggle('hide', !n); d.querySelector('summary .n').textContent = n; if (q && n) d.open = true; });
   ['counter', 'front', 'metal'].forEach(sec => { const card = $('card-' + sec), n = count(card); card.querySelector('.empty').hidden = true; if (q) card.open = n > 0; });
@@ -976,8 +1399,8 @@ $('q-clear').addEventListener('click', () => { $('q').value = ''; applySearch();
 // ---------- tooltip: name on top, code / brand / family below
 const tip = $('tip');
 function showTip(b) {
-  const it = ITEMS[b.dataset.id]; if (!it) return;
-  tip.innerHTML = `${esc(it.o.name)}<small>${esc(subline(it.o))}</small>`; tip.hidden = false;
+  const it = ITEMS[b.dataset.id], name = it ? it.o.name : b.dataset.tip; if (!name) return;
+  tip.innerHTML = `${esc(name)}<small>${esc(it ? subline(it.o) : b.dataset.sub)}</small>`; tip.hidden = false;
   const r = b.getBoundingClientRect(), w = tip.offsetWidth;
   tip.style.left = Math.min(innerWidth - w / 2 - 8, Math.max(w / 2 + 8, r.left + r.width / 2)) + 'px'; tip.style.top = r.top - 10 + 'px';
 }
@@ -990,8 +1413,13 @@ addEventListener('scroll', hideTip, { passive: true });
 
 // ---------- build state in the URL: Share copies a link that reopens this exact build
 function writeHash() {
-  if (restoring || !SEL.counter || !SEL.front || !SEL.metal) return;
-  const p = new URLSearchParams({ c: SEL.counter.id, s: SEL.splash, sh: SEL.splashH, f: SEL.front.id, h: SEL.metal.id, sc: curScene, v: curView });
+  if (restoring || !SEL.counter || !SEL.front || !SEL.hw.door || !SEL.hw.drawer) return;
+  // h is the showroom bar finish (links from before the hardware library keep working); hd / hr carry a door or drawer
+  // choice that differs from it as slug.size.finish or bar.metal
+  const H = SEL.hw, h = (H.door.slug === 'bar' ? H.door : H.drawer.slug === 'bar' ? H.drawer : { metal: METALS[0] }).metal;
+  const p = new URLSearchParams({ c: SEL.counter.id, s: SEL.splash, sh: SEL.splashH, f: SEL.front.id, h: h.id });
+  for (const [t, k] of [['door', 'hd'], ['drawer', 'hr']]) if (H[t].slug !== 'bar' || H[t].metal !== h) p.set(k, encHw(H[t]));
+  p.set('sc', curScene); p.set('v', curView);
   history.replaceState(null, '', '#' + p);
 }
 async function restoreBuild() {
@@ -999,10 +1427,11 @@ async function restoreBuild() {
   const p = new URLSearchParams(location.hash.slice(1)), get = (k, d) => ITEMS[p.get(k)]?.o || d;
   setScene(SCENES[p.get('sc')] ? p.get('sc') : 'showroom');
   const v = +p.get('v'); goView(Number.isInteger(v) && v >= 0 && v < VIEWS.length && p.has('v') ? v : 0, true);
-  pickMetal(get('h', METALS[0]));
+  const bar = { slug: 'bar', metal: METALS.find(m => m.id === p.get('h')) || METALS[0] };
+  const hw = Promise.all([['door', 'hd'], ['drawer', 'hr']].map(([t, k]) => setHw(t, decHw(p.get(k)) || bar)));
   setSplashHeight(SPLASH_H[p.get('sh')] ? p.get('sh') : 'full');
   setSplash(SPLASH.some(o => o.k === p.get('s')) ? p.get('s') : 'vtile');
-  await Promise.all([pickCounter(get('c', CAT.counters[0])), pickFront(get('f', SHOWROOM_PAINT))]);
+  await Promise.all([pickCounter(get('c', CAT.counters[0])), pickFront(get('f', SHOWROOM_PAINT)), hw]);
   restoring = false; writeHash(); queueThumbs();
   // Phones build the path tracer only when Photo render is tapped: compiling it in the background stalls mobile GPUs.
   if (!PHONE) setTimeout(prewarm, 2500);
@@ -1024,7 +1453,7 @@ function drawSummary() {
     ['counter', 'Countertop', sw(SEL.counter), SEL.counter.name, subline(SEL.counter)],
     ['splash', 'Backsplash', splashBg(sp), sp.t + ' · ' + SPLASH_H[SEL.splashH], SEL.splash === 'slab' ? 'Matches ' + SEL.counter.name : sp.d],
     ['front', 'Cabinets', sw(SEL.front), SEL.front.name, subline(SEL.front)],
-    ['metal', 'Hardware', sw(SEL.metal), SEL.metal.name, '6-3/4 in bar pulls'],
+    ...hwSummaryRows(),
   ];
   $('sum-rows').innerHTML = rows.map(([k, t, bg, v, s]) => `<div class="row"><span class="ph" style="${bg}"></span><div><div class="k">${t}</div><div class="v">${esc(v)}</div><div class="s">${esc(s)}</div></div><button class="b ghost" data-change="${k}">Change</button></div>`).join('')
     + `<div class="row"><span class="ph" style="background:${SCENE_SW[curScene]}"></span><div><div class="k">Lighting</div><div class="v">${SCENES[curScene].label}</div></div><span></span></div>`;
@@ -1104,6 +1533,7 @@ async function enablePhoto(on) {
   $('chip').dataset.mode = on ? 'photo' : 'live'; $('spp').textContent = on ? 'Preparing photo render…' : 'Live view';
   key.visible = !on; keyArea.visible = on;
   scene.environmentIntensity = on ? PHOTO_ENV : RASTER_ENV;
+  Object.values(secMats).forEach(glassMode);
   if (!on) return;
   if (!pt) {
     $('spp').textContent = 'loading path tracer…';

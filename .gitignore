@@ -3,3 +3,9 @@ __pycache__/
 *.pyc
 # empty placeholder from a failed screenshot save
 Screenshot *
+
+# Top Knobs: page cache (catalog.json holds the parsed data) and QA renders are regenerable
+materials/topknobs/pages/
+materials/topknobs/qa/
+materials/msi_tile/cache/
+materials/msi_tile/qa/

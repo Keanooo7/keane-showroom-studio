@@ -1,0 +1,48 @@
+{
+ "params": {
+  "section": "flat"
+ },
+ "sizes": {
+  "3_3_4_inch_pull": {
+   "params": {
+    "bevel": 3.17
+   }
+  },
+  "5_1_16_inch_pull": {
+   "params": {
+    "bevel": 3.17
+   }
+  },
+  "6_5_16_inch_pull": {
+   "params": {
+    "bevel": 3.17
+   }
+  },
+  "7_9_16_inch_pull": {
+   "params": {
+    "bevel": 3.17
+   }
+  },
+  "8_13_16_inch_pull": {
+   "params": {
+    "bevel": 3.17
+   }
+  },
+  "12_inch_pull": {
+   "params": {
+    "bevel": 3.17
+   }
+  },
+  "12_inch_app_pull": {
+   "params": {
+    "bevel": 6.35
+   }
+  },
+  "18_inch_app_pull": {
+   "params": {
+    "bevel": 6.35
+   }
+  }
+ },
+ "notes": "_1 shows an octagonal (faceted) bar, not a round one: flat section with a bevel of a quarter of the Width reads as the chamfered facets"
+}

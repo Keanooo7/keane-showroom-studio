@@ -1,0 +1,82 @@
+{
+ "sizes": {
+  "one_size": {
+   "shape": {
+    "kind": "lathe",
+    "profile": [
+     [
+      0.0,
+      0.0
+     ],
+     [
+      4.3,
+      0.0
+     ],
+     [
+      4.7,
+      0.4
+     ],
+     [
+      4.76,
+      1.0
+     ],
+     [
+      4.76,
+      13.6
+     ],
+     [
+      5.3,
+      14.1
+     ],
+     [
+      9.0,
+      14.3
+     ],
+     [
+      9.4,
+      14.6
+     ],
+     [
+      9.53,
+      15.4
+     ],
+     [
+      9.53,
+      20.8
+     ],
+     [
+      9.3,
+      21.6
+     ],
+     [
+      8.8,
+      22.05
+     ],
+     [
+      8.2,
+      22.22
+     ],
+     [
+      0.0,
+      22.22
+     ]
+    ],
+    "section": "round",
+    "offset": [
+     0.0,
+     0.0,
+     0.0
+    ],
+    "rotate": [
+     0,
+     0,
+     0
+    ]
+   },
+   "spec_fix": {
+    "width_mm": 19.06
+   }
+  }
+ },
+ "notes": "audit 10: round 3/4\" disc head on a 3/8\" post (the fit was 8 % oval from the 13/16\" Width, and pinched a neck once made round); hand profile from SS117_0"
+}

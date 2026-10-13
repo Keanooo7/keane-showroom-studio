@@ -1,0 +1,4 @@
+{
+ "params": {"dims": {"width_mm": 15.6}},
+ "notes": "audit 12: the spec Width 1/4 in is wrong (M37_0/_1 show a round twisted bar ~15.6 mm across, which the generator already takes from the photo), but the stem radius was still capped at 0.49 x the spec 6.35 mm, leaving a 6 mm pin with no rosette; Width set to the photo's bar diameter so the stem and its 9/16 in base read as photographed"
+}
