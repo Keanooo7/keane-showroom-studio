@@ -143,7 +143,7 @@ details[open]>summary .chev{transform:rotate(180deg)}
 .oc[aria-pressed="true"]{border-color:var(--ring);box-shadow:inset 0 0 0 1px var(--ring)}
 .oc .img{display:block;width:100%;height:84px;border-radius:8px;background:var(--soft) center/cover no-repeat;margin-bottom:6px}
 .oc b{display:block;font-weight:600;font-size:15px;margin-bottom:6px}
-.oc small{display:block;color:var(--muted);font-size:13px;line-height:1.35}
+.oc small{display:block;color:var(--muted);font-size:13px;line-height:1.35;padding-right:24px}
 .oc .dot{position:absolute;right:10px;bottom:10px;width:20px;height:20px;border-radius:50%;border:1.5px solid var(--line);background:var(--card)}
 .oc[aria-pressed="true"] .dot{border:6px solid var(--ring)}
 /* tooltip */
@@ -456,8 +456,8 @@ function tileSet({ tw, th, cols, rows, bond, seed }) {
   const rgh = texFromFn(W, H, (x, y, i) => [rough[i], rough[i], rough[i]]);
   return { map, nrm, rgh, pw, ph };
 }
-const tileV = tileSet({ tw: 3 * IN, th: 12 * IN, cols: 8, rows: 4, bond: false, seed: 11 });   // W1: vertical stack
-const tileH = tileSet({ tw: 12 * IN, th: 3 * IN, cols: 2, rows: 16, bond: true, seed: 23 });   // W2: running bond
+const tileV = tileSet({ tw: 3 * IN, th: 12 * IN, cols: 8, rows: 4, bond: false, seed: 11 });   // vertical stack
+const tileH = tileSet({ tw: 12 * IN, th: 3 * IN, cols: 2, rows: 16, bond: true, seed: 23 });   // horizontal running bond
 
 // Polished showroom floor: soft mottling.
 const mott = noise2D(512, 6, 5, 3);
@@ -564,7 +564,7 @@ const fireclay = new THREE.MeshPhysicalMaterial({ name: 'fireclay', color: new T
 const hose = new THREE.MeshPhysicalMaterial({ name: 'hose', color: new THREE.Color().setRGB(0.03, 0.03, 0.03), roughness: 0.55 });
 const tileMat = s => new THREE.MeshPhysicalMaterial({ name: 'tile', map: s.map, normalMap: s.nrm, roughnessMap: s.rgh, roughness: 1,
   clearcoat: 0.6, clearcoatRoughness: 0.05 });
-const tileW1 = tileMat(tileV), tileW2 = tileMat(tileH);
+const tileVMat = tileMat(tileV), tileHMat = tileMat(tileH);
 // full-height backsplash cut from the same slab as the countertop (shares its texture)
 const splashSlab = new THREE.MeshPhysicalMaterial({ name: 'splash_slab', roughness: 0.14, ior: 1.55, clearcoat: 0.7, clearcoatRoughness: 0.03 });
 const wall = new THREE.MeshPhysicalMaterial({ name: 'wall', color: new THREE.Color().setRGB(0.33, 0.33, 0.32), roughness: 0.92 });
@@ -702,15 +702,16 @@ new GLTFLoader().parse(bin.buffer, '', gltf => {
     else if (mname === 'mat_backsplash_tile') {
       const g = o.geometry = o.geometry.index ? o.geometry.toNonIndexed() : o.geometry, w1 = id.endsWith('01');
       const slabUV = boxUV(g.clone(), 126 * IN, 63 * IN, false, w1 ? 0.05 : 0.2, w1 ? 0.1 : 0.45).attributes.uv;   // its own area of the slab
-      boxUV(g, w1 ? tileV.pw : tileH.pw, w1 ? tileV.ph : tileH.ph);
-      g.userData.uv = { tile: g.attributes.uv, slab: slabUV }; g.userData.tileMat = w1 ? tileW1 : tileW2; splashMeshes.push(o);
+      const hUV = boxUV(g.clone(), tileH.pw, tileH.ph).attributes.uv;
+      boxUV(g, tileV.pw, tileV.ph);
+      g.userData.uv = { vtile: g.attributes.uv, htile: hUV, slab: slabUV }; splashMeshes.push(o);
     }
     else if (mname === 'mat_cabinet_primary') boxUV(o.geometry = o.geometry.index ? o.geometry.toNonIndexed() : o.geometry, GRAIN_U, GRAIN_V);
     else if (id.startsWith('reference_floor')) boxUV(o.geometry = o.geometry.toNonIndexed(), 3000);
 
     o.material = { mat_cabinet_primary: paint, mat_countertop_surface: quartz, mat_hardware_finish: metal, mat_faucet_finish: nickel,
       mat_fixture_fireclay: fireclay, mat_faucet_hose: hose,
-      mat_backsplash_tile: id.endsWith('01') ? tileW1 : tileW2,
+      mat_backsplash_tile: tileVMat,
       mat_reference: id.startsWith('reference_floor') ? floor : wall }[mname] || o.material;
   });
   for (const [id, d] of Object.entries(DATA.parts)) {
@@ -846,7 +847,7 @@ $('body-front').innerHTML =
   sub('Decore woodgrain', groupBy(woods, 'family', ['Smooth woodgrain', 'Textured']), 'front', false) + empty;
 $('body-metal').innerHTML = grp('Bar pulls', METALS, 'metal') + empty;
 
-const SEL = { counter: null, front: null, metal: null, splash: 'tile' };
+const SEL = { counter: null, front: null, metal: null, splash: 'vtile' };
 let lastSection = null, restoring = false;
 function markSelected(sec, id) {
   const card = $('card-' + sec), it = ITEMS[id];
@@ -908,20 +909,23 @@ function pickMetal(o) {
 }
 
 // backsplash: option cards with a picture, like the seat cards
-const tileThumb = (() => { const c = document.createElement('canvas'); c.width = 240; c.height = 140; const src = tileV.map.image;
-  c.getContext('2d').drawImage(src, 0, 0, src.width, src.width * 140 / 240, 0, 0, 240, 140); return c.toDataURL('image/jpeg', 0.85); })();
+// Both tile layouts run on both walls; the thumbnails crop the same area of each tile sheet, so they share a scale.
+const tileThumb = s => { const c = document.createElement('canvas'); c.width = 240; c.height = 140; const src = s.map.image;
+  c.getContext('2d').drawImage(src, 0, 0, src.width, src.width * 140 / 240, 0, 0, 240, 140); return c.toDataURL('image/jpeg', 0.85); };
 const SPLASH = [
-  { k: 'tile', t: 'Glazed tile', d: '3 × 12 in handmade-look tile, as in the showroom.' },
-  { k: 'slab', t: 'Full-height slab', d: 'Cut from the same stone as the countertop.' },
+  { k: 'vtile', t: 'Vertical tile', d: '3 × 12 in glazed tile, vertical stack.', thumb: tileThumb(tileV), mat: tileVMat },
+  { k: 'htile', t: 'Horizontal tile', d: '12 × 3 in glazed tile, running bond.', thumb: tileThumb(tileH), mat: tileHMat },
+  { k: 'slab', t: 'Full-height slab', d: 'Cut from the same stone as the countertop.', mat: splashSlab },
 ];
+const splashBg = o => `background-image:url(${o.thumb || SEL.counter?.thumb || ''})`;
 function drawSplashCards() {
-  $('splash').innerHTML = SPLASH.map(o => `<button class="oc" data-k="${o.k}" aria-pressed="${SEL.splash === o.k}"><span class="img" style="background-image:url(${o.k === 'tile' ? tileThumb : SEL.counter?.thumb || ''})"></span><b>${o.t}</b><small>${o.d}</small><span class="dot"></span></button>`).join('');
+  $('splash').innerHTML = SPLASH.map(o => `<button class="oc" data-k="${o.k}" aria-pressed="${SEL.splash === o.k}"><span class="img" style="${splashBg(o)}"></span><b>${o.t}</b><small>${o.d}</small><span class="dot"></span></button>`).join('');
   $('sel-splash').textContent = SPLASH.find(o => o.k === SEL.splash).t + (SEL.splash === 'slab' && SEL.counter ? ' · ' + SEL.counter.name : '');
 }
 $('splash').addEventListener('click', e => { const b = e.target.closest('[data-k]'); if (b) { follow('splash'); setSplash(b.dataset.k); } });
 function setSplash(k) {
   SEL.splash = k; drawSplashCards();
-  splashMeshes.forEach(o => { o.material = k === 'slab' ? splashSlab : o.geometry.userData.tileMat; });
+  const sp = SPLASH.find(o => o.k === k); splashMeshes.forEach(o => { o.material = sp.mat; });
   setUVs(splashMeshes, k); sceneChanged(); writeHash(); queueThumbs();
 }
 
@@ -969,7 +973,7 @@ async function restoreBuild() {
   setScene(SCENES[p.get('sc')] ? p.get('sc') : 'showroom');
   const v = +p.get('v'); goView(Number.isInteger(v) && v >= 0 && v < VIEWS.length && p.has('v') ? v : 0, true);
   pickMetal(get('h', METALS[0]));
-  setSplash(p.get('s') === 'slab' ? 'slab' : 'tile');
+  setSplash(SPLASH.some(o => o.k === p.get('s')) ? p.get('s') : 'vtile');
   await Promise.all([pickCounter(get('c', CAT.counters[0])), pickFront(get('f', SHOWROOM_PAINT))]);
   restoring = false; writeHash(); queueThumbs();
   // Phones build the path tracer only when Photo render is tapped: compiling it in the background stalls mobile GPUs.
@@ -990,7 +994,7 @@ function drawSummary() {
   const sp = SPLASH.find(o => o.k === SEL.splash);
   const rows = [
     ['counter', 'Countertop', sw(SEL.counter), SEL.counter.name, subline(SEL.counter)],
-    ['splash', 'Backsplash', `background-image:url(${SEL.splash === 'tile' ? tileThumb : SEL.counter.thumb})`, sp.t, SEL.splash === 'slab' ? 'Matches ' + SEL.counter.name : 'Vertical stack + running bond'],
+    ['splash', 'Backsplash', splashBg(sp), sp.t, SEL.splash === 'slab' ? 'Matches ' + SEL.counter.name : sp.d],
     ['front', 'Cabinets', sw(SEL.front), SEL.front.name, subline(SEL.front)],
     ['metal', 'Hardware', sw(SEL.metal), SEL.metal.name, '6-3/4 in bar pulls'],
   ];
