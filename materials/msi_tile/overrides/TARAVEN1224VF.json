@@ -1,0 +1,3 @@
+{"image": "https://cdn.msisurfaces.com/images/mosaics/variations/arabescato-venato-valentino-fluto-12x24-honed-variation.jpg",
+ "mode": "synth", "piece": [790, 0, 1600, 1590], "grout_mm": 1.6,
+ "notes": "audit1: main photo is one tile face with no joints (flute groups were read as 12 in courses, ~4x scale error); field synthesised from the right-hand whole 12 in tile of the variations photo (joint x 780 px of 1600, 14 flutes, bottom joint y 1594)"}

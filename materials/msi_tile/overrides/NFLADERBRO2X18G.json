@@ -1,0 +1,10 @@
+{
+ "crop": [
+  0,
+  880,
+  1600,
+  1600
+ ],
+ "notes": "audit1: cropped to the lower photo, away from the window glare on the upper right courses; grout ~6-7 px (2.5 mm)",
+ "grout_mm": 2.5
+}

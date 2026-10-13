@@ -1,0 +1,2 @@
+{"period_px": [197.12, 197.84],
+ "notes": "audit1: the weave alternates horizontal / vertical pairs, so the true repeat is 2 dot pitches (197 px), not the 98.6 px dot lattice; 7 dot repeats broke the weave at the wrap seam"}

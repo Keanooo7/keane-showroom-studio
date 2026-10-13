@@ -1,0 +1,11 @@
+{
+ "image": "https://cdn.msisurfaces.com/images/mosaics/variations/renzo-sterling-5x5.jpg",
+ "crop": [
+  0,
+  195,
+  805,
+  805
+ ],
+ "grout_mm": 3.5,
+ "notes": "audit1: cropped below the top course (window glare on most of its tiles); grey grout ~5-6 px (3.5 mm) in the photo"
+}

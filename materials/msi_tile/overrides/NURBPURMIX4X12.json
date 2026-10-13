@@ -1,0 +1,9 @@
+{
+ "image": "https://cdn.msisurfaces.com/images/mosaics/variations/urbano-pure-3d-mix.jpg",
+ "notes": "audit1: variations photo shows 6 courses of the mixed 3D faces in half bond; the main photo shows 2 courses (7 of 8 tiles reused, white-on-white joints vanished); pitch 410 x 137 px read off the photo (relief ribs were read as extra joints); accepted by hand: the \"missing joints\" check fails on white-on-white joints beside the relief ribs",
+ "period_px": [
+  410,
+  137
+ ],
+ "usable": true
+}

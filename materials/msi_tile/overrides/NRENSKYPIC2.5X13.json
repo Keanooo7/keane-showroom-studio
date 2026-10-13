@@ -1,0 +1,19 @@
+{
+ "image": "https://cdn.msisurfaces.com/images/mosaics/variations/renzo-sky-25x13-pickett-variations.jpg",
+ "crop": [
+  0,
+  0,
+  805,
+  650
+ ],
+ "px_per_in": 25.29,
+ "chip_px": [
+  564.5,
+  64.76
+ ],
+ "period_px": [
+  564.5,
+  64.76
+ ],
+ "notes": "audit1: cropped (y < 650) above most of the window reflection in the lower middle column (it repeated as a light streak); scale and chip repeat as measured on the full photo (25.29 px/in, 564.5 x 64.76 px)"
+}

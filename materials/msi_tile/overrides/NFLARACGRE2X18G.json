@@ -1,0 +1,12 @@
+{
+ "crop": [
+  0,
+  890,
+  1600,
+  1600
+ ],
+ "bond": "running",
+ "offset": 0.5,
+ "notes": "audit1: cropped to the lower photo, away from the window glare that turned the upper courses grey; photo is a regular half bond; white grout ~6-8 px (3 mm)",
+ "grout_mm": 3.0
+}

@@ -173,6 +173,10 @@ details[open]>summary .chev{transform:rotate(180deg)}
 .oc small{display:block;color:var(--muted);font-size:13px;line-height:1.35;padding-right:24px}
 .oc .dot{position:absolute;right:10px;bottom:10px;width:20px;height:20px;border-radius:50%;border:1.5px solid var(--line);background:var(--card)}
 .oc[aria-pressed="true"] .dot{border:6px solid var(--ring)}
+/* backsplash tile pickers: rectangular tile under Vertical / Horizontal, mosaics and patterns under Custom; a search shows both */
+#splash-pick>div{display:flex;flex-direction:column;gap:18px}
+#splash-pick[data-lay="line"] .pk-custom,#splash-pick[data-lay="custom"] .pk-line,#splash-pick[data-lay="none"]>div{display:none}
+.searching #splash-pick>div{display:flex!important}
 /* tooltip */
 .tip{position:fixed;z-index:50;pointer-events:none;padding:8px 11px;border-radius:9px;background:var(--card);color:var(--ink);box-shadow:0 6px 24px rgba(0,0,0,.18);font-size:14px;line-height:1.3;width:max-content;max-width:260px;transform:translate(-50%,-100%)}
 .tip small{display:block;color:var(--muted);font-size:12.5px;margin-top:2px}
@@ -277,6 +281,7 @@ dialog::backdrop{background:rgba(10,10,12,.45);backdrop-filter:blur(2px)}
         <div class="seg"><span id="splash-h-lbl">Height</span><div id="splash-h" role="group" aria-labelledby="splash-h-lbl">
           <button data-h="full" aria-pressed="true">Full height</button><button data-h="low" aria-pressed="false">6 in</button></div></div>
         <div class="optcards" id="splash" role="group" aria-label="Backsplash"></div>
+        <div id="splash-pick" data-lay="line"></div>
       </div>
     </details>
     <details class="card" id="card-front" data-view="2" open>
@@ -342,7 +347,8 @@ const DATA = JSON.parse(document.getElementById('asm').textContent);
 const CAT = JSON.parse(document.getElementById('catalog').textContent);
 const $ = id => document.getElementById(id);
 const IN = 25.4;
-let pt = null, photo = false, geomDirty = false, ready = false, warming = false;   // path tracer state (created on first use)
+let pt = null, photo = false, geomDirty = false, ready = false;   // path tracer state (created on first use)
+let dirty = true, moving = false;   // live view: draw on the next frame / the camera is moving (see the loop)
 
 // ============================ finishes ============================
 const SHOWROOM_PAINT = { id: 'paint_showroom', name: 'Showroom greige (from photos)', kind: 'paint', brand: 'Five-piece painted', family: 'Satin paint', color: DATA.photoPaint, rough: 0.5, cc: 0.45 };
@@ -415,15 +421,23 @@ function noise2D(size, base, octaves, seed) {
   for (let i = 0; i < out.length; i++) out[i] /= norm;
   return out;
 }
+// fn(x, y, i, o) writes the pixel's RGB into o (one reused array: these run over millions of pixels at load)
 function texFromFn(w, h, fn, srgb) {
   const cv = document.createElement('canvas'); cv.width = w; cv.height = h;
-  const ctx = cv.getContext('2d'), img = ctx.createImageData(w, h), d = img.data;
-  for (let y = 0; y < h; y++) for (let x = 0; x < w; x++) { const i = (y * w + x) * 4, c = fn(x, y, i / 4); d[i] = c[0]; d[i + 1] = c[1]; d[i + 2] = c[2]; d[i + 3] = 255; }
+  const ctx = cv.getContext('2d'), img = ctx.createImageData(w, h), d = img.data, o = [0, 0, 0];
+  for (let y = 0, i = 0; y < h; y++) for (let x = 0; x < w; x++, i++) { fn(x, y, i, o); const j = i * 4; d[j] = o[0]; d[j + 1] = o[1]; d[j + 2] = o[2]; d[j + 3] = 255; }
   ctx.putImageData(img, 0, 0);
   const t = new THREE.CanvasTexture(cv);
   t.wrapS = t.wrapT = THREE.RepeatWrapping; t.anisotropy = maxAniso;
   t.colorSpace = srgb ? THREE.SRGBColorSpace : THREE.NoColorSpace;
   return t;
+}
+// tileable height field -> tangent-space normal map; s scales the slope (canvas y runs down, uv v runs up)
+function normalTex(W, H, hgt, s) {
+  return texFromFn(W, H, (x, y, i, o) => {
+    const hx = s * (hgt[y * W + (x + 1) % W] - hgt[y * W + (x - 1 + W) % W]), hy = s * (hgt[((y + 1) % H) * W + x] - hgt[((y - 1 + H) % H) * W + x]);
+    const k = 127.5 / Math.hypot(hx, hy, 1); o[0] = 127.5 - hx * k; o[1] = 127.5 + hy * k; o[2] = 127.5 + k;
+  });
 }
 // Painted hardwood: the paint film is smooth; only fine, long grain telegraphs through it, visible in raking light.
 // Tileable anisotropic value noise: many cells across the grain (u), few along it (v), so features become long streaks.
@@ -450,13 +464,9 @@ const grainTex = (() => {
     const wv = warp[(Math.floor(y / H * 256) * 256 + Math.floor(x / W * 256))], xs = (x + Math.round(wv * 40) + W) % W, i = y * W + xs;
     hgt[y * W + x] = 0.68 * a[i] + 0.27 * b[i] + 0.05 * c[i];   // pore pattern, not hairline scratches
   }
-  const nrm = texFromFn(W, H, (x, y, i) => {
-    const hx = hgt[y * W + (x + 1) % W] - hgt[y * W + (x - 1 + W) % W], hy = hgt[((y + 1) % H) * W + x] - hgt[((y - 1 + H) % H) * W + x];
-    const n = new THREE.Vector3(-hx * 1.6, hy * 1.6, 1).normalize();
-    return [127.5 + 127.5 * n.x, 127.5 + 127.5 * n.y, 127.5 + 127.5 * n.z];
-  });
+  const nrm = normalTex(W, H, hgt, 1.6);
   // paint sits a touch glossier where it levels into the grain: tiny roughness variation, no blotches
-  const rgh = texFromFn(W, H, (x, y, i) => { const v = 249 + 6 * hgt[i]; return [v, v, v]; });
+  const rgh = texFromFn(W, H, (x, y, i, o) => { o[0] = o[1] = o[2] = 249 + 6 * hgt[i]; });
   return { nrm, rgh };
 })();
 
@@ -464,28 +474,24 @@ const grainTex = (() => {
 function tileSet({ tw, th, cols, rows, bond, seed }) {
   const ppm = 1.4, pw = tw * cols, ph = th * rows, W = Math.round(pw * ppm), H = Math.round(ph * ppm);
   const pal = ['#5d5a55', '#6f6a63', '#46443f', '#827d75', '#3d3b38', '#8c877f', '#55524c', '#67625a', '#4c4945'].map(h => new THREE.Color(h));
-  const r = rng(seed), tone = new Map(), toneOf = (c, rw) => { const k = c + ',' + rw; if (!tone.has(k)) tone.set(k, [pal[Math.floor(r() * pal.length)], 0.92 + 0.16 * r(), r() * 6.28]); return tone.get(k); };
+  const r = rng(seed), tone = new Map(), toneOf = (c, rw) => { const k = rw * 1024 + c; if (!tone.has(k)) tone.set(k, [pal[Math.floor(r() * pal.length)], 0.92 + 0.16 * r(), r() * 6.28]); return tone.get(k); };
   const wav = noise2D(256, 4, 3, seed + 1), grout = 1.6, hgt = new Float32Array(W * H), col = new Float32Array(W * H * 3), rough = new Uint8Array(W * H);
   for (let y = 0; y < H; y++) for (let x = 0; x < W; x++) {
     const mx = x / ppm, my = y / ppm, rw = Math.floor(my / th), off = bond && (rw & 1) ? tw / 2 : 0;
     const sx = ((mx + off) % pw + pw) % pw, cl = Math.floor(sx / tw), lx = sx - cl * tw, ly = my - rw * th;
     const dEdge = Math.min(lx, tw - lx, ly, th - ly) - grout / 2, i = y * W + x;
-    if (dEdge < 0) { hgt[i] = 0; col.set([0.30, 0.29, 0.27], i * 3); rough[i] = 225; continue; }
+    if (dEdge < 0) { hgt[i] = 0; col[i * 3] = 0.30; col[i * 3 + 1] = 0.29; col[i * 3 + 2] = 0.27; rough[i] = 225; continue; }
     const [c, k, ph0] = toneOf(cl, rw), w = wav[(Math.floor(y / H * 256) * 256 + Math.floor(x / W * 256)) % 65536];
     const pillow = Math.min(1, dEdge / 2.2), edgeDark = 0.80 + 0.20 * Math.min(1, dEdge / 5);
     hgt[i] = 0.55 * Math.sin(pillow * Math.PI / 2) + 0.45 * (0.5 + 0.5 * Math.sin(ph0 + lx * 0.05 + ly * 0.03)) * w;
     const v = k * edgeDark * (0.94 + 0.12 * w);
-    col.set([c.r * v, c.g * v, c.b * v], i * 3);
+    col[i * 3] = c.r * v; col[i * 3 + 1] = c.g * v; col[i * 3 + 2] = c.b * v;
     rough[i] = 26 + 20 * w;
   }
   const lin2s = v => 255 * (v <= 0.0031308 ? 12.92 * v : 1.055 * Math.pow(v, 1 / 2.4) - 0.055);
-  const map = texFromFn(W, H, (x, y, i) => [lin2s(col[i * 3]), lin2s(col[i * 3 + 1]), lin2s(col[i * 3 + 2])], true);
-  const nrm = texFromFn(W, H, (x, y, i) => {
-    const hx = hgt[y * W + (x + 1) % W] - hgt[y * W + (x - 1 + W) % W], hy = hgt[((y + 1) % H) * W + x] - hgt[((y - 1 + H) % H) * W + x];
-    const s = 2.2, n = new THREE.Vector3(-hx * s, hy * s, 1).normalize();   // canvas y runs down, uv v runs up
-    return [127.5 + 127.5 * n.x, 127.5 + 127.5 * n.y, 127.5 + 127.5 * n.z];
-  });
-  const rgh = texFromFn(W, H, (x, y, i) => [rough[i], rough[i], rough[i]]);
+  const map = texFromFn(W, H, (x, y, i, o) => { o[0] = lin2s(col[i * 3]); o[1] = lin2s(col[i * 3 + 1]); o[2] = lin2s(col[i * 3 + 2]); }, true);
+  const nrm = normalTex(W, H, hgt, 2.2);
+  const rgh = texFromFn(W, H, (x, y, i, o) => { o[0] = o[1] = o[2] = rough[i]; });
   return { map, nrm, rgh, pw, ph };
 }
 const tileV = tileSet({ tw: 3 * IN, th: 12 * IN, cols: 8, rows: 4, bond: false, seed: 11 });   // vertical stack
@@ -494,18 +500,21 @@ const SPLASH_LOW = 6 * IN;   // 6 in backsplash height; the wall shows between i
 
 // Polished showroom floor: soft mottling.
 const mott = noise2D(512, 6, 5, 3);
-const floorMap = texFromFn(512, 512, (x, y, i) => { const v = 190 + 40 * mott[i]; return [v, v * 0.995, v * 0.985]; }, true);
+const floorMap = texFromFn(512, 512, (x, y, i, o) => { const v = 190 + 40 * mott[i]; o[0] = v; o[1] = v * 0.995; o[2] = v * 0.985; }, true);
 
 // Finish textures live in textures/<id>.js (JSONP with a data: URL), fetched on first pick and cached.
 // A <script> tag works from file:// and data: URLs are not cross-origin, so WebGL accepts them without a server.
+// The image is decoded off the main thread (decode()) so its upload does not stall a frame, and the script tag goes as
+// soon as it has run: it holds the whole data: URL. A failed load is not cached, so picking the finish again retries.
 const texWait = {}, texImg = {};
 window.__texData = (id, src) => texWait[id] && texWait[id](src);
 function loadImage(id) {
   return texImg[id] || (texImg[id] = new Promise((res, rej) => {
-    texWait[id] = src => { const im = new Image(); im.onload = () => res(im); im.onerror = rej; im.src = src; };
-    const sc = document.createElement('script'); sc.src = 'textures/' + id + '.js'; sc.onerror = () => rej(new Error('missing textures/' + id + '.js'));
+    const sc = document.createElement('script'); sc.src = 'textures/' + id + '.js';
+    texWait[id] = src => { delete texWait[id]; sc.remove(); const im = new Image(); im.src = src; im.decode().then(() => res(im), () => rej(new Error('bad image textures/' + id + '.js'))); };
+    sc.onerror = () => { delete texWait[id]; sc.remove(); rej(new Error('missing textures/' + id + '.js')); };
     document.head.appendChild(sc);
-  }));
+  }).catch(e => { delete texImg[id]; throw e; }));
 }
 const colorTex = {};
 async function getColorTex(id) {
@@ -522,14 +531,12 @@ async function getEmbossTex(id) {
   const im = await loadImage(id), W = im.width, H = im.height, cv = document.createElement('canvas'); cv.width = W; cv.height = H;
   const ctx = cv.getContext('2d'); ctx.drawImage(im, 0, 0); const d = ctx.getImageData(0, 0, W, H).data, L = new Float32Array(W * H);
   for (let i = 0; i < W * H; i++) L[i] = (0.2126 * d[i * 4] + 0.7152 * d[i * 4 + 1] + 0.0722 * d[i * 4 + 2]) / 255;
-  const blur = (src, r, horiz) => { const out = new Float32Array(W * H); for (let y = 0; y < H; y++) for (let x = 0; x < W; x++) { let s = 0;
-    for (let k = -r; k <= r; k++) s += horiz ? src[y * W + (x + k + W) % W] : src[((y + k + H) % H) * W + x]; out[y * W + x] = s / (2 * r + 1); } return out; };
+  // wrapped box blur as a running sum: O(1) per pixel whatever the radius
+  const blur = (src, r, horiz) => { const out = new Float32Array(W * H), n = horiz ? W : H, lines = horiz ? H : W, at = horiz ? (l, k) => l * W + k : (l, k) => k * W + l;
+    for (let l = 0; l < lines; l++) { let s = 0; for (let k = -r; k <= r; k++) s += src[at(l, (k + n) % n)];
+      for (let k = 0; k < n; k++) { out[at(l, k)] = s / (2 * r + 1); s += src[at(l, (k + r + 1) % n)] - src[at(l, (k - r + n) % n)]; } } return out; };
   const B = blur(blur(L, 6, true), 6, false), hp = L.map((v, i) => v - B[i]);
-  const t = texFromFn(W, H, (x, y) => {
-    const hx = hp[y * W + (x + 1) % W] - hp[y * W + (x - 1 + W) % W], hy = hp[((y + 1) % H) * W + x] - hp[((y - 1 + H) % H) * W + x];
-    const n = new THREE.Vector3(-hx * 6, hy * 6, 1).normalize(); return [127.5 + 127.5 * n.x, 127.5 + 127.5 * n.y, 127.5 + 127.5 * n.z];
-  });
-  return (embossTex[id] = t);
+  return (embossTex[id] = normalTex(W, H, hp, 6));
 }
 
 // ============================ HDR light room (equirect) ============================
@@ -801,19 +808,38 @@ strip.addEventListener('scroll', syncArrows, { passive: true }); new ResizeObser
 // Each view is drawn into a corner of the main canvas and copied out within the same task, before the next frame.
 const thumbCam = new THREE.PerspectiveCamera(50, 1.6, 0.05, 60);
 let thumbTimer = 0;
-const queueThumbs = () => { clearTimeout(thumbTimer); thumbTimer = setTimeout(renderThumbs, 450); };
+// Every edit ends here, so this also asks the live view for a new frame.
+const queueThumbs = () => { invalidate(); clearTimeout(thumbTimer); thumbTimer = setTimeout(renderThumbs, 450); };
+const thumbURL = [];
 function renderThumbs() {
   if (!ready || tween) return queueThumbs();
   const TW = 224, TH = 140, dpr = renderer.getPixelRatio(), size = renderer.getSize(new THREE.Vector2());
-  const cv = document.createElement('canvas'); cv.width = TW; cv.height = TH; const ctx = cv.getContext('2d');
-  thumbCam.aspect = TW / TH;
-  VIEWS.forEach((v, i) => {
-    thumbCam.position.copy(in2gl(...v.pos)); thumbCam.fov = v.fov; thumbCam.updateProjectionMatrix(); thumbCam.lookAt(in2gl(...v.tgt));
-    renderer.setViewport(0, 0, TW / dpr, TH / dpr); renderer.render(scene, thumbCam);
-    ctx.drawImage(canvas, 0, canvas.height - TH, TW, TH, 0, 0, TW, TH);
-    const b = strip.querySelector(`[data-v="${i}"]`); if (b) b.style.backgroundImage = `url(${cv.toDataURL('image/jpeg', 0.82)})`;
-  });
-  renderer.setViewport(0, 0, size.x, size.y);
+  // Views are laid out in a grid on the stage canvas and read back with one drawImage per grid: each read of a WebGL
+  // canvas waits for the GPU. The shadow map does not depend on the camera, so it is drawn for the first view only.
+  const cols = Math.max(1, Math.floor(canvas.width / TW)), per = cols * Math.max(1, Math.floor(canvas.height / TH));
+  thumbCam.aspect = TW / TH; renderer.setScissorTest(true);
+  for (let p = 0; p < VIEWS.length; p += per) {
+    const batch = VIEWS.slice(p, p + per), rows = Math.ceil(batch.length / cols);
+    batch.forEach((v, k) => {
+      thumbCam.position.copy(in2gl(...v.pos)); thumbCam.fov = v.fov; thumbCam.updateProjectionMatrix(); thumbCam.lookAt(in2gl(...v.tgt));
+      const x = (k % cols) * TW / dpr, y = Math.floor(k / cols) * TH / dpr;   // css px, from the bottom
+      renderer.setViewport(x, y, TW / dpr, TH / dpr); renderer.setScissor(x, y, TW / dpr, TH / dpr);
+      renderer.render(scene, thumbCam); renderer.shadowMap.autoUpdate = false;
+    });
+    const grid = document.createElement('canvas'); grid.width = cols * TW; grid.height = rows * TH;
+    grid.getContext('2d').drawImage(canvas, 0, canvas.height - rows * TH, cols * TW, rows * TH, 0, 0, cols * TW, rows * TH);
+    batch.forEach((v, k) => {
+      const i = p + k, cv = document.createElement('canvas'); cv.width = TW; cv.height = TH;
+      cv.getContext('2d').drawImage(grid, (k % cols) * TW, (rows - 1 - Math.floor(k / cols)) * TH, TW, TH, 0, 0, TW, TH);
+      // toBlob encodes off the main thread (toDataURL took 50-250 ms per refresh); the old object URL is freed once replaced
+      cv.toBlob(blob => {
+        const b = strip.querySelector(`[data-v="${i}"]`), old = thumbURL[i]; if (!blob || !b) return;
+        b.style.backgroundImage = `url(${thumbURL[i] = URL.createObjectURL(blob)})`; if (old) URL.revokeObjectURL(old);
+      }, 'image/jpeg', 0.82);
+    });
+  }
+  renderer.shadowMap.autoUpdate = true; renderer.setScissorTest(false); renderer.setViewport(0, 0, size.x, size.y);
+  invalidate();   // the thumbnails were drawn over the stage canvas
   if (pt && photo) pt.reset();
 }
 
@@ -838,7 +864,7 @@ function setScene(k) {
   keyArea.position.copy(key.position); keyArea.lookAt(key.target.position); keyArea.color.copy(key.color);
   keyArea.intensity = PHOTO_KEY * s.keyI * d * d / (keyArea.width * keyArea.height);
   scene.environmentIntensity = photo ? PHOTO_ENV : RASTER_ENV;
-  if (pt) { pt.updateEnvironment(); pt.updateLights(); }
+  if (pt && photo) { pt.updateEnvironment(); pt.updateLights(); }
   writeHash(); queueThumbs();
 }
 const POPS = { 'btn-scene': 'pop-scene', 'btn-open': 'pop-open' };
@@ -853,6 +879,9 @@ const lin2hex = c => '#' + c.map(v => Math.round(255 * Math.min(1, v <= 0.003130
 const esc = t => String(t ?? '').replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' })[c]);
 // geometry attributes or mesh materials changed: the path tracer must rebuild its scene
 function sceneChanged() { if (!pt) return; if (photo) { pt.setScene(scene, camera); geomDirty = false; } else geomDirty = true; }
+// material values or maps changed. In the live view nothing is sent to the path tracer: enablePhoto refreshes it all,
+// and repacking its texture atlas here cost up to 0.7 s per pick.
+const ptMaterials = () => { if (pt && photo) pt.updateMaterials(); };
 function setUVs(meshes, key) { let changed = false; meshes.forEach(o => { const a = o.geometry.userData.uv[key]; if (o.geometry.attributes.uv !== a) { o.geometry.setAttribute('uv', a); changed = true; } }); return changed; }
 const subline = o => [o.code, o.brand, o.family || o.group].filter(Boolean).join(' · ');
 const gloss = o => o.kind === 'slab' || o.kind === 'tile' ? 0.42 : o.metalness ? Math.max(0.12, 0.55 - o.roughness * 0.7)
@@ -902,7 +931,7 @@ function follow(sec) { if (restoring) return; const v = +$('card-' + sec).datase
 document.querySelectorAll('.card>summary').forEach(sm => sm.addEventListener('click', () => { const card = sm.parentElement; setTimeout(() => { if (card.open) follow(card.id.slice(5)); }, 0); }));
 document.querySelector('.opts').addEventListener('click', e => {
   const b = e.target.closest('.sw'); if (!b) return; const it = ITEMS[b.dataset.id]; if (!it) return;
-  follow(it.sec); ({ counter: pickCounter, front: pickFront, metal: pickHwItem })[it.sec](it.o);
+  follow(it.sec); ({ counter: pickCounter, front: pickFront, metal: pickHwItem, splash: pickTile })[it.sec](it.o);
 });
 const busy = (id, on) => document.querySelectorAll(`.sw[data-id="${id}"]`).forEach(b => b.toggleAttribute('aria-busy', on));
 
@@ -910,11 +939,11 @@ let counterTok = 0;
 async function pickCounter(o) {
   const tok = ++counterTok; SEL.counter = o; markSelected('counter', o.id); busy(o.id, true);
   let t; try { t = await getColorTex(o.id); } catch (e) { busy(o.id, false); toast(`Texture for ${o.name} is missing`); return; }
-  busy(o.id, false); if (tok !== counterTok) return;
+  busy(o.id, false); texUsed(o.id); if (tok !== counterTok) return;
   // geometry UVs are in slab units (126 x 63 in); tiled granite repeats its close-up at true size
   t.repeat.set(126 * IN / o.size_mm[0], 63 * IN / o.size_mm[1]);
   quartz.map = splashSlab.map = t; quartz.needsUpdate = splashSlab.needsUpdate = true;
-  if (pt) pt.updateMaterials();
+  ptMaterials();
   drawSplashCards(); writeHash(); queueThumbs();
 }
 let frontTok = 0;
@@ -931,7 +960,7 @@ async function pickFront(o) {
   } else {
     busy(o.id, true);
     let t, n; try { [t, n] = await Promise.all([getColorTex(o.id), getEmbossTex(o.id)]); } catch (e) { busy(o.id, false); toast(`Texture for ${o.name} is missing`); return; }
-    busy(o.id, false); if (tok !== frontTok) return;
+    busy(o.id, false); texUsed(o.id); if (tok !== frontTok) return;
     n.wrapS = n.wrapT = THREE.RepeatWrapping;
     [t, n].forEach(x => x.repeat.set(GRAIN_U / o.size_mm[0], GRAIN_V / o.size_mm[1]));
     Object.assign(P, { map: t, roughnessMap: null, normalMap: n, clearcoatNormalMap: n, roughness: o.rough, clearcoat: o.cc, clearcoatRoughness: 0.32 });
@@ -939,7 +968,7 @@ async function pickFront(o) {
   }
   P.needsUpdate = true;
   const uvChanged = frontMeshes.length && setUVs(frontMeshes, o.kind === 'paint' ? 'piece' : 'whole');
-  if (uvChanged) sceneChanged(); else if (pt) pt.updateMaterials();
+  if (uvChanged) sceneChanged(); else ptMaterials();
   writeHash(); queueThumbs();
 }
 // ============================ hardware: showroom bar pull + Top Knobs library ============================
@@ -1215,7 +1244,7 @@ async function setHw(t, sel) {
     else { mt.par.remove(mt.o); const r = placeOn(mt, g, sizeOf(HWP[sel.slug], sel.size)); mt.obj = r.obj; mt.fits = r.fits; mt.bbox = r.bbox; mt.par.add(r.obj); }
     mt.placed = key; rebuilt = true;
   }
-  if (rebuilt) sceneChanged(); else if (pt) pt.updateMaterials();
+  if (rebuilt) sceneChanged(); else ptMaterials();
   markHw(); writeHash(); queueThumbs();
 }
 function pickHwItem(o) {
@@ -1350,33 +1379,130 @@ const HW_HOOK = {
     [k, { color: m.color.toArray().map(x => +x.toFixed(4)), roughness: m.roughness, metalness: m.metalness, anisotropy: m.anisotropy }]))])),
 };
 
-// backsplash: option cards with a picture, like the seat cards
-// Both tile layouts run on both walls; the thumbnails crop the same area of each tile sheet, so they share a scale.
+// backsplash: layout cards with a picture, like the seat cards, and the tile picker under them
+// Vertical and Horizontal lay the same rectangular tile (Vertical turns it 90 deg); Custom holds the squares, mosaics and
+// patterns, laid as the maker photographs them. The showroom tile is procedural; MSI tile loads like the finish textures.
 const tileThumb = s => { const c = document.createElement('canvas'); c.width = 240; c.height = 140; const src = s.map.image;
   c.getContext('2d').drawImage(src, 0, 0, src.width, src.width * 140 / 240, 0, 0, 240, 140); return c.toDataURL('image/jpeg', 0.85); };
+const SHOWROOM_THUMB = { vtile: tileThumb(tileV), htile: tileThumb(tileH) };
+const SHOWROOM_TILE = { id: 'tile_showroom', name: 'Showroom tile 3 × 12 in', brand: 'Glazed handmade', family: 'Vertical stack or running bond',
+  lay: 'line', thumb: SHOWROOM_THUMB.htile, rough: 0.15, cc: 0.6 };
+const TILES = (CAT.tiles || []).map(t => Object.assign(t, { brand: 'MSI', thumb: t.th, kind: 'msitile' }));
+const LINE = TILES.filter(t => t.lay === 'line'), CUSTOM = TILES.filter(t => t.lay === 'custom');
+SEL.tile = SHOWROOM_TILE; SEL.ctile = CUSTOM[0] || null; SEL.lineK = 'vtile';
 const SPLASH = [
-  { k: 'vtile', t: 'Vertical tile', d: '3 × 12 in glazed tile, vertical stack.', thumb: tileThumb(tileV), mat: tileVMat },
-  { k: 'htile', t: 'Horizontal tile', d: '12 × 3 in glazed tile, running bond.', thumb: tileThumb(tileH), mat: tileHMat },
-  { k: 'slab', t: 'Stone slab', d: 'Cut from the same stone as the countertop.', mat: splashSlab },
-];
+  { k: 'vtile', t: 'Vertical tile' },
+  { k: 'htile', t: 'Horizontal tile' },
+  { k: 'ctile', t: 'Custom tile' },
+  { k: 'slab', t: 'Stone slab', d: 'Cut from the same stone as the countertop.' },
+].filter(o => o.k !== 'ctile' || CUSTOM.length);
 const SPLASH_H = { full: 'Full height', low: '6 in' };
-const splashBg = o => `background-image:url(${o.thumb || SEL.counter?.thumb || ''})`;
-function drawSplashCards() {
-  $('splash').innerHTML = SPLASH.map(o => `<button class="oc" data-k="${o.k}" aria-pressed="${SEL.splash === o.k}"><span class="img" style="${splashBg(o)}"></span><b>${o.t}</b><small>${o.d}</small><span class="dot"></span></button>`).join('');
-  $('sel-splash').textContent = SPLASH.find(o => o.k === SEL.splash).t + ' · ' + SPLASH_H[SEL.splashH] + (SEL.splash === 'slab' && SEL.counter ? ' · ' + SEL.counter.name : '');
+const tileOf = k => k === 'ctile' ? SEL.ctile : k === 'slab' ? null : SEL.tile;
+const splashDesc = o => { const t = tileOf(o.k); if (!t) return o.d;
+  if (t === SHOWROOM_TILE) return o.k === 'vtile' ? '3 × 12 in glazed tile, vertical stack.' : '12 × 3 in glazed tile, running bond.';
+  return t.name + (o.k === 'vtile' ? ', laid vertically.' : o.k === 'htile' ? ', laid horizontally.' : '.'); };
+// card pictures: 600 x 350 mm of wall at true scale, made once a tile's texture has loaded (its chip picture until then)
+const cardThumbs = {};
+function makeCardThumbs(t, img) {
+  for (const vert of t.lay === 'line' ? [false, true] : [false]) {
+    const key = t.id + (vert ? ':v' : ''); if (cardThumbs[key]) continue;
+    const c = document.createElement('canvas'); c.width = 240; c.height = 140; const ctx = c.getContext('2d'), s = 240 / 600;
+    const kx = t.p[0] * s / img.width, ky = t.p[1] * s / img.height, pat = ctx.createPattern(img, 'repeat');
+    pat.setTransform(vert ? new DOMMatrix([0, -kx, ky, 0, 0, 140]) : new DOMMatrix([kx, 0, 0, ky, 0, 140]));   // vertical: long axis up the wall
+    ctx.fillStyle = pat; ctx.fillRect(0, 0, 240, 140); cardThumbs[key] = c.toDataURL('image/jpeg', 0.85);
+  }
+}
+const splashBg = o => { const t = tileOf(o.k);
+  const src = !t ? SEL.counter?.thumb : t === SHOWROOM_TILE ? SHOWROOM_THUMB[o.k] : cardThumbs[t.id + (o.k === 'vtile' ? ':v' : '')] || t.thumb;
+  return `background-image:url(${src || ''})`; };
+const tileNote = t => `<p class="note"><svg><use href="#i-info"/></svg>${t}</p>`;
+$('splash-pick').innerHTML =
+  `<div class="pk-line">${grp('Showroom tile', [SHOWROOM_TILE], 'splash')}` +
+  tileNote("MSI tile repeats at true size, built from the maker's photos. Vertical turns the same tile 90°, so a running bond becomes a vertical offset.") +
+  sub('MSI subway & field tile', groupBy(LINE, 'group'), 'splash', true) + `</div>` +
+  `<div class="pk-custom">${tileNote('Squares, mosaics and patterns, laid the way MSI photographs them.')}` +
+  sub('MSI mosaics & patterns', groupBy(CUSTOM, 'group'), 'splash', true) + `</div>` + empty;
+function drawSplashCards(reveal) {
+  $('splash').innerHTML = SPLASH.map(o => `<button class="oc" data-k="${o.k}" aria-pressed="${SEL.splash === o.k}"><span class="img" style="${splashBg(o)}"></span><b>${o.t}</b><small>${esc(splashDesc(o))}</small><span class="dot"></span></button>`).join('');
+  const t = tileOf(SEL.splash), card = $('card-splash');
+  $('sel-splash').textContent = [SPLASH.find(o => o.k === SEL.splash).t, t ? t.name : SEL.counter?.name, SPLASH_H[SEL.splashH]].filter(Boolean).join(' · ');
   document.querySelectorAll('#splash-h [data-h]').forEach(b => b.setAttribute('aria-pressed', b.dataset.h === SEL.splashH));
+  $('splash-pick').dataset.lay = !t ? 'none' : SEL.splash === 'ctile' ? 'custom' : 'line';
+  card.querySelectorAll('.sw').forEach(b => b.setAttribute('aria-pressed', !!t && b.dataset.id === t.id));
+  card.querySelectorAll('.pickname').forEach(p => p.textContent = '');
+  const btn = t && card.querySelector(`.sw[data-id="${t.id}"]`);
+  if (btn) { btn.closest('.grp').querySelector('.pickname').textContent = t.name + (t.code ? '  ' + t.code : ''); const d = btn.closest('.sub'); if (d && reveal) d.open = true; }
 }
 $('splash').addEventListener('click', e => { const b = e.target.closest('[data-k]'); if (b) { follow('splash'); setSplash(b.dataset.k); } });
 function setSplash(k) {
-  SEL.splash = k; drawSplashCards();
-  const sp = SPLASH.find(o => o.k === k); splashMeshes.forEach(o => { o.material = sp.mat; });
-  setUVs(splashMeshes, k); sceneChanged(); writeHash(); queueThumbs();
+  SEL.splash = k; if (k === 'vtile' || k === 'htile') SEL.lineK = k;
+  drawSplashCards(true); return applySplash();
+}
+function pickTile(o) {
+  if (o.lay === 'custom') SEL.ctile = o; else SEL.tile = o;
+  return setSplash(o.lay === 'custom' ? 'ctile' : SEL.splash === 'vtile' || SEL.splash === 'htile' ? SEL.splash : SEL.lineK);
+}
+// non-colour data (normal maps): no sRGB decode
+const dataTex = {};
+async function getDataTex(id) {
+  if (dataTex[id]) return dataTex[id];
+  const t = new THREE.Texture(await loadImage(id)); t.colorSpace = THREE.NoColorSpace; t.anisotropy = maxAniso;
+  t.wrapS = t.wrapT = THREE.RepeatWrapping; t.needsUpdate = true;
+  return (dataTex[id] = t);
+}
+// one material per MSI tile; its normal map holds the grout recess and edge profile at physical slope (relief 1 = true)
+const msiMats = {};
+async function msiMat(t) {
+  if (msiMats[t.id]) return msiMats[t.id];
+  const [map, nrm] = await Promise.all([getColorTex(t.id), getDataTex(t.id + '_n')]);
+  makeCardThumbs(t, map.image);
+  const r = t.relief ?? 0.6;
+  return (msiMats[t.id] = new THREE.MeshPhysicalMaterial({ name: 'tile_' + t.id, map, normalMap: nrm, normalScale: new THREE.Vector2(r, r),
+    roughness: t.rough, clearcoat: t.cc, clearcoatRoughness: 0.05, clearcoatNormalMap: nrm, clearcoatNormalScale: new THREE.Vector2(r, r) }));
+}
+// GPU memory: every finish picked used to stay in memory for good, 4-12 MB each with mipmaps, so browsing the library
+// ran a phone out of memory and iOS reloaded the page. Keep the current picks and the few most recent; older ones are
+// released and come back from the HTTP cache when picked again.
+const TEX_KEEP = PHONE ? 3 : 10, texLRU = [];
+function texUsed(id) {
+  const i = texLRU.indexOf(id); if (i >= 0) texLRU.splice(i, 1); texLRU.push(id);
+  const live = new Set([SEL.counter?.id, SEL.front?.id, SEL.tile?.id, SEL.ctile?.id]);
+  for (let k = 0; texLRU.length > TEX_KEEP && k < texLRU.length;) { const old = texLRU[k]; if (live.has(old)) k++; else { texLRU.splice(k, 1); dropTex(old); } }
+}
+function dropTex(id) {
+  for (const [c, k] of [[colorTex, id], [embossTex, id], [dataTex, id + '_n'], [msiMats, id]]) if (c[k]) { c[k].dispose(); delete c[k]; }
+  delete texImg[id]; delete texImg[id + '_n'];
+}
+// UVs in units of the tile's texture period, so courses start on the counter; vertical turns the texture 90 deg
+// (a rotation: u up the wall, v against x, not a mirror). Built once per layout and period, for both heights.
+function splashUV(vert, p) {
+  const key = (vert ? 'v' : 'h') + p[0] + 'x' + p[1];
+  const bare = g => { const c = new THREE.BufferGeometry(); c.setAttribute('position', g.attributes.position); return c; };
+  splashMeshes.forEach(o => Object.values(o.userData.splashGeo).forEach(g => {
+    g.userData.uv[key] ||= (vert ? boxUV(bare(g), p[0], -p[1], true) : boxUV(bare(g), p[0], p[1])).attributes.uv;
+  }));
+  return key;
+}
+let splashTok = 0;
+async function applySplash() {
+  const tok = ++splashTok, k = SEL.splash, t = tileOf(k); let mat, key;
+  if (!t) { mat = splashSlab; key = 'slab'; }
+  else if (t === SHOWROOM_TILE) { mat = k === 'vtile' ? tileVMat : tileHMat; key = k; }
+  else {
+    busy(t.id, true);
+    try { mat = await msiMat(t); } catch (e) { busy(t.id, false); toast(`Texture for ${t.name} is missing`); return; }
+    busy(t.id, false); texUsed(t.id); if (tok !== splashTok) return;
+    key = splashUV(k === 'vtile', t.p);
+  }
+  SEL.splashUV = key;
+  splashMeshes.forEach(o => { o.material = mat; });
+  setUVs(splashMeshes, key); drawSplashCards(); sceneChanged(); writeHash(); queueThumbs();
 }
 $('splash-h').addEventListener('click', e => { const b = e.target.closest('[data-h]'); if (b) { follow('splash'); setSplashHeight(b.dataset.h); } });
 function setSplashHeight(h) {
   SEL.splashH = h; drawSplashCards();
   splashMeshes.forEach(o => { o.geometry = o.userData.splashGeo[h]; });
-  setUVs(splashMeshes, SEL.splash); sceneChanged(); writeHash(); queueThumbs();
+  setUVs(splashMeshes, SEL.splashUV || SEL.splash); sceneChanged(); writeHash(); queueThumbs();
 }
 
 // ---------- search across every finish
@@ -1390,7 +1516,7 @@ function applySearch() {
   const count = el => el.querySelectorAll('.sw[data-q]:not(.hide)').length;
   opts.querySelectorAll('.grp').forEach(g => { const n = count(g); g.classList.toggle('hide', !n); g.querySelector('h3 .n').textContent = n; });
   opts.querySelectorAll('.sub').forEach(d => { const n = count(d); d.classList.toggle('hide', !n); d.querySelector('summary .n').textContent = n; if (q && n) d.open = true; });
-  ['counter', 'front', 'metal'].forEach(sec => { const card = $('card-' + sec), n = count(card); card.querySelector('.empty').hidden = true; if (q) card.open = n > 0; });
+  ['counter', 'splash', 'front', 'metal'].forEach(sec => { const card = $('card-' + sec), n = count(card); card.querySelector('.empty').hidden = true; if (q) card.open = n > 0; });
   if (!q && preSearch) { folds.forEach((d, i) => d.open = preSearch[i]); preSearch = null; }
 }
 $('q').addEventListener('input', applySearch);
@@ -1418,6 +1544,7 @@ function writeHash() {
   // choice that differs from it as slug.size.finish or bar.metal
   const H = SEL.hw, h = (H.door.slug === 'bar' ? H.door : H.drawer.slug === 'bar' ? H.drawer : { metal: METALS[0] }).metal;
   const p = new URLSearchParams({ c: SEL.counter.id, s: SEL.splash, sh: SEL.splashH, f: SEL.front.id, h: h.id });
+  const tl = tileOf(SEL.splash); if (tl && tl !== SHOWROOM_TILE) p.set('t', tl.id);   // the MSI tile on the backsplash
   for (const [t, k] of [['door', 'hd'], ['drawer', 'hr']]) if (H[t].slug !== 'bar' || H[t].metal !== h) p.set(k, encHw(H[t]));
   p.set('sc', curScene); p.set('v', curView);
   history.replaceState(null, '', '#' + p);
@@ -1429,12 +1556,17 @@ async function restoreBuild() {
   const v = +p.get('v'); goView(Number.isInteger(v) && v >= 0 && v < VIEWS.length && p.has('v') ? v : 0, true);
   const bar = { slug: 'bar', metal: METALS.find(m => m.id === p.get('h')) || METALS[0] };
   const hw = Promise.all([['door', 'hd'], ['drawer', 'hr']].map(([t, k]) => setHw(t, decHw(p.get(k)) || bar)));
+  const tl = TILES.find(t => t.id === p.get('t'));
+  if (tl) { if (tl.lay === 'custom') SEL.ctile = tl; else SEL.tile = tl; }
   setSplashHeight(SPLASH_H[p.get('sh')] ? p.get('sh') : 'full');
-  setSplash(SPLASH.some(o => o.k === p.get('s')) ? p.get('s') : 'vtile');
-  await Promise.all([pickCounter(get('c', CAT.counters[0])), pickFront(get('f', SHOWROOM_PAINT)), hw]);
+  const splash = setSplash(SPLASH.some(o => o.k === p.get('s')) ? p.get('s') : 'vtile');
+  await Promise.all([pickCounter(get('c', CAT.counters[0])), pickFront(get('f', SHOWROOM_PAINT)), hw, splash]);
   restoring = false; writeHash(); queueThumbs();
   // Phones build the path tracer only when Photo render is tapped: compiling it in the background stalls mobile GPUs.
-  if (!PHONE) setTimeout(prewarm, 2500);
+  // Building the path tracer's scene and compiling its shader froze the page for 1-4 s when it ran in the background,
+  // so that waits for the first Photo render click. Desktops fetch its code when the page is idle.
+  const fetchPT = () => loadPT().catch(e => console.warn('[studio] path tracer unavailable', e));
+  if (!PHONE) window.requestIdleCallback ? requestIdleCallback(fetchPT, { timeout: 8000 }) : setTimeout(fetchPT, 3000);
 }
 let toastT = 0;
 function toast(msg) { const t = $('toast'); t.textContent = msg; t.hidden = false; clearTimeout(toastT); toastT = setTimeout(() => t.hidden = true, 2200); }
@@ -1448,10 +1580,10 @@ $('share').addEventListener('click', copyLink); $('sum-share').addEventListener(
 // ---------- summary + about dialogs
 function drawSummary() {
   const sw = chipBg;
-  const sp = SPLASH.find(o => o.k === SEL.splash);
+  const sp = SPLASH.find(o => o.k === SEL.splash), tile = tileOf(SEL.splash);
   const rows = [
     ['counter', 'Countertop', sw(SEL.counter), SEL.counter.name, subline(SEL.counter)],
-    ['splash', 'Backsplash', splashBg(sp), sp.t + ' · ' + SPLASH_H[SEL.splashH], SEL.splash === 'slab' ? 'Matches ' + SEL.counter.name : sp.d],
+    ['splash', 'Backsplash', splashBg(sp), sp.t + ' · ' + SPLASH_H[SEL.splashH], tile ? tile.name + ' · ' + subline(tile) : 'Matches ' + SEL.counter.name],
     ['front', 'Cabinets', sw(SEL.front), SEL.front.name, subline(SEL.front)],
     ...hwSummaryRows(),
   ];
@@ -1475,7 +1607,7 @@ function applyOpen() {
   doors.forEach(d => d.n.quaternion.copy(d.q0).multiply(new THREE.Quaternion().setFromAxisAngle(Y, d.sign * t * d.max)));
   drawers.forEach(d => d.n.position.copy(d.p0).addScaledVector(d.dir, d.travel * t));
 }
-$('open').addEventListener('input', () => { applyOpen(); if (pt) geomDirty = true; });
+$('open').addEventListener('input', () => { applyOpen(); moving = dirty = true; if (pt) geomDirty = true; });
 $('open').addEventListener('change', () => { if (pt && photo) { pt.setScene(scene, camera); geomDirty = false; } });
 
 // ============================ path-traced photo mode ============================
@@ -1490,7 +1622,7 @@ function loadPT() {
       // CSS-pixel resolution and 4 bounces: ~5 samples/s on an M1 Pro, converged still in about a minute
       pt.tiles.set(2, 2); pt.bounces = 4; pt.filterGlossyFactor = 0.4; pt.minSamples = 3; pt.renderDelay = 120; pt.fadeDuration = 0;
       pt.textureSize.set(2048, 2048); pt.renderScale = 1 / renderer.getPixelRatio();
-      pt.rasterizeSceneCallback = () => composer.render();
+      pt.rasterizeSceneCallback = () => { gtao.enabled = true; composer.render(); };
       // Edge-preserving (bilateral) denoise that compares neighbours in log space, so the test is relative. Noise on a
       // bright white sink is ignored as readily as on dark paint, while stone speckle and grain still count as edges.
       // Painted panels are large and matte, where leftover noise reads as grit, so the blur keeps a firm floor.
@@ -1520,17 +1652,9 @@ function loadPT() {
       };
   })());
 }
-// Build the BVH and compile the (large) path-tracing shader in the background shortly after load, so the first
-// click on Photo render does not wait ~30 s for the driver. Lights are snapshotted in their photo-mode state.
-async function prewarm() {
-  try { await loadPT(); } catch (e) { console.warn('[studio] path tracer unavailable', e); return; }
-  if (photo) return;
-  key.visible = false; keyArea.visible = true; pt.setScene(scene, camera); key.visible = true; keyArea.visible = false;
-  pt.renderToCanvas = false; warming = true; geomDirty = false;
-}
 async function enablePhoto(on) {
   photo = on; $('photo').setAttribute('aria-pressed', on); $('photo').textContent = on ? 'Exit photo' : 'Photo render';
-  $('chip').dataset.mode = on ? 'photo' : 'live'; $('spp').textContent = on ? 'Preparing photo render…' : 'Live view';
+  $('chip').dataset.mode = on ? 'photo' : 'live'; $('spp').textContent = on ? 'Preparing photo render…' : 'Live view'; invalidate();
   key.visible = !on; keyArea.visible = on;
   scene.environmentIntensity = on ? PHOTO_ENV : RASTER_ENV;
   Object.values(secMats).forEach(glassMode);
@@ -1541,7 +1665,7 @@ async function enablePhoto(on) {
     catch (e) { console.error(e); toast('Photo render is not available in this browser'); enablePhoto(false); return; }
   }
   if (!photo) return;
-  warming = false; pt.renderToCanvas = true; pt.pausePathTracing = false;
+  pt.pausePathTracing = false;
   if (!pt.scene || pt.scene !== scene || geomDirty) {
     $('spp').textContent = 'building scene…';
     await new Promise(r => setTimeout(r, 30));
@@ -1549,7 +1673,7 @@ async function enablePhoto(on) {
   } else { pt.updateLights(); pt.updateMaterials(); pt.updateEnvironment(); pt.updateCamera(); }
 }
 $('photo').addEventListener('click', () => enablePhoto(!photo));
-function camMoved() { if (pt && photo) pt.updateCamera(); }
+function camMoved() { moving = dirty = true; if (pt && photo) pt.updateCamera(); }
 controls.addEventListener('change', camMoved);
 
 $('shot').addEventListener('click', () => {
@@ -1558,6 +1682,7 @@ $('shot').addEventListener('click', () => {
 });
 
 // ============================ loop ============================
+function invalidate() { dirty = true; }
 function resize() {
   const w = canvas.clientWidth, h = canvas.clientHeight; if (!w || !h) return;
   renderer.setSize(w, h, false); composer.setSize(w, h);
@@ -1565,12 +1690,17 @@ function resize() {
 }
 new ResizeObserver(resize).observe(canvas);
 const ease = t => t < .5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2;
-function frame() {
-  if (photo && pt && !geomDirty) {
+// fast: skip GTAO, about 5x cheaper (4.8 vs 22.6 ms a frame on an M1 Pro at 2x pixel ratio)
+function frame(fast) {
+  if (photo && pt && pt.scene && !geomDirty) {
     pt.renderSample();
-    $('spp').textContent = pt.isCompiling ? 'Preparing photo render…' : pt.samples >= MAX_SPP ? `Photo · done (${MAX_SPP} samples)` : `Photo · ${Math.floor(pt.samples)} / ${MAX_SPP}`;
-  } else composer.render();
+    const s = pt.isCompiling ? 'Preparing photo render…' : pt.samples >= MAX_SPP ? `Photo · done (${MAX_SPP} samples)` : `Photo · ${Math.floor(pt.samples)} / ${MAX_SPP}`;
+    if ($('spp').textContent !== s) $('spp').textContent = s;
+  } else { gtao.enabled = !fast; composer.render(); }
 }
+// Frames are drawn only when something changed (invalidate, camMoved): an idle page used to redraw the whole scene with
+// ambient occlusion every frame, which kept the GPU busy and made scrolling and picking lag. While the camera or the
+// fronts move, frames skip GTAO; one full-quality frame follows when they stop. Photo render runs until it converges.
 renderer.setAnimationLoop(now => {
   if (!ready) return;
   if (tween) {
@@ -1579,10 +1709,15 @@ renderer.setAnimationLoop(now => {
     camera.fov = tween.f0 + (tween.fov - tween.f0) * e; camera.updateProjectionMatrix(); if (k === 1) tween = null;
     camMoved();
   }
-  controls.update();
-  if (warming) { pt.renderSample(); if (!pt.isCompiling && pt.samples >= 1) warming = false; }
-  else if (pt) pt.pausePathTracing = pt.samples >= MAX_SPP;
-  frame();
+  controls.update();   // fires 'change' (camMoved) while the user drags and while damping settles
+  if (photo && pt && pt.scene) {   // pt.scene: built by enablePhoto (the code may be loaded at idle without it)
+    pt.pausePathTracing = pt.samples >= MAX_SPP;
+    if (dirty || geomDirty || pt.isCompiling || !pt.pausePathTracing) frame(moving);
+    dirty = moving = false; return;
+  }
+  if (!dirty) return;
+  const fast = moving; moving = false; dirty = fast;
+  frame(fast);
 });
 </script>
 </body>

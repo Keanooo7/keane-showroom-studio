@@ -12,6 +12,8 @@ Sources (downloaded by hand into materials/, see materials/manifest.json):
   materials/vadara/*.jpg  vadara.uk/designs                    full slab, 126 x 63 in
   materials/msi/*.jpg     msisurfaces.com/granite-countertops  close-up, assumed 24 x 24 in
   materials/decore/*.jpg  decore.com DRS131 finishes           400 px chip, assumed ~10 in across
+MSI backsplash tile comes from materials/msi_tile/tiles.json, whose textures tools/msi_tiles.py has already written to
+viewer/textures/ (true-scale repeats measured from the maker's photos); only the catalog goes into the page.
 
 Paths are relative to the repo root, so this runs from any checkout:  python3 tools/build_studio.py
 (TK_DATA=<dir> python3 tools/build_studio.py reads geom/ and finishes.json from <dir> instead, e.g. mock data.)
@@ -87,7 +89,9 @@ for d in M['vadara']:
 for d in M['msi']:
     im = Image.open(R / d['file']).convert('RGB')
     tid = 'msi_' + slug(d['name'])
-    write_tex(tid, seamless(im), 86)
+    st = seamless(im)   # 2048 px at most, like the slabs: larger costs GPU memory and the path tracer resizes to 2048 anyway
+    if max(st.size) > 2048: st = st.resize((round(2048 * st.width / max(st.size)), round(2048 * st.height / max(st.size))), Image.Resampling.LANCZOS)
+    write_tex(tid, st, 86)
     lum = ImageStat.Stat(im.convert('L')).mean[0]   # tone bands for grouping, like a maker's colour tiers
     tone = 'Light & white' if lum >= 155 else 'Mid tones' if lum >= 80 else 'Dark & black'
     counters.append(dict(id=tid, name=d['name'], brand='MSI granite', kind='tile', group=tone, size_mm=[609.6, 609.6], thumb=thumb(im, 84, 56)))
@@ -200,10 +204,52 @@ def hardware():
 
 hw = hardware()
 
+def tiles():
+    """MSI backsplash tile (materials/msi_tile/tiles.json, made by tools/msi_tiles.py; its textures are already in
+    viewer/textures/). Every usable SKU goes in. lay 'line': a rectangular tile laid in courses (running or stack bond),
+    offered both horizontally and turned 90 deg for vertical; lay 'custom': squares, hexagons, penny rounds, arabesques,
+    pickets, herringbone and other patterns, laid as photographed. Trim pieces (bullnose, quarter round) are not wall
+    field tile and stay out. Compact keys: p = texture period [w, h] mm, cc = clearcoat, th = chip picture."""
+    src = R / 'materials/msi_tile/tiles.json'
+    if not src.exists(): print('warning: materials/msi_tile/tiles.json missing, no MSI tile'); return []
+    T = [t for t in json.load(open(src))['tiles'] if t.get('usable') and t.get('tex')]
+    have = [t for t in T if (TEX / f'{t["id"]}.js').exists() and (TEX / f'{t["id"]}_n.js').exists()]
+    if len(have) < len(T): print(f'warning: {len(T) - len(have)} MSI tiles have no texture file and are left out: '
+                                 + ', '.join(t['sku'] for t in T if t not in have))
+    tones = [('White & cream', ('white', 'cream')), ('Gray', ('gray', 'grey', 'silver')), ('Beige & brown', ('beige', 'brown', 'taupe')),
+             ('Blue', ('blue',)), ('Green', ('green',)), ('Black', ('black',)), ('Red & pink', ('red', 'pink'))]
+    shapes = [('Hexagon', ('hexagon', 'hexo', 'hive', 'petal')), ('Penny round', ('penny',)), ('Octagon', ('octagon',)),
+              ('Arabesque & scallop', ('arabesque', 'scalop', 'scallop', 'fish scale', 'teardrop')), ('Picket', ('picket', 'pkt')),
+              ('Herringbone & weave', ('herringbone', 'basketweave', 'weave'))]
+    pick = lambda text, table, other: next((k for k, ws in table if any(w in text for w in ws)), other)
+    dup = {}
+    for t in have: dup[t['product']] = dup.get(t['product'], 0) + 1
+    out = []
+    for t in have:
+        L, S = t['tile_mm'] or (0, 0); bond = t['tex']['bond']
+        lay = 'line' if bond in ('running', 'stack') and S and L / S >= 1.4 else 'custom'
+        text = ' '.join([t['name'], t['product'], t['style']]).lower()
+        if lay == 'line': grp = pick((t['color'] or '').split(',')[0].lower(), tones, 'Other')
+        elif bond in ('running', 'stack') and S and L / S < 1.4 and 'hex' not in text: grp = 'Squares & checks'
+        elif bond == 'herringbone': grp = 'Herringbone & weave'
+        else: grp = pick(text, shapes, 'Squares & checks' if re.search(r'chex|check', text) else 'Other patterns')
+        name = re.sub(r'\s*®\s*', ' ', t['product']).strip()
+        if dup[t['product']] > 1: name += f' {t["size_label"]} {t["finish"]}'.rstrip()
+        size = re.sub(r'(?i)\s*x\s*', ' × ', t['size_label'].replace('"', '').replace('”', '')).strip()
+        out.append(dict(id=t['id'], name=name, code=t['sku'], family=' · '.join(v for v in (size + (' in' if re.search(r'\d$', size) else ''), t['finish']) if v),
+                        coll=t['collection'] or '', lay=lay, group=grp, bond=bond, p=t['tex']['period_mm'],
+                        rough=t['rough'], cc=t['clearcoat'], relief=t['relief'], th=t['thumb'],
+                        url=t['url'].replace('https://www.msisurfaces.com/', '')))
+    order = {g: i for i, g in enumerate([k for k, _ in tones] + ['Other'] + [k for k, _ in shapes] + ['Squares & checks', 'Other patterns'])}
+    out.sort(key=lambda o: (o['lay'] != 'line', order.get(o['group'], 99), o['coll'], o['name']))
+    return out
+
+tile = tiles()
+
 mats = A['materials']
 digest = dict(parts=parts, views=views, photoPaint=mats['mat_cabinet_primary']['baseColor'],
               photoMetal=mats['mat_hardware_finish']['baseColor'])
-catalog = dict(counters=counters, fronts=fronts, sources=M.get('sources', {}), hardware=hw)
+catalog = dict(counters=counters, fronts=fronts, sources=M.get('sources', {}), hardware=hw, tiles=tile)
 glb = base64.b64encode(open(R / 'export/kitchen_world.glb', 'rb').read()).decode()
 safe = lambda o: json.dumps(o, separators=(',', ':')).replace('</', '<\\/')
 html = (R / 'viewer/studio_template.html').read_text()
@@ -214,6 +260,8 @@ tex_bytes = sum(p.stat().st_size for p in TEX.glob('*.js'))
 print(f'counters {len(counters)} (quartz {sum(c["kind"] == "slab" for c in counters)}, granite {sum(c["kind"] == "tile" for c in counters)}), '
       f'fronts {len(fronts)} (solid {sum(f["group"] == "solid" for f in fronts)}, woodgrain {sum(f["group"] == "woodgrain" for f in fronts)}, '
       f'textured {sum(f["kind"] == "tex" for f in fronts)})')
+print(f'MSI tile {len(tile)} (horizontal / vertical {sum(t["lay"] == "line" for t in tile)}, custom {sum(t["lay"] == "custom" for t in tile)}), '
+      f'{len(safe(tile)) / 1e3:.0f} kB in the page')
 print(f'page {len(html) / 1e6:.2f} MB -> {out.relative_to(R)}; textures {tex_bytes / 1e6:.1f} MB in {TEX.relative_to(R)}/')
 hw_bytes = sum(p.stat().st_size for p in HWD.rglob('*.*'))
 print(f'hardware {len(hw["products"])} products, {sum(len(p["s"]) for p in hw["products"])} sizes, {len(hw["finishes"])} finishes; '

@@ -1,0 +1,3 @@
+{"image": "https://cdn.msisurfaces.com/images/mosaics/arabescato-venato-4x12-slat-honed.jpg",
+ "rotate90": true, "period_px": [803, 267], "grout_mm": 1.6,
+ "notes": "audit1: tiles stand vertically in the main photo, 4 slats (66.6 px) per 4 in tile, joints at x 92 / 359 / 626 px; the auto run took each slat for a course (4x scale error)"}

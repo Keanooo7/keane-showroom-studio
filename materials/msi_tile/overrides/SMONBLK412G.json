@@ -1,0 +1,1 @@
+{"mode": "lattice", "image": 1, "period_px": [291.6, 101.4], "px_per_in": 17.4, "bond": "herringbone", "kind": "field", "notes": "audit3: MSI only shows this 4x12 in a 45 deg herringbone; repeat 291.6 x 101.4 px = (L+g)*sqrt2 x (S+g)*sqrt2 at 17.4 px/in"}

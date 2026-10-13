@@ -1,0 +1,12 @@
+{
+ "image": "https://cdn.msisurfaces.com/images/porcelainceramic/brickstone-roustique-2x18-porcelain.jpg",
+ "period_px": [
+  588,
+  68.3
+ ],
+ "bond": "running",
+ "offset": 0.5,
+ "grout_mm": 2.6,
+ "notes": "audit1: main photo (12 courses, 68.3 px pitch, joints alternating x 237 / 550) instead of the 6-course close-up that gave one unique brick (15 of 16 reused); joint pitch = course x nominal aspect (stain edges read as joints); mortar ~3-4 px (2.6 mm); accepted by hand: the \"missing joints\" check fails on rust-stain edges, the texture matches the photo (half bond, 12 courses)",
+ "usable": true
+}
