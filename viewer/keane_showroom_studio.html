@@ -136,6 +136,12 @@ details[open]>summary .chev{transform:rotate(180deg)}
 .sw.hide,.grp.hide,.sub.hide{display:none}
 .empty{color:var(--muted);font-size:14px;margin:0}
 .empty[hidden]{display:none}
+/* backsplash height: two-way segmented switch above the option cards */
+.seg{display:flex;align-items:center;gap:12px;margin-bottom:12px}
+.seg>span{font-weight:600;font-size:14.5px}
+.seg div{display:flex;flex:1;padding:3px;border-radius:10px;background:var(--soft)}
+.seg button{flex:1;height:34px;border:0;border-radius:8px;background:transparent;cursor:pointer;font-size:14px;color:var(--muted)}
+.seg button[aria-pressed="true"]{background:var(--card);color:var(--ink);font-weight:600;box-shadow:0 1px 3px rgba(0,0,0,.12)}
 /* option cards (backsplash), like the seat cards */
 .optcards{display:grid;grid-template-columns:1fr 1fr;gap:10px}
 /* block layout, not flex: iOS Safari does not apply a button's flex layout to its children, so the picture span collapsed */
@@ -246,7 +252,11 @@ dialog::backdrop{background:rgba(10,10,12,.45);backdrop-filter:blur(2px)}
     </details>
     <details class="card" id="card-splash" data-view="1" open>
       <summary><h2>Backsplash</h2><span class="sel" id="sel-splash"></span><svg class="chev"><use href="#i-chev"/></svg></summary>
-      <div class="body"><div class="optcards" id="splash" role="group" aria-label="Backsplash"></div></div>
+      <div class="body">
+        <div class="seg"><span id="splash-h-lbl">Height</span><div id="splash-h" role="group" aria-labelledby="splash-h-lbl">
+          <button data-h="full" aria-pressed="true">Full height</button><button data-h="low" aria-pressed="false">6 in</button></div></div>
+        <div class="optcards" id="splash" role="group" aria-label="Backsplash"></div>
+      </div>
     </details>
     <details class="card" id="card-front" data-view="2" open>
       <summary><h2>Cabinets</h2><span class="sel" id="sel-front"></span><svg class="chev"><use href="#i-chev"/></svg></summary>
@@ -458,6 +468,7 @@ function tileSet({ tw, th, cols, rows, bond, seed }) {
 }
 const tileV = tileSet({ tw: 3 * IN, th: 12 * IN, cols: 8, rows: 4, bond: false, seed: 11 });   // vertical stack
 const tileH = tileSet({ tw: 12 * IN, th: 3 * IN, cols: 2, rows: 16, bond: true, seed: 23 });   // horizontal running bond
+const SPLASH_LOW = 6 * IN;   // 6 in backsplash height; the wall shows between it and the upper cabinets
 
 // Polished showroom floor: soft mottling.
 const mott = noise2D(512, 6, 5, 3);
@@ -701,10 +712,18 @@ new GLTFLoader().parse(bin.buffer, '', gltf => {
     else if (isBox(o.geometry) && mname === 'mat_cabinet_primary') { o.geometry = boxUV(rbox(bb.min.x, bb.max.x, bb.min.y, bb.max.y, bb.min.z, bb.max.z, 1.5), GRAIN_U, GRAIN_V, (bb.max.x - bb.min.x) > (bb.max.y - bb.min.y)); report.boxes++; }
     else if (mname === 'mat_backsplash_tile') {
       const g = o.geometry = o.geometry.index ? o.geometry.toNonIndexed() : o.geometry, w1 = id.endsWith('01');
-      const slabUV = boxUV(g.clone(), 126 * IN, 63 * IN, false, w1 ? 0.05 : 0.2, w1 ? 0.1 : 0.45).attributes.uv;   // its own area of the slab
-      const hUV = boxUV(g.clone(), tileH.pw, tileH.ph).attributes.uv;
-      boxUV(g, tileV.pw, tileV.ph);
-      g.userData.uv = { vtile: g.attributes.uv, htile: hUV, slab: slabUV }; splashMeshes.push(o);
+      // 6 in version: local y = 0 is the counter top, so flatten everything above SPLASH_LOW onto that plane. Faces above
+      // collapse to nothing, and the top caps land on one plane with identical UVs (top-face UVs ignore height).
+      const low = g.clone(); low.userData = {};
+      const P = low.attributes.position; for (let i = 0; i < P.count; i++) P.setY(i, Math.min(P.getY(i), SPLASH_LOW));
+      low.computeBoundingBox(); low.computeBoundingSphere();
+      for (const v of [g, low]) {
+        const slabUV = boxUV(v.clone(), 126 * IN, 63 * IN, false, w1 ? 0.05 : 0.2, w1 ? 0.1 : 0.45).attributes.uv;   // its own area of the slab
+        const hUV = boxUV(v.clone(), tileH.pw, tileH.ph).attributes.uv;
+        boxUV(v, tileV.pw, tileV.ph);
+        v.userData.uv = { vtile: v.attributes.uv, htile: hUV, slab: slabUV };
+      }
+      o.userData.splashGeo = { full: g, low }; splashMeshes.push(o);
     }
     else if (mname === 'mat_cabinet_primary') boxUV(o.geometry = o.geometry.index ? o.geometry.toNonIndexed() : o.geometry, GRAIN_U, GRAIN_V);
     else if (id.startsWith('reference_floor')) boxUV(o.geometry = o.geometry.toNonIndexed(), 3000);
@@ -847,7 +866,7 @@ $('body-front').innerHTML =
   sub('Decore woodgrain', groupBy(woods, 'family', ['Smooth woodgrain', 'Textured']), 'front', false) + empty;
 $('body-metal').innerHTML = grp('Bar pulls', METALS, 'metal') + empty;
 
-const SEL = { counter: null, front: null, metal: null, splash: 'vtile' };
+const SEL = { counter: null, front: null, metal: null, splash: 'vtile', splashH: 'full' };
 let lastSection = null, restoring = false;
 function markSelected(sec, id) {
   const card = $('card-' + sec), it = ITEMS[id];
@@ -915,18 +934,26 @@ const tileThumb = s => { const c = document.createElement('canvas'); c.width = 2
 const SPLASH = [
   { k: 'vtile', t: 'Vertical tile', d: '3 × 12 in glazed tile, vertical stack.', thumb: tileThumb(tileV), mat: tileVMat },
   { k: 'htile', t: 'Horizontal tile', d: '12 × 3 in glazed tile, running bond.', thumb: tileThumb(tileH), mat: tileHMat },
-  { k: 'slab', t: 'Full-height slab', d: 'Cut from the same stone as the countertop.', mat: splashSlab },
+  { k: 'slab', t: 'Stone slab', d: 'Cut from the same stone as the countertop.', mat: splashSlab },
 ];
+const SPLASH_H = { full: 'Full height', low: '6 in' };
 const splashBg = o => `background-image:url(${o.thumb || SEL.counter?.thumb || ''})`;
 function drawSplashCards() {
   $('splash').innerHTML = SPLASH.map(o => `<button class="oc" data-k="${o.k}" aria-pressed="${SEL.splash === o.k}"><span class="img" style="${splashBg(o)}"></span><b>${o.t}</b><small>${o.d}</small><span class="dot"></span></button>`).join('');
-  $('sel-splash').textContent = SPLASH.find(o => o.k === SEL.splash).t + (SEL.splash === 'slab' && SEL.counter ? ' · ' + SEL.counter.name : '');
+  $('sel-splash').textContent = SPLASH.find(o => o.k === SEL.splash).t + ' · ' + SPLASH_H[SEL.splashH] + (SEL.splash === 'slab' && SEL.counter ? ' · ' + SEL.counter.name : '');
+  document.querySelectorAll('#splash-h [data-h]').forEach(b => b.setAttribute('aria-pressed', b.dataset.h === SEL.splashH));
 }
 $('splash').addEventListener('click', e => { const b = e.target.closest('[data-k]'); if (b) { follow('splash'); setSplash(b.dataset.k); } });
 function setSplash(k) {
   SEL.splash = k; drawSplashCards();
   const sp = SPLASH.find(o => o.k === k); splashMeshes.forEach(o => { o.material = sp.mat; });
   setUVs(splashMeshes, k); sceneChanged(); writeHash(); queueThumbs();
+}
+$('splash-h').addEventListener('click', e => { const b = e.target.closest('[data-h]'); if (b) { follow('splash'); setSplashHeight(b.dataset.h); } });
+function setSplashHeight(h) {
+  SEL.splashH = h; drawSplashCards();
+  splashMeshes.forEach(o => { o.geometry = o.userData.splashGeo[h]; });
+  setUVs(splashMeshes, SEL.splash); sceneChanged(); writeHash(); queueThumbs();
 }
 
 // ---------- search across every finish
@@ -964,7 +991,7 @@ addEventListener('scroll', hideTip, { passive: true });
 // ---------- build state in the URL: Share copies a link that reopens this exact build
 function writeHash() {
   if (restoring || !SEL.counter || !SEL.front || !SEL.metal) return;
-  const p = new URLSearchParams({ c: SEL.counter.id, s: SEL.splash, f: SEL.front.id, h: SEL.metal.id, sc: curScene, v: curView });
+  const p = new URLSearchParams({ c: SEL.counter.id, s: SEL.splash, sh: SEL.splashH, f: SEL.front.id, h: SEL.metal.id, sc: curScene, v: curView });
   history.replaceState(null, '', '#' + p);
 }
 async function restoreBuild() {
@@ -973,6 +1000,7 @@ async function restoreBuild() {
   setScene(SCENES[p.get('sc')] ? p.get('sc') : 'showroom');
   const v = +p.get('v'); goView(Number.isInteger(v) && v >= 0 && v < VIEWS.length && p.has('v') ? v : 0, true);
   pickMetal(get('h', METALS[0]));
+  setSplashHeight(SPLASH_H[p.get('sh')] ? p.get('sh') : 'full');
   setSplash(SPLASH.some(o => o.k === p.get('s')) ? p.get('s') : 'vtile');
   await Promise.all([pickCounter(get('c', CAT.counters[0])), pickFront(get('f', SHOWROOM_PAINT))]);
   restoring = false; writeHash(); queueThumbs();
@@ -994,7 +1022,7 @@ function drawSummary() {
   const sp = SPLASH.find(o => o.k === SEL.splash);
   const rows = [
     ['counter', 'Countertop', sw(SEL.counter), SEL.counter.name, subline(SEL.counter)],
-    ['splash', 'Backsplash', splashBg(sp), sp.t, SEL.splash === 'slab' ? 'Matches ' + SEL.counter.name : sp.d],
+    ['splash', 'Backsplash', splashBg(sp), sp.t + ' · ' + SPLASH_H[SEL.splashH], SEL.splash === 'slab' ? 'Matches ' + SEL.counter.name : sp.d],
     ['front', 'Cabinets', sw(SEL.front), SEL.front.name, subline(SEL.front)],
     ['metal', 'Hardware', sw(SEL.metal), SEL.metal.name, '6-3/4 in bar pulls'],
   ];
