@@ -12,6 +12,7 @@ Sources (downloaded by hand into materials/, see materials/manifest.json):
   materials/vadara/*.jpg  vadara.uk/designs                    full slab, 126 x 63 in
   materials/msi/*.jpg     msisurfaces.com/granite-countertops  close-up, assumed 24 x 24 in
   materials/decore/*.jpg  decore.com DRS131 finishes           400 px chip, assumed ~10 in across
+Sherwin-Williams paint colours are materials/sherwin_williams/colors.json (tools/fetch_sw_colors.py): hex values only.
 MSI backsplash tile comes from materials/msi_tile/tiles.json, whose textures tools/msi_tiles.py has already written to
 viewer/textures/ (true-scale repeats measured from the maker's photos); only the catalog goes into the page.
 
@@ -119,6 +120,13 @@ for d in M['decore']:
     else:
         e.update(kind='solid')
     fronts.append(e)
+
+# ---- Sherwin-Williams paint (materials/sherwin_williams/colors.json, from tools/fetch_sw_colors.py): a painted
+# five-piece door in each colour. The published hex is the colour; lightest first within each family.
+SW = json.load(open(R / 'materials/sherwin_williams/colors.json'))['colors']
+for c in sorted(SW, key=lambda c: -sum(int(c['hex'][i:i + 2], 16) for i in (1, 3, 5))):
+    fronts.append(dict(id='sw_' + c['code'][3:], name=c['name'], code=c['code'], brand='Sherwin-Williams', group='sw', family=c['family'],
+                       kind='paint', color=[round(s2l(int(c['hex'][i:i + 2], 16)), 4) for i in (1, 3, 5)]))
 
 # ---- Top Knobs knobs & pulls (materials/topknobs/README.md): the page embeds the catalog; each product's geometry is
 # viewer/hardware/<slug>.js (JSONP, loaded on pick) and its chip picture viewer/hardware/thumbs/<slug>.jpg.
@@ -259,7 +267,7 @@ out.write_text(html)
 tex_bytes = sum(p.stat().st_size for p in TEX.glob('*.js'))
 print(f'counters {len(counters)} (quartz {sum(c["kind"] == "slab" for c in counters)}, granite {sum(c["kind"] == "tile" for c in counters)}), '
       f'fronts {len(fronts)} (solid {sum(f["group"] == "solid" for f in fronts)}, woodgrain {sum(f["group"] == "woodgrain" for f in fronts)}, '
-      f'textured {sum(f["kind"] == "tex" for f in fronts)})')
+      f'textured {sum(f["kind"] == "tex" for f in fronts)}, Sherwin-Williams paint {sum(f["group"] == "sw" for f in fronts)})')
 print(f'MSI tile {len(tile)} (horizontal / vertical {sum(t["lay"] == "line" for t in tile)}, custom {sum(t["lay"] == "custom" for t in tile)}), '
       f'{len(safe(tile)) / 1e3:.0f} kB in the page')
 print(f'page {len(html) / 1e6:.2f} MB -> {out.relative_to(R)}; textures {tex_bytes / 1e6:.1f} MB in {TEX.relative_to(R)}/')

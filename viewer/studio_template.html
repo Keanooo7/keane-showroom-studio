@@ -173,6 +173,36 @@ details[open]>summary .chev{transform:rotate(180deg)}
 .oc small{display:block;color:var(--muted);font-size:13px;line-height:1.35;padding-right:24px}
 .oc .dot{position:absolute;right:10px;bottom:10px;width:20px;height:20px;border-radius:50%;border:1.5px solid var(--line);background:var(--card)}
 .oc[aria-pressed="true"] .dot{border:6px solid var(--ring)}
+/* cabinets: door style and drawer front cards carry an elevation sketch of two base cabinets */
+.optcards.c3{grid-template-columns:repeat(3,minmax(0,1fr))}
+/* door style / drawer fronts: radio cards (labels, so the content stacks from the top on every browser) */
+.oc.rad{display:flex;flex-direction:column}
+.oc.rad small{flex:1}
+.oc.rad:has(input:checked){border-color:var(--ring);box-shadow:inset 0 0 0 1px var(--ring)}
+.oc.rad:has(input:checked) .dot{border:6px solid var(--ring)}
+.oc.rad:has(input:focus-visible){outline:2px solid var(--accent);outline-offset:2px}
+.c3 .oc small{padding-right:0}
+.c3 .oc .dot{top:16px;right:16px;bottom:auto}
+.note[hidden]{display:none}
+.searching .fstyle{display:none}
+.oc .img.elev{background:var(--bg)}
+.elev svg{display:block;width:100%;height:100%}
+.elev .f{fill:var(--card);stroke:var(--muted);stroke-width:1}
+.elev .f.hl{fill:color-mix(in srgb,var(--accent) 22%,var(--card));stroke:var(--accent)}
+.elev .p{fill:none;stroke:var(--muted);stroke-width:.8}
+.elev .h{stroke:var(--ink);stroke-width:2;stroke-linecap:round}
+.lbl{margin:0 0 10px;font-size:14.5px;font-weight:600}
+.lbl+.note{margin:-4px 0 10px}
+/* end of the options: what is chosen so far, and the way to the summary */
+.done{padding:20px;display:flex;flex-direction:column;gap:14px}
+.done h2{margin:0;font-size:20px;font-weight:600}
+.done ol{margin:0;padding:0;list-style:none;display:grid;grid-template-columns:1fr 1fr;gap:8px 12px}
+.done li{display:flex;align-items:center;gap:8px;font-size:14px;color:var(--muted)}
+.done li i{width:18px;height:18px;border-radius:50%;border:1.5px solid var(--line);flex:none;display:grid;place-items:center}
+.done li.ok{color:var(--ink)}
+.done li.ok i{background:var(--ink);border-color:var(--ink)}
+.done li.ok i::after{content:"";width:8px;height:4px;border:solid var(--bg);border-width:0 0 1.6px 1.6px;transform:translate(0,-1px) rotate(-45deg)}
+.b.wide{width:100%;height:52px;font-size:16px}
 /* backsplash tile pickers: rectangular tile under Vertical / Horizontal, mosaics and patterns under Custom; a search shows both */
 #splash-pick>div{display:flex;flex-direction:column;gap:18px}
 #splash-pick[data-lay="line"] .pk-custom,#splash-pick[data-lay="custom"] .pk-line,#splash-pick[data-lay="none"]>div{display:none}
@@ -188,16 +218,69 @@ dialog::backdrop{background:rgba(10,10,12,.45);backdrop-filter:blur(2px)}
 .dh{display:flex;align-items:center;justify-content:space-between;padding:20px 24px 8px}
 .dh h2{margin:0;font-size:22px;font-weight:600}
 .db{padding:8px 24px 24px;display:flex;flex-direction:column;gap:14px}
-.row{display:grid;grid-template-columns:56px 1fr auto;gap:14px;align-items:center;padding:10px 0;border-top:1px solid var(--line)}
-.row .ph{width:56px;height:56px;border-radius:10px;background:var(--soft) center/cover}
-.row .k{font-size:12.5px;color:var(--muted);text-transform:uppercase;letter-spacing:.06em}
-.row .v{font-weight:600}
-.row .s{color:var(--muted);font-size:13.5px}
-.acts{display:flex;gap:10px;flex-wrap:wrap}
 .toast{position:fixed;left:50%;bottom:24px;transform:translateX(-50%);background:var(--ink);color:var(--bg);padding:10px 16px;border-radius:10px;font-size:14px;z-index:60}
 .toast[hidden]{display:none}
 .about ul{margin:0;padding-left:18px;color:var(--muted);font-size:14.5px}
 .about li{margin:5px 0}.about b{color:var(--ink)}
+
+/* ---------- summary page (after Porsche's summary: a gallery of the finished build, then every selection by section) ---------- */
+body.sum-open{overflow:hidden}
+.summary{position:fixed;inset:var(--bar-h) 0 0;z-index:20;overflow-y:auto;background:var(--bg);overscroll-behavior:contain}
+.summary[hidden]{display:none}
+.sm{max-width:1320px;margin:0 auto;padding:20px clamp(16px,2.4vw,28px) 64px;display:flex;flex-direction:column;gap:32px}
+.sm-hero{display:grid;grid-template-columns:minmax(0,1fr) 360px;gap:24px;align-items:start}
+.sm-main{position:relative;border-radius:var(--r-card);overflow:hidden;background:var(--stage);aspect-ratio:16/10}
+.sm-main img{display:block;width:100%;height:100%;object-fit:cover}
+.sm-main img:not([src]){visibility:hidden}
+.sm-main .wait{position:absolute;inset:0;display:grid;place-items:center;color:var(--muted);font:500 13px var(--f-mono)}
+.sm-main .wait[hidden]{display:none}
+.sm-main .cap{position:absolute;left:14px;bottom:14px;padding:7px 11px;border-radius:999px;background:var(--glass);color:var(--glass-ink);font:500 12px/1 var(--f-mono);backdrop-filter:blur(10px)}
+.sm-main .cap:empty{display:none}
+.sm-main .arrow{width:40px;height:40px}
+.sm-main .arrow.l{left:12px}.sm-main .arrow.r{right:12px}
+.sm-thumbs{display:flex;gap:8px;margin-top:10px;overflow-x:auto;padding:3px;scrollbar-width:none}
+.sm-thumbs button{flex:0 0 auto;width:112px;height:70px;border-radius:10px;border:0;padding:0;cursor:pointer;background:var(--stage) center/cover no-repeat;position:relative}
+.sm-thumbs button[aria-pressed="true"]{box-shadow:0 0 0 2px var(--bg),0 0 0 4px var(--ring)}
+.sm-thumbs em{position:absolute;left:6px;bottom:5px;font:600 10.5px/1 var(--f-body);font-style:normal;color:#fff;text-shadow:0 1px 3px rgba(0,0,0,.7)}
+.sm-side{padding:24px;display:flex;flex-direction:column;gap:18px;position:sticky;top:20px}
+.eyebrow{margin:0;font:500 12px var(--f-mono);letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+.sm-side h1{margin:4px 0 0;font-size:30px;line-height:1.1;font-weight:600}
+.sm-side .meta{margin:6px 0 0;color:var(--muted);font-size:14px}
+.sm-key{margin:0;display:flex;flex-direction:column;border-top:1px solid var(--line)}
+.sm-key div{display:grid;grid-template-columns:100px minmax(0,1fr);gap:12px;padding:10px 0;border-bottom:1px solid var(--line);font-size:14px}
+.sm-key dt{color:var(--muted)}
+.sm-key dd{margin:0;font-weight:600;overflow-wrap:anywhere}
+.sm-acts{display:flex;flex-direction:column;gap:8px}
+.sm-acts .b{width:100%}
+.sm-sec>h2{margin:0 0 14px;font-size:26px;font-weight:600}
+.sm-cats{display:flex;flex-direction:column;gap:14px}
+.sm-cat{padding:18px 20px}
+.sm-cat header{display:flex;align-items:baseline;justify-content:space-between;gap:12px;margin-bottom:14px}
+.sm-cat h3{margin:0;font-size:19px;font-weight:600}
+.sm-items{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:12px}
+.sm-item{display:grid;grid-template-columns:72px minmax(0,1fr);gap:14px;align-items:center;padding:10px;border-radius:12px;background:var(--bg)}
+.sm-item .ph{width:72px;height:72px;border-radius:10px;background:var(--soft) center/cover no-repeat;overflow:hidden;box-shadow:inset 0 0 0 1px rgba(0,0,0,.06)}
+.sm-item .k{font-size:12px;color:var(--muted);text-transform:uppercase;letter-spacing:.06em}
+.sm-item .v{font-weight:600;margin-top:1px}
+.sm-item .s{color:var(--muted);font-size:13.5px;margin-top:1px}
+.sm-tw{overflow-x:auto;border-radius:var(--r-card)}
+.sm-spec{width:100%;border-collapse:collapse;font-size:14px;min-width:560px}
+.sm-spec th,.sm-spec td{text-align:left;padding:12px 16px;border-bottom:1px solid var(--line);vertical-align:top}
+.sm-spec th{font-size:12px;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:.06em}
+.sm-spec tbody tr:last-child td{border-bottom:0}
+.sm-spec td:first-child{color:var(--muted);white-space:nowrap}
+.sm-spec .code{font:500 13px var(--f-mono);color:var(--muted)}
+.sm-spec .n{text-align:right;font-variant-numeric:tabular-nums}
+.sm-foot{margin:0;color:var(--muted);font-size:13px}
+@media (max-width:980px){.sm-hero{grid-template-columns:minmax(0,1fr)}.sm-side{position:static}.sm-thumbs button{width:84px;height:54px}}
+@media print{
+  .appbar,.app,.sm-acts,.sm-main .arrow,.sm-thumbs,.sm-cat header .linkbtn,.toast{display:none!important}
+  body,body.sum-open{background:#fff;overflow:visible}
+  .summary{position:static;overflow:visible}
+  .sm-hero{grid-template-columns:minmax(0,1fr)}
+  .card{box-shadow:none;border:1px solid #ddd}
+  .sm-sec,.sm-cat{break-inside:avoid}
+}
 
 @media (max-width:980px){
   .app{grid-template-columns:minmax(0,1fr);gap:16px}
@@ -292,27 +375,63 @@ dialog::backdrop{background:rgba(10,10,12,.45);backdrop-filter:blur(2px)}
       <summary><h2>Hardware</h2><span class="sel" id="sel-metal"></span><svg class="chev"><use href="#i-chev"/></svg></summary>
       <div class="body" id="body-metal"></div>
     </details>
+    <div class="card done" id="done">
+      <h2 id="done-h">Your selections</h2>
+      <ol id="done-steps"></ol>
+      <button class="b primary wide" id="to-summary">View summary</button>
+    </div>
   </section>
 </main>
+
+<section class="summary" id="summary" aria-labelledby="sm-h" hidden>
+  <div class="sm">
+    <div><button class="linkbtn" id="sm-back">← Back to configurator</button></div>
+    <div class="sm-hero">
+      <div>
+        <div class="sm-main">
+          <img id="sm-img" alt="">
+          <div class="wait" id="sm-wait">Rendering your build…</div>
+          <span class="cap" id="sm-cap"></span>
+          <button class="arrow l" id="sm-prev" aria-label="Previous picture"><svg width="18" height="18"><use href="#i-left"/></svg></button>
+          <button class="arrow r" id="sm-next" aria-label="Next picture"><svg width="18" height="18"><use href="#i-right"/></svg></button>
+        </div>
+        <div class="sm-thumbs" id="sm-thumbs" role="group" aria-label="Pictures of your build"></div>
+      </div>
+      <aside class="card sm-side">
+        <div>
+          <p class="eyebrow">Your build</p>
+          <h1 id="sm-h">L-Corner Display</h1>
+          <p class="meta" id="sm-meta"></p>
+        </div>
+        <dl class="sm-key" id="sm-key"></dl>
+        <div class="sm-acts">
+          <button class="b primary" id="sm-share"><svg><use href="#i-share"/></svg>Copy build link</button>
+          <button class="b" id="sm-print">Save as PDF</button>
+          <button class="b" id="sm-dl"><svg><use href="#i-dl"/></svg>Download picture</button>
+          <button class="b ghost" id="sm-edit">Edit build</button>
+        </div>
+      </aside>
+    </div>
+    <div class="sm-sec">
+      <h2>Your selections</h2>
+      <div class="sm-cats" id="sm-cats"></div>
+    </div>
+    <div class="sm-sec">
+      <h2>Specification</h2>
+      <div class="card sm-tw"><table class="sm-spec" id="sm-spec"></table></div>
+    </div>
+    <p class="sm-foot">Sizes and quantities are taken from the showroom display's CAD model. Pictures are live renders of this build.</p>
+  </div>
+</section>
 
 <div class="tip" id="tip" role="tooltip" hidden></div>
 <div class="toast" id="toast" role="status" hidden></div>
 
-<dialog id="dlg-summary" aria-labelledby="sum-h">
-  <div class="dh"><h2 id="sum-h">Your build</h2><button class="b ghost" data-close aria-label="Close"><svg><use href="#i-x"/></svg></button></div>
-  <div class="db">
-    <div id="sum-rows"></div>
-    <div class="acts">
-      <button class="b primary" id="sum-share"><svg><use href="#i-share"/></svg>Copy build link</button>
-      <button class="b" id="sum-shot"><svg><use href="#i-dl"/></svg>Download image</button>
-    </div>
-  </div>
-</dialog>
 <dialog id="dlg-about" aria-labelledby="about-h">
   <div class="dh"><h2 id="about-h">How this model is built</h2><button class="b ghost" data-close aria-label="Close"><svg><use href="#i-x"/></svg></button></div>
   <div class="db about">
     <ul>
-      <li><b>Geometry</b>: fitted from five showroom photos. Doors and drawers are rebuilt as Shaker fronts (2-1/4 in frame, 1/4 in recessed panel, 1.6 mm edge radius). Countertops are re-extruded from the CAD footprint with a 1.5 mm eased edge.</li>
+      <li><b>Geometry</b>: fitted from five showroom photos. Doors and drawers are rebuilt as Shaker fronts (2-1/4 in frame, 1/4 in recessed panel, 1.6 mm edge radius), slim Shaker (1 in frame) or slab fronts. Drawer fronts follow the door style, or the short ones can be flat slabs. Countertops are re-extruded from the CAD footprint with a 1.5 mm eased edge.</li>
       <li><b>Finish library</b>: 38 Decore DRS131 finishes (decore.com), 34 Vadara quartz designs (vadara.uk) and 48 MSI granites (msisurfaces.com). Each texture loads only when picked.</li>
       <li><b>Hardware</b>: the showroom bar pull (matched to the photos) or any Top Knobs knob or pull, built from the maker's spec table and product photos at true size. Doors and drawers can take different pieces. Each piece loads only when picked.</li>
       <li><b>Scale</b>: Vadara slabs map at 126 × 63 in. MSI close-ups are assumed to show 24 × 24 in, and Decore chips about 10 in.</li>
@@ -643,12 +762,28 @@ function withGrainLayouts(g, isDrawer, id) {
   const piece = g.attributes.uv.clone(), whole = boxUV(g.clone(), GRAIN_U, GRAIN_V, isDrawer, hash01(id, 1), hash01(id, 2)).attributes.uv;
   g.setAttribute('uv', piece); g.userData.uv = { piece, whole }; return g;
 }
-function shakerFront(bb, isDrawer, id) { return withGrainLayouts(shakerFront0(bb), isDrawer, id); }
-function shakerFront0(bb) {
+// Door styles: stile / rail width (in) around the recessed panel; 0 is a slab. Drawer fronts take the door style, or a
+// slab where the drawer option says so (styleOf).
+const STYLES = {
+  shaker: { t: 'Shaker', S: 2.25, d: '2-1/4 in frame', long: '2-1/4 in frame around a 1/4 in recessed panel' },
+  slim: { t: 'Slim Shaker', S: 1, d: '1 in frame', long: '1 in frame around a 1/4 in recessed panel' },
+  slab: { t: 'Slab', S: 0, d: 'Flat, no frame', long: 'One flat panel, no frame' },
+};
+const DRAWERS = {
+  match: { t: 'Match doors', d: 'Every drawer front in the door style.' },
+  top: { t: 'Flat top drawers', d: 'The short top drawer of each cabinet is a flat slab.' },
+  six: { t: 'Flat 6 in drawers', d: 'Every drawer 6-1/4 in tall or less is a flat slab.' },
+  flat: { t: 'All flat', d: 'Every drawer front is a flat slab.' },
+};
+// a drawer front is flat under this option: top = the cabinet's highest drawer when it is a short one (under 10 in)
+const flatDrawer = (mode, top, hIn) => mode === 'flat' || mode === 'top' && top && hIn < 10 || mode === 'six' && hIn <= 6.5;
+// frame width in mm on this front, capped at a fifth of its short side; fronts under 100 mm are always slabs
+const frameW = (w, h, style) => STYLES[style].S && Math.min(w, h) >= 100 ? Math.min(STYLES[style].S * IN, 0.2 * Math.min(w, h)) : 0;
+function frontGeo(f, style) { return f.geos[style] ||= withGrainLayouts(shakerFront0(f.bb, frameW(f.w, f.h, style)), f.drawer, f.id); }
+function shakerFront0(bb, S) {
   const { min: m, max: M } = bb, w = M.x - m.x, h = M.y - m.y;
-  const S = Math.min(2.25 * IN, 0.2 * Math.min(w, h));            // stile / rail width
   const G = (g, rot) => boxUV(g, GRAIN_U, GRAIN_V, rot);
-  if (Math.min(w, h) < 100) return G(rbox(m.x, M.x, m.y, M.y, m.z, M.z, 1.6), w > h);
+  if (!S) return G(rbox(m.x, M.x, m.y, M.y, m.z, M.z, 1.6), w > h);
   const R = 1.6, z0 = m.z, z1 = M.z;
   // grain runs along each piece: vertical stiles, horizontal rails, panel along its long side
   const parts = [
@@ -725,15 +860,12 @@ new GLTFLoader().parse(bin.buffer, '', gltf => {
     const id = o.name, mname = o.material.name, cat = (gltf.parser.json.nodes.find(n => n.name === id) || {}).extras?.category || '';
     o.geometry.computeBoundingBox(); const bb = o.geometry.boundingBox.clone();
     o.castShadow = o.receiveShadow = true;
-    if (cat === 'door' || cat === 'drawer_front') { o.geometry = shakerFront(bb, cat === 'drawer_front', id); frontMeshes.push(o); report.fronts++; }
-    else if (cat === 'hardware_handle') {
-      o.geometry = barPull(bb); report.pulls++; handles.push(o);
-      // pulls centred on a drawer land on the recessed panel, not in mid-air
-      const par = o.parent; if (par && par.isMesh && /drawer_front/.test(par.name)) {
-        par.geometry.computeBoundingBox(); const pb = par.geometry.boundingBox, S = Math.min(2.25 * IN, 0.2 * Math.min(pb.max.x - pb.min.x, pb.max.y - pb.min.y));
-        if (Math.abs(o.position.y - (pb.min.y + pb.max.y) / 2) < (pb.max.y - pb.min.y) / 2 - S && Math.min(pb.max.x - pb.min.x, pb.max.y - pb.min.y) >= 100) o.position.z -= RECESS;
-      }
+    if (cat === 'door' || cat === 'drawer_front') {
+      const w = bb.max.x - bb.min.x, h = bb.max.y - bb.min.y, f = o.userData.front = { id, bb, w, h, drawer: cat === 'drawer_front', top: false, geos: {}, style: 'shaker' };
+      o.geometry = frontGeo(f, 'shaker'); frontMeshes.push(o); report.fronts++;
     }
+    // the pull's seat (frame or recessed panel) follows the front's style: initMounts / seatBar
+    else if (cat === 'hardware_handle') { o.geometry = barPull(bb); report.pulls++; handles.push(o); }
     else if (cat === 'countertop_slab') {
       const off = id.endsWith('01') ? [0.03, 0.52] : [0.40, 0.06];
       const r = quartzSlab(o.geometry, off); o.geometry = r.g; report.slabs.push(id + ':' + r.loops + 'loop/' + r.verts + 'v');
@@ -767,6 +899,12 @@ new GLTFLoader().parse(bin.buffer, '', gltf => {
     if (d.swing) doors.push({ n, q0: n.quaternion.clone(), sign: d.swing.sign, max: d.swing.max * Math.PI / 180 });
     if (d.travel_mm) drawers.push({ n, p0: n.position.clone(), dir: new THREE.Vector3(0, 0, 1).applyQuaternion(n.quaternion), travel: d.travel_mm });
   }
+  // each cabinet's highest drawer front is its top drawer (the 'Flat top drawers' option)
+  root.updateMatrixWorld(true);
+  const topOf = new Map(), wp = new THREE.Vector3();
+  frontMeshes.filter(o => o.userData.front.drawer).forEach(o => { const y = o.getWorldPosition(wp).y, t = topOf.get(o.parent);
+    if (!t || y > t.y) topOf.set(o.parent, { f: o.userData.front, y }); });
+  topOf.forEach(t => { t.f.top = true; });
   initMounts(handles);
   console.log('[studio] upgraded', JSON.stringify(report));
   window.__studio = { THREE, scene, camera, renderer, composer, gtao, controls, nodes, get pt() { return pt; }, hw: HW_HOOK };
@@ -894,8 +1032,8 @@ const chipBg = o => o.thumb ? `background-image:url(${o.thumb})`
   : `background-color:${lin2hex(o.color)}`;
 function swatch(o, sec) {
   ITEMS[o.id] = { o, sec };
-  // searchable text: name, code, brand, family, and Vadara collection (tone bands are left out: "black" should not find Coffee Brown)
-  const q = [o.name, o.code, o.brand, o.family, o.kind === 'slab' ? o.group : ''].filter(Boolean).join(' ').toLowerCase();
+  // searchable text: name, code (also without its space: "sw7005"), brand, family, and Vadara collection (tone bands are left out: "black" should not find Coffee Brown)
+  const q = [o.name, o.code, o.code && o.code.replace(/\s/g, ''), o.brand, o.family, o.kind === 'slab' ? o.group : ''].filter(Boolean).join(' ').toLowerCase();
   return `<button class="sw" data-id="${o.id}" aria-pressed="false" aria-label="${esc(o.name)}" data-q="${esc(q)}" style="${chipBg(o)};--g:${gloss(o).toFixed(2)}"></button>`;
 }
 const chev = '<svg class="chev"><use href="#i-chev"/></svg>';
@@ -910,13 +1048,19 @@ $('body-counter').innerHTML =
   `<p class="note"><svg><use href="#i-info"/></svg>Quartz is cut from the full slab photo at 126 × 63 in. Granite repeats the maker's close-up at true scale.</p>` +
   sub('Vadara quartz', groupBy(quartzAll, 'group'), 'counter', true) +
   sub('MSI granite', groupBy(graniteAll, 'group', ['Light & white', 'Mid tones', 'Dark & black']), 'counter', false) + empty;
-const solids = CAT.fronts.filter(f => f.group === 'solid'), woods = CAT.fronts.filter(f => f.group === 'woodgrain');
+const solids = CAT.fronts.filter(f => f.group === 'solid'), woods = CAT.fronts.filter(f => f.group === 'woodgrain'), swPaints = CAT.fronts.filter(f => f.group === 'sw');
 $('body-front').innerHTML =
+  `<div class="fstyle"><h3 class="lbl" id="ds-lbl">Door style</h3><div class="optcards c3" id="ds" role="radiogroup" aria-labelledby="ds-lbl"></div></div>` +
+  `<div class="fstyle"><h3 class="lbl" id="dr-lbl">Drawer fronts</h3><p class="note" id="dr-note" hidden><svg><use href="#i-info"/></svg>With slab doors every drawer front is already flat.</p>` +
+  `<div class="optcards" id="dr" role="radiogroup" aria-labelledby="dr-lbl"></div></div>` +
+  `<h3 class="lbl fstyle" style="margin:0 0 -8px">Finish</h3>` +
   grp('Showroom paint', [SHOWROOM_PAINT], 'front') +
   `<p class="note"><svg><use href="#i-info"/></svg>Decore DRS131 is a one-piece RTF door. Woodgrain runs vertically on doors and horizontally on drawer fronts, with no rail joints.</p>` +
   sub('Decore solid colours', groupBy(solids, 'family', ['Smooth', 'Satin', 'Soft-touch', 'Supermatte']), 'front', true) +
-  sub('Decore woodgrain', groupBy(woods, 'family', ['Smooth woodgrain', 'Textured']), 'front', false) + empty;
-const SEL = { counter: null, front: null, splash: 'vtile', splashH: 'full', hw: { door: null, drawer: null } };
+  sub('Decore woodgrain', groupBy(woods, 'family', ['Smooth woodgrain', 'Textured']), 'front', false) +
+  `<p class="note"><svg><use href="#i-info"/></svg>Sherwin-Williams colours are painted on the five-piece door from each colour's published value. Screens shift paint colour, so check a real chip before ordering.</p>` +
+  sub('Sherwin-Williams paint', groupBy(swPaints, 'family', ['White', 'Neutral', 'Red', 'Orange', 'Yellow', 'Green', 'Blue', 'Purple']), 'front', false) + empty;
+const SEL = { counter: null, front: null, style: 'shaker', drw: 'match', splash: 'vtile', splashH: 'full', hw: { door: null, drawer: null } };
 let lastSection = null, restoring = false;
 function markSelected(sec, id) {
   const card = $('card-' + sec), it = ITEMS[id];
@@ -924,14 +1068,15 @@ function markSelected(sec, id) {
   card.querySelectorAll('.pickname').forEach(p => p.textContent = '');
   const btn = card.querySelector(`.sw[data-id="${id}"]`);
   if (btn) { btn.closest('.grp').querySelector('.pickname').textContent = it.o.name + (it.o.code ? '  ' + it.o.code : ''); const d = btn.closest('.sub'); if (d) d.open = true; }
-  $('sel-' + sec).textContent = it.o.name + (it.o.code ? ' ' + it.o.code : '') + (it.o.brand ? ' · ' + it.o.brand : '');
+  $('sel-' + sec).textContent = sec === 'front' ? frontLine() : it.o.name + (it.o.code ? ' ' + it.o.code : '') + (it.o.brand ? ' · ' + it.o.brand : '');
 }
+const frontLine = () => [STYLES[SEL.style].t, SEL.drw !== 'match' && SEL.style !== 'slab' ? DRAWERS[SEL.drw].t : '', SEL.front && SEL.front.name + (SEL.front.code ? ' ' + SEL.front.code : '')].filter(Boolean).join(' · ');
 // the camera follows the section being edited (Porsche jumps to the wheel or seat view the same way)
 function follow(sec) { if (restoring) return; const v = +$('card-' + sec).dataset.view; if (lastSection !== sec) { lastSection = sec; if (curView !== v) goView(v); } }
 document.querySelectorAll('.card>summary').forEach(sm => sm.addEventListener('click', () => { const card = sm.parentElement; setTimeout(() => { if (card.open) follow(card.id.slice(5)); }, 0); }));
 document.querySelector('.opts').addEventListener('click', e => {
   const b = e.target.closest('.sw'); if (!b) return; const it = ITEMS[b.dataset.id]; if (!it) return;
-  follow(it.sec); ({ counter: pickCounter, front: pickFront, metal: pickHwItem, splash: pickTile })[it.sec](it.o);
+  follow(it.sec); touched(it.sec); ({ counter: pickCounter, front: pickFront, metal: pickHwItem, splash: pickTile })[it.sec](it.o);
 });
 const busy = (id, on) => document.querySelectorAll(`.sw[data-id="${id}"]`).forEach(b => b.toggleAttribute('aria-busy', on));
 
@@ -967,10 +1112,61 @@ async function pickFront(o) {
     P.normalScale.set(o.emboss, o.emboss); P.clearcoatNormalScale.set(o.emboss * 0.6, o.emboss * 0.6); P.color.setRGB(0.93, 0.93, 0.93);
   }
   P.needsUpdate = true;
-  const uvChanged = frontMeshes.length && setUVs(frontMeshes, o.kind === 'paint' ? 'piece' : 'whole');
+  frontUV = o.kind === 'paint' ? 'piece' : 'whole';
+  const uvChanged = frontMeshes.length && setUVs(frontMeshes, frontUV);
   if (uvChanged) sceneChanged(); else ptMaterials();
   writeHash(); queueThumbs();
 }
+// ---------- door style and drawer fronts
+let frontUV = 'piece';   // grain layout of the current finish (pickFront); a front's other style geometries take it on swap
+const styleOf = f => f.drawer && flatDrawer(SEL.drw, f.top, f.h / IN) ? 'slab' : SEL.style;
+function applyFrontStyles() {
+  const changed = new Set();
+  for (const o of frontMeshes) {
+    const f = o.userData.front, s = styleOf(f); if (f.style === s) continue;
+    f.style = s; o.geometry = frontGeo(f, s); o.geometry.setAttribute('uv', o.geometry.userData.uv[frontUV]); changed.add(o);
+  }
+  if (changed.size) { MOUNTS.filter(m => changed.has(m.par)).forEach(reseat); sceneChanged(); }
+  drawFrontCards(); if (SEL.front) markSelected('front', SEL.front.id); markHw(); writeHash(); queueThumbs();
+}
+function setFrontStyle(style, drw) { if (style) SEL.style = style; if (drw) SEL.drw = drw; applyFrontStyles(); }
+// Elevation sketch for the cards: two base cabinets of the display (drawer over door; the four-drawer bank) at true
+// proportion, in inches. Fronts a drawer option turns flat are tinted.
+const ELEV = [[22.5, [[6.25, 'top'], [24.375, 'door']]], [21, [[6.25, 'top'], [6.25], [6.25], [11.625]]]];
+function elevSVG(style, mode) {
+  const k = 3.7, gap = 0.25, W = ELEV.reduce((s, [w]) => s + w, 0) + gap * 2, H = Math.max(...ELEV.map(([, fr]) => fr.reduce((s, [h]) => s + h + gap, -gap)));
+  let x = (240 / k - W) / 2, out = '';
+  for (const [w, fronts] of ELEV) {
+    let y = (140 / k - H) / 2;
+    for (const [h, kind] of fronts) {
+      const door = kind === 'door', flat = !door && flatDrawer(mode, kind === 'top', h), st = flat ? 'slab' : style, S = frameW(w * IN, h * IN, st) / IN;
+      const r = (a, b, c, d, cl) => `<rect class="${cl}" x="${(a * k).toFixed(1)}" y="${(b * k).toFixed(1)}" width="${(c * k).toFixed(1)}" height="${(d * k).toFixed(1)}" rx="${cl === 'p' ? .6 : 1}"/>`;
+      out += r(x, y, w, h, 'f' + (flat && style !== 'slab' ? ' hl' : ''));
+      if (S) out += r(x + S, y + S, w - 2 * S, h - 2 * S, 'p');
+      // pulls: centred on drawers, upright at the latch corner of the door
+      out += door ? `<line class="h" x1="${((x + w - 1.75) * k).toFixed(1)}" y1="${((y + 2.5) * k).toFixed(1)}" x2="${((x + w - 1.75) * k).toFixed(1)}" y2="${((y + 9.25) * k).toFixed(1)}"/>`
+        : `<line class="h" x1="${((x + w / 2 - 3.4) * k).toFixed(1)}" y1="${((y + h / 2) * k).toFixed(1)}" x2="${((x + w / 2 + 3.4) * k).toFixed(1)}" y2="${((y + h / 2) * k).toFixed(1)}"/>`;
+      y += h + gap;
+    }
+    x += w + gap * 2;
+  }
+  return `<svg viewBox="0 0 240 140" aria-hidden="true">${out}</svg>`;
+}
+const flatCount = mode => frontMeshes.filter(o => { const f = o.userData.front; return f.drawer && flatDrawer(mode, f.top, f.h / IN); }).length;
+function drawFrontCards() {
+  const card = (name, k, o, pic, d) => `<label class="oc rad"><input class="vh" type="radio" name="${name}" value="${k}"${(name === 'ds' ? SEL.style : SEL.drw) === k ? ' checked' : ''}><span class="img elev">${pic}</span><b>${o.t}</b><small>${esc(d)}</small><span class="dot"></span></label>`;
+  $('ds').innerHTML = Object.entries(STYLES).map(([k, o]) => card('ds', k, o, elevSVG(k, 'match'), o.d)).join('');
+  const nDr = frontMeshes.filter(o => o.userData.front.drawer).length;
+  $('dr').innerHTML = Object.entries(DRAWERS).map(([k, o]) => card('dr', k, o, elevSVG(SEL.style, k),
+    k === 'match' || !nDr ? o.d : `${o.d} ${flatCount(k)} of ${nDr} drawers.`)).join('');
+  $('dr-note').hidden = SEL.style !== 'slab';
+}
+drawFrontCards();
+$('body-front').addEventListener('change', e => {
+  const r = e.target.closest('input[name="ds"],input[name="dr"]'); if (!r) return;
+  follow('front'); touched('front'); r.name === 'ds' ? setFrontStyle(r.value) : setFrontStyle(null, r.value);
+  $('body-front').querySelector(`input[name="${r.name}"][value="${r.value}"]`).focus({ preventScroll: true });   // the cards were redrawn
+});
 // ============================ hardware: showroom bar pull + Top Knobs library ============================
 // The catalog is embedded in compact form and expanded here to products[].sizes[] = {key, label, c2c_mm, length_mm,
 // width_mm, proj_mm, diam_mm, skus[] (aligned with finishes)}. Each product's shapes load from hardware/<slug>.js on first
@@ -1162,14 +1358,28 @@ function initMounts(list) {
     par.geometry.computeBoundingBox(); o.geometry.computeBoundingBox();
     const pb = par.geometry.boundingBox.clone(), ob = o.geometry.boundingBox, alongX = ob.max.x - ob.min.x > ob.max.y - ob.min.y;
     const ax = alongX ? 'x' : 'y', cx = alongX ? 'y' : 'x';
-    const w = pb.max.x - pb.min.x, h = pb.max.y - pb.min.y, S = Math.min(2.25 * IN, 0.2 * Math.min(w, h));
+    const f = par.userData.front;
     if (!door) o.material = hwMat.drawer.body;
-    MOUNTS.push({ o, par, door, tgt, ax, pb, c0: o.position[ax] + (ob.min[ax] + ob.max[ax]) / 2, L0: ob.max[ax] - ob.min[ax], across: o.position[cx],
+    const mt = { o, par, door, tgt, ax, pb, c0: o.position[ax] + (ob.min[ax] + ob.max[ax]) / 2, L0: ob.max[ax] - ob.min[ax], across: o.position[cx],
       // the end of the old pull nearest the door's latch corner: the top on base doors, the bottom on wall doors
       end: Math.sign(o.position.y - (pb.min.y + pb.max.y) / 2) || 1, side: Math.sign(o.position.x - (pb.min.x + pb.max.x) / 2) || 1,
-      onPanel: (x, y) => Math.min(w, h) >= 100 && x > pb.min.x + S && x < pb.max.x - S && y > pb.min.y + S && y < pb.max.y - S,
-      placed: 'bar', obj: null, fits: true, bbox: [L0Of(ob, alongX), 41.275, 12.7] });
+      // inside the recessed panel of the front's current style (a slab has none)
+      onPanel: (x, y) => { const S = frameW(f.w, f.h, f.style); return S > 0 && x > pb.min.x + S && x < pb.max.x - S && y > pb.min.y + S && y < pb.max.y - S; },
+      z0: o.position.z, placed: 'bar', obj: null, fits: true, bbox: [L0Of(ob, alongX), 41.275, 12.7] };
+    MOUNTS.push(mt); seatBar(mt);
   }
+}
+// the showroom bar pull sits on the recessed panel when its whole footprint lands there (drawer centres), else on the frame
+function seatBar(mt) {
+  const o = mt.o, b = o.geometry.boundingBox, p = o.position;
+  o.position.z = mt.z0 - (mt.onPanel(p.x + b.min.x, p.y + b.min.y) && mt.onPanel(p.x + b.max.x, p.y + b.max.y) ? RECESS : 0);
+}
+// a front changed style: seat the bar pull again and set any placed Top Knobs piece again on the new surface
+function reseat(mt) {
+  seatBar(mt);
+  const g = mt.placed !== 'bar' && geoCache[mt.placed]; if (!mt.obj || !g) return;
+  const [slug, size] = mt.placed.split('|'); mt.par.remove(mt.obj);
+  const r = placeOn(mt, g, sizeOf(HWP[slug], size)); mt.obj = r.obj; mt.fits = r.fits; mt.bbox = r.bbox; mt.par.add(r.obj);
 }
 function L0Of(b, alongX) { return +(alongX ? b.max.x - b.min.x : b.max.y - b.min.y).toFixed(2); }
 // Place a product on one mount, in the front's own frame (mm, +Z out of the front).
@@ -1327,16 +1537,16 @@ $('body-metal').addEventListener('click', e => {
   const t = e.target.closest('[data-t]'), f = e.target.closest('[data-fin]'), z = e.target.closest('[data-size]');
   if (t) { hwTarget = t.dataset.t; markHw(); return; }
   const sel = shownSel(); if (!sel || sel.slug === 'bar' || !(f || z)) return;
-  follow('metal');
+  follow('metal'); touched('metal');
   editTargets(sel).forEach(k => setHw(k, { ...SEL.hw[k], ...(f ? { finish: f.dataset.fin } : { size: z.dataset.size }) }));
 });
-function hwSummaryRows() {
-  const H = SEL.hw, row = (k, sel) => {
-    if (sel.slug === 'bar') return ['metal', k, chipBg(sel.metal), 'Showroom bar pull', sel.metal.name + ' · 6-3/4 in'];
-    const p = HWP[sel.slug], z = sizeOf(p, sel.size);
-    return ['metal', k, `background:#fff url(hardware/thumbs/${p.slug}.jpg) center/contain no-repeat`, p.name, [sel.finish, z.label, skuOf(sel)].filter(Boolean).join(' · ')];
-  };
-  return encHw(H.door) === encHw(H.drawer) ? [row('Hardware', H.door)] : [row('Door hardware', H.door), row('Drawer hardware', H.drawer)];
+// summary page: one target's piece as { bg, name, finish, size, sku, n (pieces on the display) }
+function hwInfo(t) {
+  const sel = SEL.hw[t], n = MOUNTS.filter(m => m.tgt === t).length;
+  if (sel.slug === 'bar') return { bg: chipBg(sel.metal), name: 'Showroom bar pull', finish: sel.metal.name, size: '6-3/4 in', sku: '', n };
+  const p = HWP[sel.slug], z = sizeOf(p, sel.size);
+  return { bg: `background:#fff url(hardware/thumbs/${p.slug}.jpg) center/contain no-repeat`, name: p.name, finish: sel.finish, size: z.label, sku: skuOf(sel), n,
+    brand: 'Top Knobs ' + collName(p.collection) };
 }
 // Test hook (window.__studio.hw): sweep every product headlessly and compare the placed bounds with the spec table.
 const HW_HOOK = {
@@ -1433,7 +1643,7 @@ function drawSplashCards(reveal) {
   const btn = t && card.querySelector(`.sw[data-id="${t.id}"]`);
   if (btn) { btn.closest('.grp').querySelector('.pickname').textContent = t.name + (t.code ? '  ' + t.code : ''); const d = btn.closest('.sub'); if (d && reveal) d.open = true; }
 }
-$('splash').addEventListener('click', e => { const b = e.target.closest('[data-k]'); if (b) { follow('splash'); setSplash(b.dataset.k); } });
+$('splash').addEventListener('click', e => { const b = e.target.closest('[data-k]'); if (b) { follow('splash'); touched('splash'); setSplash(b.dataset.k); } });
 function setSplash(k) {
   SEL.splash = k; if (k === 'vtile' || k === 'htile') SEL.lineK = k;
   drawSplashCards(true); return applySplash();
@@ -1498,7 +1708,7 @@ async function applySplash() {
   splashMeshes.forEach(o => { o.material = mat; });
   setUVs(splashMeshes, key); drawSplashCards(); sceneChanged(); writeHash(); queueThumbs();
 }
-$('splash-h').addEventListener('click', e => { const b = e.target.closest('[data-h]'); if (b) { follow('splash'); setSplashHeight(b.dataset.h); } });
+$('splash-h').addEventListener('click', e => { const b = e.target.closest('[data-h]'); if (b) { follow('splash'); touched('splash'); setSplashHeight(b.dataset.h); } });
 function setSplashHeight(h) {
   SEL.splashH = h; drawSplashCards();
   splashMeshes.forEach(o => { o.geometry = o.userData.splashGeo[h]; });
@@ -1546,7 +1756,9 @@ function writeHash() {
   const p = new URLSearchParams({ c: SEL.counter.id, s: SEL.splash, sh: SEL.splashH, f: SEL.front.id, h: h.id });
   const tl = tileOf(SEL.splash); if (tl && tl !== SHOWROOM_TILE) p.set('t', tl.id);   // the MSI tile on the backsplash
   for (const [t, k] of [['door', 'hd'], ['drawer', 'hr']]) if (H[t].slug !== 'bar' || H[t].metal !== h) p.set(k, encHw(H[t]));
+  if (SEL.style !== 'shaker') p.set('ds', SEL.style); if (SEL.drw !== 'match') p.set('dr', SEL.drw);   // door style, drawer fronts
   p.set('sc', curScene); p.set('v', curView);
+  if (sumOpen) p.set('p', 'summary');   // the summary page is open: the link reopens it
   history.replaceState(null, '', '#' + p);
 }
 async function restoreBuild() {
@@ -1554,6 +1766,7 @@ async function restoreBuild() {
   const p = new URLSearchParams(location.hash.slice(1)), get = (k, d) => ITEMS[p.get(k)]?.o || d;
   setScene(SCENES[p.get('sc')] ? p.get('sc') : 'showroom');
   const v = +p.get('v'); goView(Number.isInteger(v) && v >= 0 && v < VIEWS.length && p.has('v') ? v : 0, true);
+  setFrontStyle(STYLES[p.get('ds')] ? p.get('ds') : 'shaker', DRAWERS[p.get('dr')] ? p.get('dr') : 'match');   // before the hardware is placed
   const bar = { slug: 'bar', metal: METALS.find(m => m.id === p.get('h')) || METALS[0] };
   const hw = Promise.all([['door', 'hd'], ['drawer', 'hr']].map(([t, k]) => setHw(t, decHw(p.get(k)) || bar)));
   const tl = TILES.find(t => t.id === p.get('t'));
@@ -1562,6 +1775,9 @@ async function restoreBuild() {
   const splash = setSplash(SPLASH.some(o => o.k === p.get('s')) ? p.get('s') : 'vtile');
   await Promise.all([pickCounter(get('c', CAT.counters[0])), pickFront(get('f', SHOWROOM_PAINT)), hw, splash]);
   restoring = false; writeHash(); queueThumbs();
+  if (p.has('c')) { SECS.forEach(([k]) => chosen.add(k)); drawDone(); }   // a saved build: every section was chosen
+  restoredDone();
+  if (p.get('p') === 'summary') openSummary(false);
   // Phones build the path tracer only when Photo render is tapped: compiling it in the background stalls mobile GPUs.
   // Building the path tracer's scene and compiling its shader froze the page for 1-4 s when it ran in the background,
   // so that waits for the first Photo render click. Desktops fetch its code when the page is idle.
@@ -1575,30 +1791,144 @@ async function copyLink() {
   try { await navigator.clipboard.writeText(location.href); toast('Build link copied'); }
   catch { const i = document.createElement('input'); i.value = location.href; document.body.appendChild(i); i.select(); document.execCommand('copy'); i.remove(); toast('Build link copied'); }
 }
-$('share').addEventListener('click', copyLink); $('sum-share').addEventListener('click', copyLink);
+$('share').addEventListener('click', copyLink);
 
-// ---------- summary + about dialogs
-function drawSummary() {
-  const sw = chipBg;
-  const sp = SPLASH.find(o => o.k === SEL.splash), tile = tileOf(SEL.splash);
-  const rows = [
-    ['counter', 'Countertop', sw(SEL.counter), SEL.counter.name, subline(SEL.counter)],
-    ['splash', 'Backsplash', splashBg(sp), sp.t + ' · ' + SPLASH_H[SEL.splashH], tile ? tile.name + ' · ' + subline(tile) : 'Matches ' + SEL.counter.name],
-    ['front', 'Cabinets', sw(SEL.front), SEL.front.name, subline(SEL.front)],
-    ...hwSummaryRows(),
-  ];
-  $('sum-rows').innerHTML = rows.map(([k, t, bg, v, s]) => `<div class="row"><span class="ph" style="${bg}"></span><div><div class="k">${t}</div><div class="v">${esc(v)}</div><div class="s">${esc(s)}</div></div><button class="b ghost" data-change="${k}">Change</button></div>`).join('')
-    + `<div class="row"><span class="ph" style="background:${SCENE_SW[curScene]}"></span><div><div class="k">Lighting</div><div class="v">${SCENES[curScene].label}</div></div><span></span></div>`;
-}
-$('open-summary').addEventListener('click', () => { drawSummary(); $('dlg-summary').showModal(); });
 $('open-about').addEventListener('click', () => $('dlg-about').showModal());
 document.querySelectorAll('dialog').forEach(d => d.addEventListener('click', e => { if (e.target === d || e.target.closest('[data-close]')) d.close(); }));
-$('sum-rows').addEventListener('click', e => {
-  const b = e.target.closest('[data-change]'); if (!b) return; const sec = b.dataset.change, card = $('card-' + sec);
-  $('dlg-summary').close(); card.open = true; follow(sec); card.scrollIntoView({ behavior: reduce ? 'auto' : 'smooth', block: 'start' });
-  (card.querySelector('.sw[aria-pressed="true"], .oc[aria-pressed="true"]') || card.querySelector('summary')).focus({ preventScroll: true });
+
+// ---------- what is chosen so far (the card under the options), and the way to the summary
+const SECS = [['counter', 'Countertop'], ['splash', 'Backsplash'], ['front', 'Cabinets'], ['metal', 'Hardware']];
+const chosen = new Set();
+function touched(sec) {
+  if (restoring || chosen.has(sec)) return; chosen.add(sec); drawDone();
+  if (chosen.size === SECS.length) toast('Every section is chosen. Your summary is ready.');
+}
+function drawDone() {
+  $('done-steps').innerHTML = SECS.map(([k, t]) => `<li class="${chosen.has(k) ? 'ok' : ''}"><i></i>${t}</li>`).join('');
+  $('done-h').textContent = chosen.size === SECS.length ? 'Your build is complete' : `Your selections · ${chosen.size} of ${SECS.length}`;
+}
+drawDone();
+
+// ---------- summary page, after Porsche's: pictures of the finished build, every selection by section, a specification
+let sumOpen = false, sumPushed = false, afterClose = null, shots = [], shotI = 0, shotTok = 0, restoredDone;
+const restored = new Promise(r => { restoredDone = r; });
+const SHOT_VIEWS = [0, 1, 2, 3, 4];   // Corner, Backsplash, Drawers, Countertop, Overview
+const longDate = () => new Date().toLocaleDateString(undefined, { year: 'numeric', month: 'long', day: 'numeric' });
+// backsplash height sketch: wall between countertop and upper cabinets, tiled up to the chosen height
+const heightSVG = h => `<svg viewBox="0 0 72 72" aria-hidden="true"><rect width="72" height="72" fill="var(--soft)"/><rect y="0" width="72" height="14" fill="var(--card)" stroke="var(--muted)"/>
+  <rect y="${h === 'full' ? 14 : 50}" width="72" height="${h === 'full' ? 46 : 10}" fill="color-mix(in srgb,var(--accent) 30%,var(--card))"/><rect y="60" width="72" height="12" fill="var(--muted)"/></svg>`;
+const elevPh = svg => `<span class="ph elev" style="background:var(--card)">${svg}</span>`;
+function drawSummary() {
+  const sp = SPLASH.find(o => o.k === SEL.splash), tile = tileOf(SEL.splash), C = SEL.counter, F = SEL.front;
+  const nDoor = frontMeshes.filter(o => !o.userData.front.drawer).length, nDr = frontMeshes.length - nDoor;
+  const nFlat = frontMeshes.filter(o => { const f = o.userData.front; return f.drawer && f.style === 'slab'; }).length;
+  const drwLine = SEL.style === 'slab' || nFlat === nDr ? 'All flat slabs' : !nFlat ? 'Match the doors' : `${DRAWERS[SEL.drw].t}: ${nFlat} slab${nFlat > 1 ? 's' : ''}, ${nDr - nFlat} ${STYLES[SEL.style].t}`;
+  const hd = hwInfo('door'), hr = hwInfo('drawer'), same = encHw(SEL.hw.door) === encHw(SEL.hw.drawer);
+  const item = (ph, k, v, s) => `<div class="sm-item">${ph.startsWith('<') ? ph : `<span class="ph" style="${ph}"></span>`}<div><div class="k">${esc(k)}</div><div class="v">${esc(v)}</div><div class="s">${esc(s)}</div></div></div>`;
+  const cat = (sec, title, items) => `<section class="card sm-cat"><header><h3>${title}</h3>${sec ? `<button class="linkbtn" data-change="${sec}">Change</button>` : ''}</header><div class="sm-items">${items.join('')}</div></section>`;
+  const hwItem = (k, h) => item(h.bg, k, h.name, [h.finish, h.size, h.sku].filter(Boolean).join(' · '));
+  $('sm-meta').textContent = 'Keane Showroom · ' + longDate();
+  $('sm-key').innerHTML = [
+    ['Countertop', C.name], ['Backsplash', `${tile ? tile.name : C.name} · ${SPLASH_H[SEL.splashH]}`], ['Cabinets', `${STYLES[SEL.style].t} · ${F.name}`],
+    ['Hardware', same ? `${hd.name} · ${hd.finish}` : `Doors: ${hd.name} · Drawers: ${hr.name}`], ['Lighting', SCENES[curScene].label],
+  ].map(([k, v]) => `<div><dt>${k}</dt><dd>${esc(v)}</dd></div>`).join('');
+  $('sm-cats').innerHTML = [
+    cat('counter', 'Countertop', [item(chipBg(C), C.kind === 'slab' ? 'Quartz' : 'Granite', C.name, subline(C))]),
+    cat('splash', 'Backsplash', [item(splashBg(sp), 'Layout', sp.t, splashDesc(sp)),
+      item(tile ? (tile === SHOWROOM_TILE ? splashBg(sp) : chipBg(tile)) : chipBg(C), tile ? 'Tile' : 'Stone', tile ? tile.name : C.name, tile ? subline(tile) : 'Same stone as the countertop'),
+      item(elevPh(heightSVG(SEL.splashH)), 'Height', SPLASH_H[SEL.splashH], SEL.splashH === 'full' ? 'Countertop to the upper cabinets' : '6 in up from the countertop, wall above')]),
+    cat('front', 'Cabinets', [item(elevPh(elevSVG(SEL.style, 'match')), 'Door style', STYLES[SEL.style].t, STYLES[SEL.style].long),
+      item(elevPh(elevSVG(SEL.style, SEL.drw)), 'Drawer fronts', SEL.style === 'slab' ? 'Slab' : DRAWERS[SEL.drw].t, drwLine),
+      item(chipBg(F), 'Finish', F.name, subline(F))]),
+    cat('metal', 'Hardware', same ? [hwItem('Doors and drawers', hd)] : [hwItem('Doors', hd), hwItem('Drawers', hr)]),
+    cat('', 'Scene', [item(`background:${SCENE_SW[curScene]}`, 'Lighting', SCENES[curScene].label, 'Studio light for the pictures')]),
+  ].join('');
+  const row = (a, b, code, n) => `<tr><td>${a}</td><td>${esc(b)}</td><td class="code">${esc(code || '—')}</td><td class="n">${n ?? '—'}</td></tr>`;
+  $('sm-spec').innerHTML = `<thead><tr><th>Item</th><th>Selection</th><th>Code / SKU</th><th class="n">Qty</th></tr></thead><tbody>` +
+    row('Countertop', `${C.name} · ${subline(C)}`, C.code, `${report.slabs.length} pieces`) +
+    row('Backsplash', `${sp.t} · ${tile ? tile.name : C.name} · ${SPLASH_H[SEL.splashH]}`, tile ? tile.code : C.code) +
+    row('Doors', `${STYLES[SEL.style].t} · ${F.name}`, F.code, nDoor) +
+    row('Drawer fronts', `${drwLine} · ${F.name}`, F.code, nDr) +
+    row('Door hardware', `${hd.name} · ${hd.finish} · ${hd.size}`, hd.sku, hd.n) +
+    row('Drawer hardware', `${hr.name} · ${hr.finish} · ${hr.size}`, hr.sku, hr.n) + `</tbody>`;
+}
+// Pictures: each view rendered at 1600 x 1000 with ambient occlusion into the (hidden) stage canvas, copied out within
+// the same task. A converged photo render, when there is one, leads the gallery.
+async function renderShots() {
+  const tok = ++shotTok;
+  $('sm-wait').hidden = false; $('sm-img').removeAttribute('src'); $('sm-cap').textContent = ''; $('sm-thumbs').innerHTML = '';
+  await restored; await new Promise(r => setTimeout(r, 50));   // a build loading from a link: wait for its finishes; paint first
+  if (tok !== shotTok || !sumOpen) return;
+  const grab = (w, h) => { const c = document.createElement('canvas'); c.width = w; c.height = h; c.getContext('2d').drawImage(canvas, 0, 0, w, h); return c; };
+  const list = [];
+  if (photo && pt && pt.scene && pt.samples >= 1) { frame(); list.push({ label: `Photo render · ${Math.floor(pt.samples)} samples`, cv: grab(canvas.width, canvas.height) }); }
+  const W = PHONE ? 1200 : 1600, H = W * 10 / 16, dpr = renderer.getPixelRatio(), size = renderer.getSize(new THREE.Vector2());
+  const cam = { p: camera.position.clone(), q: camera.quaternion.clone(), fov: camera.fov, aspect: camera.aspect }, was = photo;
+  if (was) { photo = false; key.visible = true; keyArea.visible = false; scene.environmentIntensity = RASTER_ENV; Object.values(secMats).forEach(glassMode); }
+  renderer.setPixelRatio(1); renderer.setSize(W, H, false); composer.setPixelRatio(1); composer.setSize(W, H);
+  camera.aspect = W / H; gtao.enabled = true;
+  for (const i of SHOT_VIEWS) {
+    const v = VIEWS[i]; camera.position.copy(in2gl(...v.pos)); camera.fov = v.fov; camera.updateProjectionMatrix(); camera.lookAt(in2gl(...v.tgt));
+    composer.render(); renderer.shadowMap.autoUpdate = false;   // the shadow map does not depend on the camera
+    list.push({ label: v.label, cv: grab(W, H) });
+  }
+  renderer.shadowMap.autoUpdate = true;
+  camera.position.copy(cam.p); camera.quaternion.copy(cam.q); camera.fov = cam.fov; camera.aspect = cam.aspect; camera.updateProjectionMatrix();
+  renderer.setPixelRatio(dpr); renderer.setSize(size.x, size.y, false); composer.setPixelRatio(dpr); composer.setSize(size.x, size.y);
+  if (was) { photo = true; key.visible = false; keyArea.visible = true; scene.environmentIntensity = PHOTO_ENV; Object.values(secMats).forEach(glassMode); }
+  invalidate();
+  const out = await Promise.all(list.map(s => new Promise(r => s.cv.toBlob(b => r({ label: s.label, url: URL.createObjectURL(b) }), 'image/jpeg', 0.9))));
+  if (tok !== shotTok) { out.forEach(s => URL.revokeObjectURL(s.url)); return; }
+  shots.forEach(s => URL.revokeObjectURL(s.url)); shots = out;
+  $('sm-thumbs').innerHTML = shots.map((s, i) => `<button data-i="${i}" aria-pressed="false" aria-label="${esc(s.label)}" style="background-image:url(${s.url})"><em>${esc(s.label.split(' · ')[0])}</em></button>`).join('');
+  $('sm-wait').hidden = true; showShot(0);
+}
+function showShot(i) {
+  if (!shots.length) return; shotI = (i + shots.length) % shots.length;
+  $('sm-img').src = shots[shotI].url; $('sm-img').alt = 'Your build: ' + shots[shotI].label; $('sm-cap').textContent = shots[shotI].label;
+  $('sm-thumbs').querySelectorAll('[data-i]').forEach(b => b.setAttribute('aria-pressed', +b.dataset.i === shotI));
+}
+function openSummary(push = true) {
+  if (sumOpen) return; sumOpen = true; closePops(); hideTip();
+  drawSummary(); $('summary').hidden = false; $('summary').scrollTop = 0; document.body.classList.add('sum-open');
+  $('open-summary').textContent = 'Edit build';
+  // its own history entry, so the browser's Back button returns to the configurator
+  if (push) { const p = new URLSearchParams(location.hash.slice(1)); p.set('p', 'summary'); history.pushState(null, '', '#' + p); sumPushed = true; }
+  writeHash(); renderShots(); $('sm-back').focus({ preventScroll: true });
+}
+function closeSummary(fromHistory) {
+  if (!sumOpen) return;
+  if (!fromHistory && sumPushed) { history.back(); return; }   // popstate finishes the close
+  sumOpen = sumPushed = false; ++shotTok; $('summary').hidden = true; document.body.classList.remove('sum-open');
+  $('open-summary').textContent = 'Summary'; writeHash(); invalidate();
+  const f = afterClose; afterClose = null; if (f) f();
+}
+// the page keeps its own scroll: restoring it on Back would undo a Change link's scroll to its card
+history.scrollRestoration = 'manual';
+addEventListener('popstate', () => {
+  const want = new URLSearchParams(location.hash.slice(1)).get('p') === 'summary';
+  if (want && !sumOpen) openSummary(false); else if (!want && sumOpen) closeSummary(true);
 });
-$('sum-shot').addEventListener('click', () => $('shot').click());
+$('open-summary').addEventListener('click', () => sumOpen ? closeSummary() : openSummary());
+$('to-summary').addEventListener('click', () => openSummary());
+$('sm-back').addEventListener('click', () => closeSummary());
+$('sm-edit').addEventListener('click', () => closeSummary());
+$('sm-share').addEventListener('click', copyLink);
+$('sm-print').addEventListener('click', () => print());
+$('sm-dl').addEventListener('click', () => { const s = shots[shotI]; if (!s) return; const a = document.createElement('a');
+  a.download = 'keane_build_' + slugify(s.label.split(' · ')[0]) + '.jpg'; a.href = s.url; a.click(); });
+$('sm-prev').addEventListener('click', () => showShot(shotI - 1));
+$('sm-next').addEventListener('click', () => showShot(shotI + 1));
+$('sm-thumbs').addEventListener('click', e => { const b = e.target.closest('[data-i]'); if (b) showShot(+b.dataset.i); });
+$('summary').addEventListener('keydown', e => { if (e.key === 'ArrowLeft' || e.key === 'ArrowRight') { if (e.target.closest('input')) return; showShot(shotI + (e.key === 'ArrowLeft' ? -1 : 1)); } });
+document.addEventListener('keydown', e => { if (e.key === 'Escape' && sumOpen && !document.querySelector('dialog[open]')) closeSummary(); });
+// Change: back to the configurator at that section's card
+$('sm-cats').addEventListener('click', e => {
+  const b = e.target.closest('[data-change]'); if (!b) return; const sec = b.dataset.change, card = $('card-' + sec);
+  afterClose = () => { card.open = true; follow(sec); card.scrollIntoView({ behavior: reduce ? 'auto' : 'smooth', block: 'start' });
+    (card.querySelector('.sw[aria-pressed="true"], .oc[aria-pressed="true"], input:checked') || card.querySelector('summary')).focus({ preventScroll: true }); };
+  closeSummary();
+});
 
 // ============================ fronts ============================
 const Y = new THREE.Vector3(0, 1, 0);
@@ -1702,7 +2032,7 @@ function frame(fast) {
 // ambient occlusion every frame, which kept the GPU busy and made scrolling and picking lag. While the camera or the
 // fronts move, frames skip GTAO; one full-quality frame follows when they stop. Photo render runs until it converges.
 renderer.setAnimationLoop(now => {
-  if (!ready) return;
+  if (!ready || sumOpen) return;   // the summary page covers the stage
   if (tween) {
     const k = Math.min(1, (now - tween.t0) / 800), e = ease(k);
     camera.position.lerpVectors(tween.p0, tween.pos, e); controls.target.lerpVectors(tween.q0, tween.tgt, e);
