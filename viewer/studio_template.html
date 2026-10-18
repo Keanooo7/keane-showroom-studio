@@ -644,9 +644,9 @@ async function getColorTex(id) {
 }
 // Embossed-in-register foils (Taction, Deep Grain, Groovz...): relief follows the printed grain, so derive a normal map
 // from the high-passed luminance of the chip (dark grain lines sit lower).
-const embossTex = {};
-async function getEmbossTex(id) {
-  if (embossTex[id]) return embossTex[id];
+const embossTex = {}, highpass = {};
+async function getHighpass(id) {
+  if (highpass[id]) return highpass[id];
   const im = await loadImage(id), W = im.width, H = im.height, cv = document.createElement('canvas'); cv.width = W; cv.height = H;
   const ctx = cv.getContext('2d'); ctx.drawImage(im, 0, 0); const d = ctx.getImageData(0, 0, W, H).data, L = new Float32Array(W * H);
   for (let i = 0; i < W * H; i++) L[i] = (0.2126 * d[i * 4] + 0.7152 * d[i * 4 + 1] + 0.0722 * d[i * 4 + 2]) / 255;
@@ -655,7 +655,21 @@ async function getEmbossTex(id) {
     for (let l = 0; l < lines; l++) { let s = 0; for (let k = -r; k <= r; k++) s += src[at(l, (k + n) % n)];
       for (let k = 0; k < n; k++) { out[at(l, k)] = s / (2 * r + 1); s += src[at(l, (k + r + 1) % n)] - src[at(l, (k - r + n) % n)]; } } return out; };
   const B = blur(blur(L, 6, true), 6, false), hp = L.map((v, i) => v - B[i]);
+  return (highpass[id] = { W, H, hp });
+}
+async function getEmbossTex(id) {
+  if (embossTex[id]) return embossTex[id];
+  const { W, H, hp } = await getHighpass(id);
   return (embossTex[id] = normalTex(W, H, hp, 6));
+}
+// Stained solid wood under a clear coat: the photo's dark grain lines are the pores and latewood, which sit a little
+// lower and scatter more. Normal map from the high-passed photo; roughness map rougher in the pores, smoother between.
+const woodMaps = {};
+async function getWoodMaps(id) {
+  if (woodMaps[id]) return woodMaps[id];
+  const { W, H, hp } = await getHighpass(id);
+  const rgh = texFromFn(W, H, (x, y, i, o) => { o[0] = o[1] = o[2] = Math.max(170, Math.min(255, 210 - 600 * hp[i])); });
+  return (woodMaps[id] = { nrm: normalTex(W, H, hp, 5), rgh });
 }
 
 // ============================ HDR light room (equirect) ============================
@@ -779,10 +793,12 @@ const DRAWERS = {
 const flatDrawer = (mode, top, hIn) => mode === 'flat' || mode === 'top' && top && hIn < 10 || mode === 'six' && hIn <= 6.5;
 // frame width in mm on this front, capped at a fifth of its short side; fronts under 100 mm are always slabs
 const frameW = (w, h, style) => STYLES[style].S && Math.min(w, h) >= 100 ? Math.min(STYLES[style].S * IN, 0.2 * Math.min(w, h)) : 0;
-function frontGeo(f, style) { return f.geos[style] ||= withGrainLayouts(shakerFront0(f.bb, frameW(f.w, f.h, style)), f.drawer, f.id); }
-function shakerFront0(bb, S) {
+function frontGeo(f, style) { return f.geos[style] ||= withGrainLayouts(shakerFront0(f.bb, frameW(f.w, f.h, style), f.id), f.drawer, f.id); }
+function shakerFront0(bb, S, id) {
   const { min: m, max: M } = bb, w = M.x - m.x, h = M.y - m.y;
-  const G = (g, rot) => boxUV(g, GRAIN_U, GRAIN_V, rot);
+  // each piece is cut from its own place in the board (offset per front and piece): a stile's grain does not run on
+  // into the panel beside it, and no two doors match
+  let k = 0; const G = (g, rot) => (k++, boxUV(g, GRAIN_U, GRAIN_V, rot, hash01(id, 10 + k), hash01(id, 20 + k)));
   if (!S) return G(rbox(m.x, M.x, m.y, M.y, m.z, M.z, 1.6), w > h);
   const R = 1.6, z0 = m.z, z1 = M.z;
   // grain runs along each piece: vertical stiles, horizontal rails, panel along its long side
@@ -1048,7 +1064,7 @@ $('body-counter').innerHTML =
   `<p class="note"><svg><use href="#i-info"/></svg>Quartz is cut from the full slab photo at 126 × 63 in. Granite repeats the maker's close-up at true scale.</p>` +
   sub('Vadara quartz', groupBy(quartzAll, 'group'), 'counter', true) +
   sub('MSI granite', groupBy(graniteAll, 'group', ['Light & white', 'Mid tones', 'Dark & black']), 'counter', false) + empty;
-const solids = CAT.fronts.filter(f => f.group === 'solid'), woods = CAT.fronts.filter(f => f.group === 'woodgrain'), swPaints = CAT.fronts.filter(f => f.group === 'sw');
+const solids = CAT.fronts.filter(f => f.group === 'solid'), woods = CAT.fronts.filter(f => f.group === 'woodgrain'), swPaints = CAT.fronts.filter(f => f.group === 'sw'), woodStains = CAT.fronts.filter(f => f.group === 'wood');
 $('body-front').innerHTML =
   `<div class="fstyle"><h3 class="lbl" id="ds-lbl">Door style</h3><div class="optcards c3" id="ds" role="radiogroup" aria-labelledby="ds-lbl"></div></div>` +
   `<div class="fstyle"><h3 class="lbl" id="dr-lbl">Drawer fronts</h3><p class="note" id="dr-note" hidden><svg><use href="#i-info"/></svg>With slab doors every drawer front is already flat.</p>` +
@@ -1058,6 +1074,8 @@ $('body-front').innerHTML =
   `<p class="note"><svg><use href="#i-info"/></svg>Decore DRS131 is a one-piece RTF door. Woodgrain runs vertically on doors and horizontally on drawer fronts, with no rail joints.</p>` +
   sub('Decore solid colours', groupBy(solids, 'family', ['Smooth', 'Satin', 'Soft-touch', 'Supermatte']), 'front', true) +
   sub('Decore woodgrain', groupBy(woods, 'family', ['Smooth woodgrain', 'Textured']), 'front', false) +
+  `<p class="note"><svg><use href="#i-info"/></svg>WalzCraft stains are solid wood five-piece doors under a satin clear coat, from WalzCraft's photo of each stain on its colour block.</p>` +
+  sub('WalzCraft stained wood', groupBy([...woodStains].sort((a, b) => a.family.localeCompare(b.family) || a.name.localeCompare(b.name)), 'family'), 'front', false) +
   `<p class="note"><svg><use href="#i-info"/></svg>Sherwin-Williams colours are painted on the five-piece door from each colour's published value. Screens shift paint colour, so check a real chip before ordering.</p>` +
   sub('Sherwin-Williams paint', groupBy(swPaints, 'family', ['White', 'Neutral', 'Red', 'Orange', 'Yellow', 'Green', 'Blue', 'Purple']), 'front', false) + empty;
 const SEL = { counter: null, front: null, style: 'shaker', drw: 'match', splash: 'vtile', splashH: 'full', hw: { door: null, drawer: null } };
@@ -1102,6 +1120,16 @@ async function pickFront(o) {
     // thermofoil over MDF: a smooth film, no grain
     Object.assign(P, { map: null, roughnessMap: null, normalMap: null, clearcoatNormalMap: null, roughness: o.rough, clearcoat: o.cc, clearcoatRoughness: 0.3 });
     P.color.setRGB(...o.color, THREE.LinearSRGBColorSpace);
+  } else if (o.kind === 'wood') {
+    // stained solid wood, five-piece: catalyzed clear coat at satin sheen. Open-grain species (oak, ash, hickory...)
+    // keep some pore relief through the film; closed grain (maple, cherry, birch...) levels almost flat.
+    busy(o.id, true);
+    let t, m; try { [t, m] = await Promise.all([getColorTex(o.id), getWoodMaps(o.id)]); } catch (e) { busy(o.id, false); toast(`Texture for ${o.name} is missing`); return; }
+    busy(o.id, false); texUsed(o.id); if (tok !== frontTok) return;
+    [t, m.nrm, m.rgh].forEach(x => { x.wrapS = x.wrapT = THREE.RepeatWrapping; x.repeat.set(GRAIN_U / o.size_mm[0], GRAIN_V / o.size_mm[1]); });
+    const ns = 0.05 + 0.20 * o.pore;
+    Object.assign(P, { map: t, roughnessMap: m.rgh, normalMap: m.nrm, clearcoatNormalMap: m.nrm, roughness: 0.62, clearcoat: 1, clearcoatRoughness: 0.26 });
+    P.normalScale.set(ns, ns); P.clearcoatNormalScale.set(0.03 * o.pore, 0.03 * o.pore); P.color.setRGB(1, 1, 1);
   } else {
     busy(o.id, true);
     let t, n; try { [t, n] = await Promise.all([getColorTex(o.id), getEmbossTex(o.id)]); } catch (e) { busy(o.id, false); toast(`Texture for ${o.name} is missing`); return; }
@@ -1112,7 +1140,7 @@ async function pickFront(o) {
     P.normalScale.set(o.emboss, o.emboss); P.clearcoatNormalScale.set(o.emboss * 0.6, o.emboss * 0.6); P.color.setRGB(0.93, 0.93, 0.93);
   }
   P.needsUpdate = true;
-  frontUV = o.kind === 'paint' ? 'piece' : 'whole';
+  frontUV = o.kind === 'paint' || o.kind === 'wood' ? 'piece' : 'whole';   // painted and solid wood doors are five-piece
   const uvChanged = frontMeshes.length && setUVs(frontMeshes, frontUV);
   if (uvChanged) sceneChanged(); else ptMaterials();
   writeHash(); queueThumbs();

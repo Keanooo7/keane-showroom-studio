@@ -12,6 +12,7 @@ Sources (downloaded by hand into materials/, see materials/manifest.json):
   materials/vadara/*.jpg  vadara.uk/designs                    full slab, 126 x 63 in
   materials/msi/*.jpg     msisurfaces.com/granite-countertops  close-up, assumed 24 x 24 in
   materials/decore/*.jpg  decore.com DRS131 finishes           400 px chip, assumed ~10 in across
+  materials/walzcraft/img  walzcraft.com/wood-finish stains     color block photo, 500 px = 7 in
 Sherwin-Williams paint colours are materials/sherwin_williams/colors.json (tools/fetch_sw_colors.py): hex values only.
 MSI backsplash tile comes from materials/msi_tile/tiles.json, whose textures tools/msi_tiles.py has already written to
 viewer/textures/ (true-scale repeats measured from the maker's photos); only the catalog goes into the page.
@@ -120,6 +121,76 @@ for d in M['decore']:
     else:
         e.update(kind='solid')
     fronts.append(e)
+
+# ---- WalzCraft stained solid wood (materials/walzcraft/, from tools/fetch_walzcraft.py). Each photo is a 12 x 7 in color
+# block shot grain-vertical: 500 px = 7 in (0.3556 mm/px), thin border on the left, D17 reeded edge on the right.
+# The blocks are glued up from narrow boards, so the texture is too: two boards side by side, joined by a cut that
+# follows the grain (image quilting), so there are no straight seams. Along the grain each board runs through three
+# versions of the photo (as shot, flipped across, flipped end for end) with long soft blends between them: a cut across
+# the grain would show as a zigzag and a plain mirror as kaleidoscope diamonds on oak and ash. The figure is drawn out
+# 1.8x along the grain in the UVs, as on a long cabinet board: one repeat is about 28 in.
+WZ_MMPX = 177.8 / 500
+WZ_PORE = {'Ash': 1, 'Oak - Red': 1, 'Oak - White': 1, 'Hickory': 1, 'Elm - Red': 1, 'Walnut': 0.6, 'Sapele': 0.6,
+           'Eucalyptus - Red Grandis': 0.6}   # open-grain species: pores show through the clear coat; the rest are closed grain
+
+def _cut_blend(a, b, feather):
+    """a, b: overlapping bands (rows across the cut x cols along it, 3). Minimum-error path through the band, one row per
+    column; above it a, below it b, softened over a few rows."""
+    import numpy as np
+    e = ((a - b) ** 2).sum(2); n, m = e.shape; acc = e.copy(); back = np.zeros((n, m), np.int8)
+    for x in range(1, m):
+        prev = np.stack([np.r_[np.inf, acc[:-1, x - 1]], acc[:, x - 1], np.r_[acc[1:, x - 1], np.inf]])
+        k = prev.argmin(0); back[:, x] = k - 1; acc[:, x] += prev[k, np.arange(n)]
+    path = np.empty(m, int); path[-1] = acc[:, -1].argmin()
+    for x in range(m - 1, 0, -1): path[x - 1] = path[x] + back[path[x], x]
+    path = np.clip(path, feather, n - feather)
+    w = np.clip((np.arange(n)[:, None] - path[None, :]) / feather * 0.5 + 0.5, 0, 1)[..., None]   # 0 = a, 1 = b
+    return a * (1 - w) + b * w
+
+def _xfade_chain(tiles, O):
+    """Tiles joined end to end in a loop, each one's first O rows faded (cosine) into the previous tile's last O rows."""
+    import numpy as np
+    w = (0.5 - 0.5 * np.cos(np.linspace(0, np.pi, O)))[:, None, None]
+    return np.concatenate([x for i, t in enumerate(tiles) for x in (tiles[i - 1][-O:] * (1 - w) + t[:O] * w, t[O:-O])])
+
+def _chain(tiles, O, feather):
+    """Tiles (rows along the chain) joined end to end in a loop: each tile's first O rows are cut into the previous
+    tile's last O rows. Seamless where the chain wraps too."""
+    import numpy as np
+    out = []
+    for i, t in enumerate(tiles):
+        prev = tiles[i - 1]
+        out += [_cut_blend(prev[-O:], t[:O], feather), t[O:-O]]
+    return np.concatenate(out)
+
+def wood_tex(im, stretch=1.8):
+    import numpy as np
+    w, h = im.size; im = im.crop((round(0.05 * w), 8, round(0.85 * w), h - 8))
+    a = np.asarray(im, dtype=np.float32) / 255; a = np.where(a <= 0.04045, a / 12.92, ((a + 0.055) / 1.055) ** 2.4)
+    # studio light falloff out, wood colour variation kept: divide by the very blurred luminance, partly
+    L = a @ [0.2126, 0.7152, 0.0722]
+    Li = Image.fromarray(L.astype(np.float32), 'F')   # low-pass: down to ~1/25 size and back up smoothly
+    Lb = np.asarray(Li.resize((max(2, Li.width // 25), max(2, Li.height // 25)), Image.Resampling.BOX).resize(Li.size, Image.Resampling.BICUBIC))
+    a = a / ((Lb / Lb.mean()) ** 0.75)[..., None]
+    # the photos are bright (natural hard maple clips at 255): one exposure for all, light finishes capped at a real albedo
+    a *= 0.85; mx = a.max(2).mean(); a *= min(1, 0.70 / mx)
+    col = _xfade_chain([a, a[:, ::-1], a[::-1]], 170)                         # along the grain
+    col2 = np.roll(col, col.shape[0] // 2, 0)[:, ::-1]                          # second board: other end, other face
+    t = _chain([col.transpose(1, 0, 2), col2.transpose(1, 0, 2)], 56, 4).transpose(1, 0, 2)   # cuts follow the grain
+    t = np.clip(t, 0, 1); t = np.where(t <= 0.0031308, 12.92 * t, 1.055 * t ** (1 / 2.4) - 0.055)
+    out = Image.fromarray((t * 255 + 0.5).astype(np.uint8))
+    return out, [round(out.width * WZ_MMPX, 1), round(out.height * WZ_MMPX * stretch, 1)]
+
+WZ = json.load(open(R / 'materials/walzcraft/finishes.json'))['finishes']
+for d in WZ:
+    sp = re.sub(r'\s*-\s*', ' - ', d['species'])   # 'Oak-Red' -> 'Oak - Red'
+    tid = f'wz_{d["id"]}'
+    im = Image.open(R / d['file']).convert('RGB')
+    t, size = wood_tex(im); write_tex(tid, t, 88)
+    stain = d['stain'] + (f' ({d["type"]})' if d['type'] and d['type'] != 'no stain' else '')
+    w, h = im.size; th = im.crop((round(0.12 * w), round(0.3 * h), round(0.78 * w), round(0.3 * h) + round(0.66 * w)))
+    fronts.append(dict(id=tid, name=f'{stain} on {sp}', brand='WalzCraft', group='wood', family=sp, kind='wood', size_mm=size,
+                       pore=WZ_PORE.get(sp, 0.25), thumb=thumb(th, 56, 56)))
 
 # ---- Sherwin-Williams paint (materials/sherwin_williams/colors.json, from tools/fetch_sw_colors.py): a painted
 # five-piece door in each colour. The published hex is the colour; lightest first within each family.
@@ -267,7 +338,7 @@ out.write_text(html)
 tex_bytes = sum(p.stat().st_size for p in TEX.glob('*.js'))
 print(f'counters {len(counters)} (quartz {sum(c["kind"] == "slab" for c in counters)}, granite {sum(c["kind"] == "tile" for c in counters)}), '
       f'fronts {len(fronts)} (solid {sum(f["group"] == "solid" for f in fronts)}, woodgrain {sum(f["group"] == "woodgrain" for f in fronts)}, '
-      f'textured {sum(f["kind"] == "tex" for f in fronts)}, Sherwin-Williams paint {sum(f["group"] == "sw" for f in fronts)})')
+      f'textured {sum(f["kind"] == "tex" for f in fronts)}, Sherwin-Williams paint {sum(f["group"] == "sw" for f in fronts)}, WalzCraft wood {sum(f["group"] == "wood" for f in fronts)})')
 print(f'MSI tile {len(tile)} (horizontal / vertical {sum(t["lay"] == "line" for t in tile)}, custom {sum(t["lay"] == "custom" for t in tile)}), '
       f'{len(safe(tile)) / 1e3:.0f} kB in the page')
 print(f'page {len(html) / 1e6:.2f} MB -> {out.relative_to(R)}; textures {tex_bytes / 1e6:.1f} MB in {TEX.relative_to(R)}/')
