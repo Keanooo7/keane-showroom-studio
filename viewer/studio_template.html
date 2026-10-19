@@ -432,9 +432,9 @@ body.sum-open{overflow:hidden}
   <div class="db about">
     <ul>
       <li><b>Geometry</b>: fitted from five showroom photos. Doors and drawers are rebuilt as Shaker fronts (2-1/4 in frame, 1/4 in recessed panel, 1.6 mm edge radius), slim Shaker (1 in frame) or slab fronts. Drawer fronts follow the door style, or the short ones can be flat slabs. Countertops are re-extruded from the CAD footprint with a 1.5 mm eased edge.</li>
-      <li><b>Finish library</b>: 38 Decore DRS131 finishes (decore.com), 34 Vadara quartz designs (vadara.uk) and 48 MSI granites (msisurfaces.com). Each texture loads only when picked.</li>
+      <li><b>Finish library</b>: 38 Decore DRS131 finishes (decore.com), 34 Vadara quartz designs (vadara.uk) and 132 MSI Q quartz colours (msisurfaces.com). Each texture loads only when picked.</li>
       <li><b>Hardware</b>: the showroom bar pull (matched to the photos) or any Top Knobs knob or pull, built from the maker's spec table and product photos at true size. Doors and drawers can take different pieces. Each piece loads only when picked.</li>
-      <li><b>Scale</b>: Vadara slabs map at 126 × 63 in. MSI close-ups are assumed to show 24 × 24 in, and Decore chips about 10 in.</li>
+      <li><b>Scale</b>: Vadara slabs map at 126 × 63 in. MSI slab photos map at 126 in wide (about 54 in tall, from the photo), and Decore chips about 10 in.</li>
       <li><b>Live view</b>: PBR materials, a studio HDR light room, soft shadows, ambient occlusion and Khronos PBR Neutral tone mapping for true product colour.</li>
       <li><b>Photo render</b>: path tracing with an edge-preserving denoise. It converges in about a minute and stops at 400 samples.</li>
     </ul>
@@ -1038,7 +1038,7 @@ function sceneChanged() { if (!pt) return; if (photo) { pt.setScene(scene, camer
 const ptMaterials = () => { if (pt && photo) pt.updateMaterials(); };
 function setUVs(meshes, key) { let changed = false; meshes.forEach(o => { const a = o.geometry.userData.uv[key]; if (o.geometry.attributes.uv !== a) { o.geometry.setAttribute('uv', a); changed = true; } }); return changed; }
 const subline = o => [o.code, o.brand, o.family || o.group].filter(Boolean).join(' · ');
-const gloss = o => o.kind === 'slab' || o.kind === 'tile' ? 0.42 : o.metalness ? Math.max(0.12, 0.55 - o.roughness * 0.7)
+const gloss = o => o.kind === 'slab' ? 0.42 : o.metalness ? Math.max(0.12, 0.55 - o.roughness * 0.7)
   : Math.max(0.06, Math.min(0.42, 0.5 - (o.rough ?? 0.5) * 0.5 + (o.cc ?? 0) * 0.2));
 const ITEMS = {};   // id -> { o, sec }
 // chip background: photo thumb, flat colour, or for metals a brushed-metal ramp built from the finish colour
@@ -1048,7 +1048,7 @@ const chipBg = o => o.thumb ? `background-image:url(${o.thumb})`
   : `background-color:${lin2hex(o.color)}`;
 function swatch(o, sec) {
   ITEMS[o.id] = { o, sec };
-  // searchable text: name, code (also without its space: "sw7005"), brand, family, and Vadara collection (tone bands are left out: "black" should not find Coffee Brown)
+  // searchable text: name, code (also without its space: "sw7005"), brand, family, and the quartz collection or MSI style
   const q = [o.name, o.code, o.code && o.code.replace(/\s/g, ''), o.brand, o.family, o.kind === 'slab' ? o.group : ''].filter(Boolean).join(' ').toLowerCase();
   return `<button class="sw" data-id="${o.id}" aria-pressed="false" aria-label="${esc(o.name)}" data-q="${esc(q)}" style="${chipBg(o)};--g:${gloss(o).toFixed(2)}"></button>`;
 }
@@ -1059,11 +1059,11 @@ const sub = (title, groups, sec, open) => { const n = groups.reduce((s, [, v]) =
   return `<details class="sub"${open ? ' open' : ''}><summary>${esc(title)} <span class="n">${n}</span>${chev}</summary><div class="inner">${groups.map(([t, v]) => grp(t, v, sec)).join('')}</div></details>`; };
 const empty = '<p class="empty" hidden>No finishes match your search.</p>';
 
-const quartzAll = CAT.counters.filter(c => c.kind === 'slab'), graniteAll = CAT.counters.filter(c => c.kind === 'tile');
+const vadaraAll = CAT.counters.filter(c => c.brand === 'Vadara quartz'), msiAll = CAT.counters.filter(c => c.brand === 'MSI Q quartz');
 $('body-counter').innerHTML =
-  `<p class="note"><svg><use href="#i-info"/></svg>Quartz is cut from the full slab photo at 126 × 63 in. Granite repeats the maker's close-up at true scale.</p>` +
-  sub('Vadara quartz', groupBy(quartzAll, 'group'), 'counter', true) +
-  sub('MSI granite', groupBy(graniteAll, 'group', ['Light & white', 'Mid tones', 'Dark & black']), 'counter', false) + empty;
+  `<p class="note"><svg><use href="#i-info"/></svg>Quartz is cut from the maker's full slab photo, 126 in wide.</p>` +
+  sub('Vadara quartz', groupBy(vadaraAll, 'group'), 'counter', true) +
+  sub('MSI Q quartz', groupBy(msiAll, 'group', ['Subtle veins', 'Dramatic veins', 'Quartzite & Taj Mahal', 'Soapstone & limestone', 'Granite looks', 'Modern']), 'counter', false) + empty;
 const solids = CAT.fronts.filter(f => f.group === 'solid'), woods = CAT.fronts.filter(f => f.group === 'woodgrain'), swPaints = CAT.fronts.filter(f => f.group === 'sw'), woodStains = CAT.fronts.filter(f => f.group === 'wood');
 $('body-front').innerHTML =
   `<div class="fstyle"><h3 class="lbl" id="ds-lbl">Door style</h3><div class="optcards c3" id="ds" role="radiogroup" aria-labelledby="ds-lbl"></div></div>` +
@@ -1103,7 +1103,7 @@ async function pickCounter(o) {
   const tok = ++counterTok; SEL.counter = o; markSelected('counter', o.id); busy(o.id, true);
   let t; try { t = await getColorTex(o.id); } catch (e) { busy(o.id, false); toast(`Texture for ${o.name} is missing`); return; }
   busy(o.id, false); texUsed(o.id); if (tok !== counterTok) return;
-  // geometry UVs are in slab units (126 x 63 in); tiled granite repeats its close-up at true size
+  // geometry UVs are in slab units (126 x 63 in); each slab photo spans its own size_mm
   t.repeat.set(126 * IN / o.size_mm[0], 63 * IN / o.size_mm[1]);
   quartz.map = splashSlab.map = t; quartz.needsUpdate = splashSlab.needsUpdate = true;
   ptMaterials();
@@ -1861,7 +1861,7 @@ function drawSummary() {
     ['Hardware', same ? `${hd.name} · ${hd.finish}` : `Doors: ${hd.name} · Drawers: ${hr.name}`], ['Lighting', SCENES[curScene].label],
   ].map(([k, v]) => `<div><dt>${k}</dt><dd>${esc(v)}</dd></div>`).join('');
   $('sm-cats').innerHTML = [
-    cat('counter', 'Countertop', [item(chipBg(C), C.kind === 'slab' ? 'Quartz' : 'Granite', C.name, subline(C))]),
+    cat('counter', 'Countertop', [item(chipBg(C), 'Quartz', C.name, subline(C))]),
     cat('splash', 'Backsplash', [item(splashBg(sp), 'Layout', sp.t, splashDesc(sp)),
       item(tile ? (tile === SHOWROOM_TILE ? splashBg(sp) : chipBg(tile)) : chipBg(C), tile ? 'Tile' : 'Stone', tile ? tile.name : C.name, tile ? subline(tile) : 'Same stone as the countertop'),
       item(elevPh(heightSVG(SEL.splashH)), 'Height', SPLASH_H[SEL.splashH], SEL.splashH === 'full' ? 'Countertop to the upper cabinets' : '6 in up from the countertop, wall above')]),

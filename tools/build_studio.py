@@ -10,7 +10,7 @@ Products without a geometry file are left out with a warning.
 Sources (downloaded by hand into materials/, see materials/manifest.json):
   Countertops/*.png       showroom slab photos (Vadara)        full slab, 126 x 63 in
   materials/vadara/*.jpg  vadara.uk/designs                    full slab, 126 x 63 in
-  materials/msi/*.jpg     msisurfaces.com/granite-countertops  close-up, assumed 24 x 24 in
+  materials/msi_quartz/   msisurfaces.com quartz collections   full slab, 126 in wide (tools/fetch_msi_quartz.py)
   materials/decore/*.jpg  decore.com DRS131 finishes           400 px chip, assumed ~10 in across
   materials/walzcraft/img  walzcraft.com/wood-finish stains     color block photo, 500 px = 7 in
 Sherwin-Williams paint colours are materials/sherwin_williams/colors.json (tools/fetch_sw_colors.py): hex values only.
@@ -65,21 +65,11 @@ def mirror4(im):
     out.paste(ImageOps.flip(im), (0, h)); out.paste(ImageOps.flip(ImageOps.mirror(im)), (w, h))
     return out
 
-def seamless(im):
-    """Offset-and-blend tile for random stone: crossfade with a half-period roll so the borders come from the
-    image interior. No mirror axes, which read as Rorschach symmetry on granite."""
-    import numpy as np
-    a = np.asarray(im, dtype=np.float32); h, w = a.shape[:2]
-    r = np.roll(np.roll(a, h // 2, 0), w // 2, 1)
-    ramp = lambda n: np.clip(np.minimum(np.arange(n), n - 1 - np.arange(n)) / (0.22 * n), 0, 1)
-    m = (np.outer(ramp(h), ramp(w)) ** 0.8)[..., None]
-    return Image.fromarray((a * m + r * (1 - m)).round().astype(np.uint8))
-
 def thumb(im, w, h):
     return jpg_uri(ImageOps.fit(im, (w, h), Image.Resampling.LANCZOS), 72)
 
 counters, fronts = [], []
-# ---- quartz: full slabs, 126 x 63 in
+# ---- Vadara quartz: full slabs, 126 x 63 in
 for d in M['vadara']:
     im = Image.open(R / d['file']).convert('RGB')
     w, h = im.size; m = max(4, round(0.006 * w)); im = im.crop((m, m, w - m, h - m))   # thin photo border
@@ -87,16 +77,20 @@ for d in M['vadara']:
     tid = 'vadara_' + slug(d['name']); write_tex(tid, im)
     counters.append(dict(id=tid, name=d['name'], code=d.get('code'), brand='Vadara quartz', kind='slab', group=d.get('collection') or 'Vadara',
                          size_mm=[3200.4, 1600.2], thumb=thumb(im.crop((im.width // 4, 0, im.width * 3 // 4, im.height)), 84, 56)))
-# ---- granite: square close-ups, tiled
-for d in M['msi']:
+# ---- MSI Q quartz (materials/msi_quartz/, from tools/fetch_msi_quartz.py): full slab photos. MSI gives no slab size in
+# inches, so the photo's width is 126 in like the Vadara slabs and its height follows the photo (no stretch).
+QSTYLE = [('Dramatic veins', ('Marble - Dramatic',)), ('Subtle veins', ('Marble',)), ('Quartzite & Taj Mahal', ('Quartzite', 'Taj Mahal')),
+          ('Soapstone & limestone', ('SoapStone', 'Limestone')), ('Granite looks', ('Granite',)), ('Modern', ('Modern',))]
+MSIQ = json.load(open(R / 'materials/msi_quartz/quartz.json'))['quartz']
+for d in MSIQ:
+    if 'file' not in d: print(f'warning: MSI quartz {d["name"]} has no slab photo, left out'); continue
     im = Image.open(R / d['file']).convert('RGB')
-    tid = 'msi_' + slug(d['name'])
-    st = seamless(im)   # 2048 px at most, like the slabs: larger costs GPU memory and the path tracer resizes to 2048 anyway
-    if max(st.size) > 2048: st = st.resize((round(2048 * st.width / max(st.size)), round(2048 * st.height / max(st.size))), Image.Resampling.LANCZOS)
-    write_tex(tid, st, 86)
-    lum = ImageStat.Stat(im.convert('L')).mean[0]   # tone bands for grouping, like a maker's colour tiers
-    tone = 'Light & white' if lum >= 155 else 'Mid tones' if lum >= 80 else 'Dark & black'
-    counters.append(dict(id=tid, name=d['name'], brand='MSI granite', kind='tile', group=tone, size_mm=[609.6, 609.6], thumb=thumb(im, 84, 56)))
+    if im.width > 2048: im = im.resize((2048, round(2048 * im.height / im.width)), Image.Resampling.LANCZOS)
+    tid = 'msiq_' + slug(d['name']); write_tex(tid, im)
+    st = d.get('style') or ''
+    group = next((g for g, keys in QSTYLE if any(st.startswith(k) for k in keys)), 'Modern')
+    counters.append(dict(id=tid, name=d['name'], brand='MSI Q quartz', kind='slab', group=group,
+                         size_mm=[3200.4, round(3200.4 * im.height / im.width, 1)], thumb=thumb(im.crop((im.width // 4, 0, im.width * 3 // 4, im.height)), 84, 56)))
 
 # ---- Decore DRS131 (1-piece RTF/MDF): finish behaviour from the product name
 def finish(name):
@@ -336,7 +330,7 @@ html = html.replace('__ASM__', safe(digest)).replace('__CATALOG__', safe(catalog
 out = R / 'viewer/keane_showroom_studio.html'
 out.write_text(html)
 tex_bytes = sum(p.stat().st_size for p in TEX.glob('*.js'))
-print(f'counters {len(counters)} (quartz {sum(c["kind"] == "slab" for c in counters)}, granite {sum(c["kind"] == "tile" for c in counters)}), '
+print(f'counters {len(counters)} (Vadara {sum(c["brand"] == "Vadara quartz" for c in counters)}, MSI {sum(c["brand"] == "MSI Q quartz" for c in counters)}), '
       f'fronts {len(fronts)} (solid {sum(f["group"] == "solid" for f in fronts)}, woodgrain {sum(f["group"] == "woodgrain" for f in fronts)}, '
       f'textured {sum(f["kind"] == "tex" for f in fronts)}, Sherwin-Williams paint {sum(f["group"] == "sw" for f in fronts)}, WalzCraft wood {sum(f["group"] == "wood" for f in fronts)})')
 print(f'MSI tile {len(tile)} (horizontal / vertical {sum(t["lay"] == "line" for t in tile)}, custom {sum(t["lay"] == "custom" for t in tile)}), '
