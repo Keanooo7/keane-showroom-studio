@@ -11,6 +11,7 @@ Sources (downloaded by hand into materials/, see materials/manifest.json):
   Countertops/*.png       showroom slab photos (Vadara)        full slab, 126 x 63 in
   materials/vadara/*.jpg  vadara.uk/designs                    full slab, 126 x 63 in
   materials/msi_quartz/   msisurfaces.com quartz collections   full slab, 126 in wide (tools/fetch_msi_quartz.py)
+  materials/cosentino/    Cosentino BIM libraries (Silestone, Dekton)  full slab, 128.74 in / 3200 mm (tools/fetch_cosentino.py)
   materials/decore/*.jpg  decore.com DRS131 finishes           400 px chip, assumed ~10 in across
   materials/walzcraft/img  walzcraft.com/wood-finish stains     color block photo, 500 px = 7 in
 Sherwin-Williams paint colours are materials/sherwin_williams/colors.json (tools/fetch_sw_colors.py): hex values only.
@@ -91,6 +92,19 @@ for d in MSIQ:
     group = next((g for g, keys in QSTYLE if any(st.startswith(k) for k in keys)), 'Modern')
     counters.append(dict(id=tid, name=d['name'], brand='MSI Q quartz', kind='slab', group=group,
                          size_mm=[3200.4, round(3200.4 * im.height / im.width, 1)], thumb=thumb(im.crop((im.width // 4, 0, im.width * 3 // 4, im.height)), 84, 56)))
+# ---- Cosentino Silestone (quartz) and Dekton (ultracompact) (materials/cosentino/, from tools/fetch_cosentino.py): full slab
+# photos from Cosentino's BIM libraries, mapped at the slab length (Silestone 128.74 in, Dekton 3200 mm), height from the photo.
+# The libraries carry no style data, so colours are grouped in tone bands.
+COS = {'silestone': ('Cosentino Silestone', 3270.0), 'dekton': ('Cosentino Dekton', 3200.0)}
+for d in json.load(open(R / 'materials/cosentino/colors.json'))['colors']:
+    brand, L = COS[d['brand']]
+    im = Image.open(R / d['file']).convert('RGB')
+    if im.width > 2048: im = im.resize((2048, round(2048 * im.height / im.width)), Image.Resampling.LANCZOS)
+    tid = d['brand'] + '_' + slug(d['name']); write_tex(tid, im)
+    lum = ImageStat.Stat(im.convert('L')).mean[0]
+    tone = 'Light & white' if lum >= 175 else 'Mid tones' if lum >= 95 else 'Dark & black'
+    counters.append(dict(id=tid, name=d['name'], brand=brand, kind='slab', group=tone, size_mm=[L, round(L * im.height / im.width, 1)],
+                         thumb=thumb(im.crop((im.width // 4, 0, im.width * 3 // 4, im.height)), 84, 56)))
 
 # ---- Decore DRS131 (1-piece RTF/MDF): finish behaviour from the product name
 def finish(name):
@@ -330,7 +344,7 @@ html = html.replace('__ASM__', safe(digest)).replace('__CATALOG__', safe(catalog
 out = R / 'viewer/keane_showroom_studio.html'
 out.write_text(html)
 tex_bytes = sum(p.stat().st_size for p in TEX.glob('*.js'))
-print(f'counters {len(counters)} (Vadara {sum(c["brand"] == "Vadara quartz" for c in counters)}, MSI {sum(c["brand"] == "MSI Q quartz" for c in counters)}), '
+print(f'counters {len(counters)} (' + ', '.join(f'{b} {sum(c["brand"] == b for c in counters)}' for b in dict.fromkeys(c['brand'] for c in counters)) + '), '
       f'fronts {len(fronts)} (solid {sum(f["group"] == "solid" for f in fronts)}, woodgrain {sum(f["group"] == "woodgrain" for f in fronts)}, '
       f'textured {sum(f["kind"] == "tex" for f in fronts)}, Sherwin-Williams paint {sum(f["group"] == "sw" for f in fronts)}, WalzCraft wood {sum(f["group"] == "wood" for f in fronts)})')
 print(f'MSI tile {len(tile)} (horizontal / vertical {sum(t["lay"] == "line" for t in tile)}, custom {sum(t["lay"] == "custom" for t in tile)}), '
